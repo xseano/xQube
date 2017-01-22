@@ -37,16 +37,16 @@
 			
 			//scene.add(camera);
 			scene.add(cubeObj);
-			camera.position.z = 1;
+			camera.position.z = 4;
 
 			/* Key Press -> Append 38, 40, 39, 37 key codes to a var speed = 10; -> server updated cube object constructor pos -> client recieves new x and y and renders camera / cube through camera.rotation.x camera.rotation.y camera.translateZ (for basic non orthographic camera class) -- cube.translateZ cube.translateY cube.translateX */
 			var render = function () {
 				requestAnimationFrame(render);
 				
-				cubeObj.rotation.x += 0.1;
-				cubeObj.rotation.y += 0.1;
+				/* Camera and Cube objects have to be translated by the same z-index value in order to not have the cube phase in or out */
 				cubeObj.translateZ(2);
 				camera.translateZ(2);
+				
 				renderer.render(scene, camera);
 			};
 
