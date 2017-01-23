@@ -1,9 +1,9 @@
+/* Launch connection to socket.io server, wait for conection before loading */
+var socket = io.connect('http://localhost:8080');
+socket.on('connect', function() { console.log("connected!"); } );
 
 /* Create the scene and basic camera. |||FOR LATER||| Build and render camera through OrthographicCamera class bassed on delta cube positioning provided from server */
 var scene = new THREE.Scene();
-scene.socket = io.connect('http://localhost:8080');
-scene.socket.on('connect', function() { console.log("connected!"); } );
-
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);			
 
 /* var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);

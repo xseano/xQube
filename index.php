@@ -15,8 +15,8 @@ function crc_file($filepath)
 				</style>
 			</head>
 	<body>
-		<script src="js/three.js"></script>
-		<script src="./js/main.js?v=<?php echo crc_file('./js/main.js'); ?>"></script>
-		<script src="./node_modules/socket.io-client/dist/socket.io.min.js"></script>
+		<script src="./js/three.js"></script>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+		<script src="./js/main.js?v=<?php echo crc_file('./js/main.js'); ?>"></script>	
 	</body>
 </html>
