@@ -1,6 +1,7 @@
 /* Create the scene and basic camera. |||FOR LATER||| Build and render camera through OrthographicCamera class bassed on delta cube positioning provided from server */
 var obj = this;	
-var id = 1;
+var id = getRandomInt(1, 100);
+console.log(id);
 var camId = id + "Cam";
 var cubeId = id + "Cube";
 var camObjId = id + "CamObj";
@@ -11,11 +12,17 @@ obj[sceneObjId] = new THREE.Scene();
 obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); //new THREE.CubeCamera( 1, 100000, 128 );	
 //obj[sceneObjId].add( obj[camObjId] );
 
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
 
 /* Launch connection to socket.io server, wait for conection before loading */
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
 obj[sceneObjId].socket.on('connect', function() { 
 	//console.log("connected!"); 
+	
 	
 	function CubeObject(x, y, z, w, h, d, color) {
 		this.x = x;
@@ -111,20 +118,22 @@ document.onkeypress = function (e) {
 			if (e.key == 'd') {
 				xx = speed;
 			}
+			console.log(id);
 			
 			obj[sceneObjId].socket.emit('updatePos', {
 				'x': xx,
 				'z': zz,
-				'id': 1
+				'id': id
 			});
+			
 };
 
 obj[sceneObjId].socket.on('move', function(data) {
-	var newCamZ = data[0].z;
-	var newCubeZ = data[1].z;
+	var newCamZ = data.CamObj.z;
+	var newCubeZ = data.CubeObj.z;
 	
-	var newCamX = data[0].x;
-	var newCubeX = data[1].x;
+	var newCamX = data.CamObj.x;
+	var newCubeX = data.CubeObj.x;
 	
 	var render = function () {
 		requestAnimationFrame(render);			

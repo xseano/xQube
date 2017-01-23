@@ -25,9 +25,18 @@ function CameraObject(x, y, z) {
     this.z = z;
 }
 
+function CubeCollection(id, CamObj, CubeObj) {
+    this.id = id;
+    this.CamObj = CamObj;
+    this.CubeObj = CubeObj;
+}
+
 function KekCube() {
     this.commands = new Commands(this).start();
 }
+
+var collection = new CubeCollection("KekCube");
+
 
 KekCube.prototype.start = function() {
     Logger.white(cowsay.say({
@@ -47,20 +56,20 @@ KekCube.prototype.handleCommand = function(data) {
 
 io.sockets.on('connection', function (socket) {
     
-    socket.on('newObj', function(data) {
-        var id = data.id;
+    socket.on('newObj', function(kek) {
+        var id = kek.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
+        var uId = "user" + id;
                
    
         obj[camId] = new CameraObject(0, 0, 4);
         obj[cubeId] = new CubeObject(0, 0, 0, 1, 1, 1, "rgb(174, 129, 255)");
+        obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
+       
+        console.log(obj[uId]);
         
-        cObjs.push(obj[camId]);
-        cObjs.push(obj[cubeId]);
-        
-        console.log(cObjs);
-        socket.emit('buildObjs', cObjs);
+        socket.emit('buildObjs', obj[uId]);
     });
     
     socket.on('updatePos', function(data) {
@@ -69,6 +78,7 @@ io.sockets.on('connection', function (socket) {
         var id = data.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
+        var uId = "user" + id;
         
         obj[camId].x = obj[camId].x + xx;
         obj[camId].z = obj[camId].z + zz;
@@ -84,7 +94,7 @@ io.sockets.on('connection', function (socket) {
         
         console.log(camDebug + "\n" + cubeDebug);
 
-        socket.emit('move', cObjs);
+        socket.emit('move', obj[uId]);
     });
         
 
