@@ -1,6 +1,5 @@
 var obj = this;	
-var id = getRandomInt(1, 100);
-console.log(id);
+var id = getRandomInt(1, 1000);
 var camId = id + "Cam";
 var cubeId = id + "Cube";
 var camObjId = id + "CamObj";
@@ -86,56 +85,56 @@ document.onkeypress = function (e) {
 	var xx = 0;
 	var zz = 0;
 	var speed = 20;
+
+	if (e.key == 'w') {
+		zz = -speed;
+	}
 	
-			if (e.key == 'w') {
-				zz = -speed;
-			}
-			
-			if (e.key == 's') {
-				
-				zz = speed;
-			}
-			
-			if (e.key == 'a') {
-				xx = -speed;
-			}
-			
-			if (e.key == 'd') {
-				xx = speed;
-			}
-			console.log(id);
-			
-			obj[sceneObjId].socket.emit('updatePos', {
-				'x': xx,
-				'z': zz,
-				'id': id
-			});
+	if (e.key == 's') {
+		
+		zz = speed;
+	}
+	
+	if (e.key == 'a') {
+		xx = -speed;
+	}
+	
+	if (e.key == 'd') {
+		xx = speed;
+	}
+	console.log(id);
+	
+	obj[sceneObjId].socket.emit('updatePos', {
+		'x': xx,
+		'z': zz,
+		'id': id
+	});
 			
 };
 
 obj[sceneObjId].socket.on('move', function(data) {
-	var newCamZ = data.CamObj.z;
-	var newCubeZ = data.CubeObj.z;
-	
-	var newCamX = data.CamObj.x;
-	var newCubeX = data.CubeObj.x;
-	
-	var render = function () {
-		requestAnimationFrame(render);			
-		obj[cubeObjId].position.z = newCubeZ;
-		obj[camObjId].position.z = newCamZ;
-		//obj[cubeObjId].position.x = newCubeX;
-		//obj[camObjId].position.x = newCamX;
-		
-		/* Cube Camera Implementation for later 
-		obj[camObjId].position.copy( obj[cubeObjId].position );
-		obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
-		*/
-		
-		renderer.render(obj[sceneObjId], obj[camObjId]);
-	};
+		var newCamZ = data.CamObj.z;
+		var newCubeZ = data.CubeObj.z;
 
-	render();
-});
+		var newCamX = data.CamObj.x;
+		var newCubeX = data.CubeObj.x;
+
+		var render = function () {
+			requestAnimationFrame(render);			
+			obj[cubeObjId].position.z = newCubeZ;
+			obj[camObjId].position.z = newCamZ;
+			//obj[cubeObjId].position.x = newCubeX;
+			//obj[camObjId].position.x = newCamX;
+			
+			/* Cube Camera Implementation for later 
+			obj[camObjId].position.copy( obj[cubeObjId].position );
+			obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
+			*/
+			
+			renderer.render(obj[sceneObjId], obj[camObjId]);
+		};
+
+		render();
+	});
 	
 });

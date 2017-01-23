@@ -55,16 +55,13 @@ io.sockets.on('connection', function (socket) {
         var id = kek.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
-        var uId = "user" + id;
-               
+        var uId = "user" + id;        
    
         obj[camId] = new CameraObject(0, 0, 4);
         obj[cubeId] = new CubeObject(0, 0, 0, 1, 1, 1, "rgb(174, 129, 255)");
         obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
-       
-        console.log(obj[uId]);
-        
-        socket.emit('buildObjs', obj[uId]);
+      
+        console.log("Built new Cube Object with ID: " + id + " ==> " + obj[uId]);
     });
     
     socket.on('updatePos', function(data) {
