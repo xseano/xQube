@@ -14,7 +14,7 @@ obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHe
 /* Launch connection to socket.io server, wait for conection before loading */
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
 obj[sceneObjId].socket.on('connect', function() { 
-	console.log("connected!"); 
+	//console.log("connected!"); 
 	
 	function CubeObject(x, y, z, w, h, d, color) {
 		this.x = x;
@@ -83,7 +83,7 @@ render();
 	
 document.onkeypress = function (e) {
 	e = e || window.event;
-	console.log(e.key);
+	//console.log(e.key);
 	var xx = 0;
 	var zz = 0;
 	var speed = 2;
@@ -118,13 +118,16 @@ obj[sceneObjId].socket.on('move', function(data) {
 	
 	var render = function () {
 		requestAnimationFrame(render);		
-		obj[cubeObjId].translateZ(newCubeZ);
-		obj[camObjId].translateZ(newCamZ);	
+		//obj[cubeObjId].translateZ(newCubeZ);
+		//obj[camObjId].translateZ(newCamZ);	
+		obj[cubeObjId].position.z = newCubeZ;
+		obj[camObjId].position.z = newCamZ;
+		
 		renderer.render(obj[sceneObjId], obj[camObjId]);
 	};
 
 	render();
-	console.log("Moved!");
+	//console.log("Moved!");
 });
 	
 });
