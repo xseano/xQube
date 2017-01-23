@@ -1,4 +1,3 @@
-/* Create the scene and basic camera. |||FOR LATER||| Build and render camera through OrthographicCamera class bassed on delta cube positioning provided from server */
 var obj = this;	
 var id = getRandomInt(1, 100);
 console.log(id);
@@ -18,11 +17,8 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-/* Launch connection to socket.io server, wait for conection before loading */
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
-obj[sceneObjId].socket.on('connect', function() { 
-	//console.log("connected!"); 
-	
+obj[sceneObjId].socket.on('connect', function() { 	
 	
 	function CubeObject(x, y, z, w, h, d, color) {
 		this.x = x;
@@ -47,15 +43,10 @@ obj[sceneObjId].socket.on('connect', function() {
 	obj[camId] = new CameraObject(0, 0, 4);
 	obj[cubeId] = new CubeObject(0, 0, 0, 1, 1, 1, "rgb(174, 129, 255)");
 
-/* var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000);
-scene.add(camera); */ // Ortho. Camera test
-
-/* WebGL Renderer provided through three.js engine */
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-/* Base Grid, I am just gonna be using 100 by 10 to produce a line representing 2D grid in background */
 var scale = 100; 
 var sections = 10; 
 var baseGrid = new THREE.GridHelper(scale, sections);
@@ -67,19 +58,14 @@ var cDepth = obj[cubeId].d;
 var cColor = obj[cubeId].color;
 var camZ = obj[camId].z;
 
-/* Cube dynamics and aesthetics */
 var cubeColorRGB = new THREE.Color(cColor);
 var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
 var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB/*, envMap: obj[camObjId].renderTarget*/ });
 obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 
-//scene.add(camera);
 obj[sceneObjId].add(obj[cubeObjId]);
 obj[camObjId].position.z = camZ;
 
-
-
-/* Key Press -> Append 38, 40, 39, 37 key codes to a var speed = 10; -> server updated cube object constructor pos -> client recieves new x and y and renders camera / cube through camera.rotation.x camera.rotation.y camera.translateZ (for basic non orthographic camera class) -- cube.translateZ cube.translateY cube.translateX */
 var render = function () {
 	requestAnimationFrame(render);
 	
@@ -97,7 +83,6 @@ render();
 	
 document.onkeypress = function (e) {
 	e = e || window.event;
-	//console.log(e.key);
 	var xx = 0;
 	var zz = 0;
 	var speed = 20;
@@ -151,7 +136,6 @@ obj[sceneObjId].socket.on('move', function(data) {
 	};
 
 	render();
-	//console.log("Moved!");
 });
 	
 });

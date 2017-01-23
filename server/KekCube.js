@@ -7,8 +7,6 @@ global.Commands = require('./modules/Commands');
 global.readline = require('readline');
 global.rl = readline.createInterface(process.stdin, process.stdout);
 
-var cObjs = [];
-
 function CubeObject(x, y, z, w, h, d, color) {
     this.x = x;
     this.y = y;
@@ -34,9 +32,6 @@ function CubeCollection(id, CamObj, CubeObj) {
 function KekCube() {
     this.commands = new Commands(this).start();
 }
-
-var collection = new CubeCollection("KekCube");
-
 
 KekCube.prototype.start = function() {
     Logger.white(cowsay.say({
