@@ -53,16 +53,6 @@ var sections = 10;
 var baseGrid = new THREE.GridHelper(scale, sections);
 obj[sceneObjId].add(baseGrid);
 
-/*
-scene.socket.on('buildObjs', function(data) {
-	console.log("yo");
-	
-	obj[camId] = new CameraObject(data[0].x, data[0].y, data[0].z);
-	obj[cubeId] = new CubeObject(data[1].x, data[1].y, data[1].z, data[1].w, data[1].h, data[1].d, data[1].color);
-});
-*/
-	
-	
 var cWidth = obj[cubeId].w;
 var cHeight = obj[cubeId].h;
 var cDepth = obj[cubeId].d;
@@ -73,10 +63,10 @@ var camZ = obj[camId].z;
 var cubeColorRGB = new THREE.Color(cColor);
 var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
 var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB });
-obj[camObjId] = new THREE.Mesh(cubeGeom, cubeColor);
+obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 
 //scene.add(camera);
-obj[sceneObjId].add(obj[camObjId]);
+obj[sceneObjId].add(obj[cubeObjId]);
 obj[camObjId].position.z = camZ;
 
 
@@ -84,12 +74,6 @@ obj[camObjId].position.z = camZ;
 /* Key Press -> Append 38, 40, 39, 37 key codes to a var speed = 10; -> server updated cube object constructor pos -> client recieves new x and y and renders camera / cube through camera.rotation.x camera.rotation.y camera.translateZ (for basic non orthographic camera class) -- cube.translateZ cube.translateY cube.translateX */
 var render = function () {
 	requestAnimationFrame(render);
-	
-	/* Camera and Cube objects have to be translated by the same z-index value in order to not have the cube phase in or out */
-	//cubeObj.translateZ(2);
-	//console.log(cubeObj.position.x);
-	//camera.translateZ(2);
-	
 	renderer.render(obj[sceneObjId], obj[camObjId]);
 };
 
@@ -134,9 +118,9 @@ obj[sceneObjId].socket.on('move', function(data) {
 	
 	var render = function () {
 		requestAnimationFrame(render);		
-		obj[camObjId].translateZ(newCubeZ);
+		obj[cubeObjId].translateZ(newCubeZ);
 		obj[camObjId].translateZ(newCamZ);	
-		renderer.render(obj[sceneObjId], obj[sceneObjId]);
+		renderer.render(obj[sceneObjId], obj[camObjId]);
 	};
 
 	render();

@@ -76,9 +76,14 @@ io.sockets.on('connection', function (socket) {
         obj[cubeId].x = obj[cubeId].x + xx;
         obj[cubeId].z = obj[cubeId].z + zz;
         
-        console.log("New Cam: " + obj[camId]);
-        console.log("New Cube: " + obj[cubeId]);
+        var camPos = "gridPos[ x: {" + obj[camId].x + "}|| y:{ " + obj[camId].y + "}|| z: {" + obj[camId].z + "} ]";
+        var camDebug = "Camera" + ": " + camPos;
         
+        var cubePos = "gridPos[ x: {" + obj[cubeId].x + "}|| y:{ " + obj[cubeId].y + "}|| z: {" + obj[cubeId].z + "} ]";
+        var cubeDebug = "Cube" + ": color{" + obj[cubeId].color + "} || " + cubePos;
+        
+        console.log(camDebug + "\n" + cubeDebug);
+
         socket.emit('move', cObjs);
     });
         
