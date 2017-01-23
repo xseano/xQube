@@ -7,7 +7,23 @@ global.Commands = require('./modules/Commands');
 global.readline = require('readline');
 global.rl = readline.createInterface(process.stdin, process.stdout);
 
-var playerList = [];
+var cObjs = [];
+
+function CubeObject(x, y, z, w, h, d, color) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+    this.h = h;
+    this.d = d;
+    this.color = color;
+}
+
+function CameraObject(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
 
 function KekCube() {
     this.commands = new Commands(this).start();
@@ -31,46 +47,41 @@ KekCube.prototype.handleCommand = function(data) {
 
 io.sockets.on('connection', function (socket) {
     
-    socket.on('loginEv', function(data) {
-        var pName = data.name;
-        var pClass = data.className;
-        
-        if ((pName) && (pClass === "Warrior")) {
-            obj[pName] = new Player(pName, 100, 100, 500);
-            Player.prototype.className = null;
-            obj[pName].className = pClass;
-        }
-        playerList.push(obj[pName]);
-        console.log(obj[pName]);
+    socket.on('newObj', function(data) {
+        var id = data.id;
+        var camId = id + "Cam";
+        var cubeId = id + "Cube";
+               
    
+        obj[camId] = new CameraObject(0, 0, 4);
+        obj[cubeId] = new CubeObject(0, 0, 0, 1, 1, 1, "rgb(174, 129, 255)");
+        
+        cObjs.push(obj[camId]);
+        cObjs.push(obj[cubeId]);
+        
+        console.log(cObjs);
+        socket.emit('buildObjs', cObjs);
     });
     
-    
-    socket.on('changePos', function (data) {
-            var pName = data.name;
-            var pClass = data.className;
-            
-            obj[pName].x = data.x;
-            obj[pName].y = data.y;
-            
-            var displayName = obj[pName].name;
-            var displayX = obj[pName].x;
-            var displayY = obj[pName].y;
-            var displayClass = obj[pName].className;
-            var debugMsg = displayName + ":   x: {" + displayX + "} || y: {" + displayY + "}";
-            console.log(debugMsg);
-
-      	});
-    
-    socket.on('fetch.players', function(data) {
-            var pName = data.name;
-            var pClass = data.className;
-            var displayName = obj[pName].name;
-            var displayX = obj[pName].x;
-            var displayY = obj[pName].y;
-            socket.emit('fetch.players', playerList);
-            console.log(playerList);
-      	});
+    socket.on('updatePos', function(data) {
+        var xx = data.x;
+        var zz = data.z;
+        var id = data.id;
+        var camId = id + "Cam";
+        var cubeId = id + "Cube";
+        
+        obj[camId].x = obj[camId].x + xx;
+        obj[camId].z = obj[camId].z + zz;
+        
+        obj[cubeId].x = obj[cubeId].x + xx;
+        obj[cubeId].z = obj[cubeId].z + zz;
+        
+        console.log("New Cam: " + obj[camId]);
+        console.log("New Cube: " + obj[cubeId]);
+        
+        socket.emit('move', cObjs);
+    });
+        
 
 });
 
