@@ -8,7 +8,8 @@ var cubeObjId = id + "CubeObj";
 var sceneObjId = id + "SceneObj";
 
 obj[sceneObjId] = new THREE.Scene();
-obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);	
+obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); //new THREE.CubeCamera( 1, 100000, 128 );	
+obj[sceneObjId].add( obj[camObjId] );
 
 
 /* Launch connection to socket.io server, wait for conection before loading */
@@ -62,7 +63,7 @@ var camZ = obj[camId].z;
 /* Cube dynamics and aesthetics */
 var cubeColorRGB = new THREE.Color(cColor);
 var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB });
+var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB/*, envMap: obj[camObjId].renderTarget*/ });
 obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 
 //scene.add(camera);
@@ -74,6 +75,12 @@ obj[camObjId].position.z = camZ;
 /* Key Press -> Append 38, 40, 39, 37 key codes to a var speed = 10; -> server updated cube object constructor pos -> client recieves new x and y and renders camera / cube through camera.rotation.x camera.rotation.y camera.translateZ (for basic non orthographic camera class) -- cube.translateZ cube.translateY cube.translateX */
 var render = function () {
 	requestAnimationFrame(render);
+	
+	/* Cube Camera Implementation for later 
+	obj[camObjId].position.copy( obj[cubeObjId].position );
+	obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
+	*/
+	
 	renderer.render(obj[sceneObjId], obj[camObjId]);
 };
 
@@ -86,7 +93,7 @@ document.onkeypress = function (e) {
 	//console.log(e.key);
 	var xx = 0;
 	var zz = 0;
-	var speed = 2;
+	var speed = 20;
 	
 			if (e.key == 'w') {
 				zz = -speed;
@@ -116,12 +123,20 @@ obj[sceneObjId].socket.on('move', function(data) {
 	var newCamZ = data[0].z;
 	var newCubeZ = data[1].z;
 	
+	var newCamX = data[0].x;
+	var newCubeX = data[1].x;
+	
 	var render = function () {
-		requestAnimationFrame(render);		
-		//obj[cubeObjId].translateZ(newCubeZ);
-		//obj[camObjId].translateZ(newCamZ);	
+		requestAnimationFrame(render);			
 		obj[cubeObjId].position.z = newCubeZ;
 		obj[camObjId].position.z = newCamZ;
+		//obj[cubeObjId].position.x = newCubeX;
+		//obj[camObjId].position.x = newCamX;
+		
+		/* Cube Camera Implementation for later 
+		obj[camObjId].position.copy( obj[cubeObjId].position );
+		obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
+		*/
 		
 		renderer.render(obj[sceneObjId], obj[camObjId]);
 	};
