@@ -9,7 +9,7 @@ var sceneObjId = id + "SceneObj";
 
 obj[sceneObjId] = new THREE.Scene();
 obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); //new THREE.CubeCamera( 1, 100000, 128 );	
-obj[sceneObjId].add( obj[camObjId] );
+//obj[sceneObjId].add( obj[camObjId] );
 
 
 /* Launch connection to socket.io server, wait for conection before loading */
