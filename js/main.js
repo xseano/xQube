@@ -7,8 +7,7 @@ var cubeObjId = id + "CubeObj";
 var sceneObjId = id + "SceneObj";
 
 obj[sceneObjId] = new THREE.Scene();
-obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); //new THREE.CubeCamera( 1, 100000, 128 );	
-//obj[sceneObjId].add( obj[camObjId] );
+obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
@@ -46,8 +45,8 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var scale = 100; 
-var sections = 10; 
+var scale = 200; 
+var sections = 20; 
 var baseGrid = new THREE.GridHelper(scale, sections);
 obj[sceneObjId].add(baseGrid);
 
@@ -59,20 +58,17 @@ var camZ = obj[camId].z;
 
 var cubeColorRGB = new THREE.Color(cColor);
 var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB/*, envMap: obj[camObjId].renderTarget*/ });
+var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB });
 obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 
 obj[sceneObjId].add(obj[cubeObjId]);
-obj[camObjId].position.z = camZ;
+obj[camObjId].position.set(0, 12, camZ);
+obj[cubeObjId].position.set(0, 10, 0);
+obj[camObjId].lookAt(new THREE.Vector3(0, 12, -10));
+
 
 var render = function () {
 	requestAnimationFrame(render);
-	
-	/* Cube Camera Implementation for later 
-	obj[camObjId].position.copy( obj[cubeObjId].position );
-	obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
-	*/
-	
 	renderer.render(obj[sceneObjId], obj[camObjId]);
 };
 
@@ -121,16 +117,9 @@ obj[sceneObjId].socket.on('move', function(data) {
 
 		var render = function () {
 			requestAnimationFrame(render);			
-			obj[cubeObjId].position.z = newCubeZ;
-			obj[camObjId].position.z = newCamZ;
-			//obj[cubeObjId].position.x = newCubeX;
-			//obj[camObjId].position.x = newCamX;
-			
-			/* Cube Camera Implementation for later 
-			obj[camObjId].position.copy( obj[cubeObjId].position );
-			obj[camObjId].updateCubeMap( renderer, obj[sceneObjId] );
-			*/
-			
+			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
+			obj[camObjId].position.set(newCamX, 12, newCamZ);
+			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
 			renderer.render(obj[sceneObjId], obj[camObjId]);
 		};
 

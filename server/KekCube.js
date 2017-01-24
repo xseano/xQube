@@ -58,7 +58,7 @@ io.sockets.on('connection', function (socket) {
         var uId = "user" + id;        
    
         obj[camId] = new CameraObject(0, 0, 4);
-        obj[cubeId] = new CubeObject(0, 0, 0, 1, 1, 1, "rgb(174, 129, 255)");
+        obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
       
         console.log("Built new Cube Object with ID: " + id + " ==> " + obj[uId]);
