@@ -6,6 +6,7 @@ global.Logger = require('./modules/Logger');
 global.Commands = require('./modules/Commands');
 global.readline = require('readline');
 global.rl = readline.createInterface(process.stdin, process.stdout);
+var userList = [];
 
 function CubeObject(x, y, z, w, h, d, color) {
     this.x = x;
@@ -50,13 +51,14 @@ xQube.prototype.handleCommand = function(data) {
 }
 
 io.sockets.on('connection', function (socket) {
+    var socketID = socket.id;
     
     socket.on('newObj', function(kek) {
-        var id = kek.id;
+        var id = socketID;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
         var uId = "user" + id;        
-   
+        userList.push(id);
         obj[camId] = new CameraObject(0, 0, 4);
         obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
@@ -64,10 +66,14 @@ io.sockets.on('connection', function (socket) {
         console.log("Built new Cube Object with ID: " + obj[uId].id + " ==> " + obj[uId].CamObj + "\n" + obj[uId].CubeObj);
     });
     
+    socket.on('disconnect', function () {
+        console.log("Client: " + socketID + " has disconnected!");
+    });
+    
     socket.on('updatePos', function(data) {
         var xx = data.x;
         var zz = data.z;
-        var id = data.id;
+        var id = socketID;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
         var uId = "user" + id;

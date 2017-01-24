@@ -1,13 +1,9 @@
 var obj = this;	
 var id = getRandomInt(1, 1000);
-var camId = id + "Cam";
-var cubeId = id + "Cube";
-var camObjId = id + "CamObj";
-var cubeObjId = id + "CubeObj";
 var sceneObjId = id + "SceneObj";
 
 obj[sceneObjId] = new THREE.Scene();
-obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+obj[sceneObjId].socket = io.connect('http://localhost:8080');
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
@@ -15,9 +11,15 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-obj[sceneObjId].socket = io.connect('http://localhost:8080');
-obj[sceneObjId].socket.on('connect', function() { 	
+obj[sceneObjId].socket.on('connect', function() { 
+	var socketID = obj[sceneObjId].socket.id;
+	var camId = socketID + "Cam";
+	var cubeId = socketID + "Cube";
+	var camObjId = socketID + "CamObj";
+	var cubeObjId = socketID + "CubeObj";
 	
+	obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
 	function CubeObject(x, y, z, w, h, d, color) {
 		this.x = x;
 		this.y = y;
@@ -35,7 +37,7 @@ obj[sceneObjId].socket.on('connect', function() {
 	}
 	
 	obj[sceneObjId].socket.emit("newObj", {
-		"id": id
+		"id": socketID
 	});
 	
 	obj[camId] = new CameraObject(0, 0, 4);
@@ -102,12 +104,12 @@ document.onkeypress = function (e) {
 	if (e.key == 'd') {
 		xx = speed;
 	}
-	console.log(id);
+	console.log(socketID);
 	
 	obj[sceneObjId].socket.emit('updatePos', {
 		'x': xx,
 		'z': zz,
-		'id': id
+		'id': socketID
 	});
 			
 };
