@@ -61,7 +61,7 @@ io.sockets.on('connection', function (socket) {
         obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
       
-        console.log("Built new Cube Object with ID: " + id + " ==> " + obj[uId]);
+        console.log("Built new Cube Object with ID: " + obj[uId].id + " ==> " + obj[uId].CamObj + "\n" + obj[uId].CubeObj);
     });
     
     socket.on('updatePos', function(data) {

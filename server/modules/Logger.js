@@ -164,7 +164,7 @@ function start() {
 
 var logFolder = "./logs";
 var logBackupFolder = "./logs/LogBackup";
-var logFileName = "MultiOgar";
+var logFileName = "xQube";
 
 var consoleLog = null;
 var colorBlack = "\u001B[30m";
