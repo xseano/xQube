@@ -1,5 +1,5 @@
-function Commands(KekCube) {
-    this.KekCube = KekCube;
+function Commands(xQube) {
+    this.xQube = xQube;
 }
 
 Commands.prototype.parse = function(command) {

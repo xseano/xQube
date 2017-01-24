@@ -8,7 +8,7 @@ function crc_file($filepath)
 		<html>
 			<head>
 				<meta charset="UTF-8">
-				<title>KekCube</title>
+				<title>xQube</title>
 				<style>
 					body { margin: 0; }
 					canvas { width: 100%; height: 100% }

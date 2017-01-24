@@ -1,5 +1,5 @@
 {
-  "name": "KekCube",
+  "name": "xQube",
   "version": "1.0.0",
   "description": "Basic cube movement powered on three.js engine",
   "author": "Mile High Interactive, LLC",
@@ -15,10 +15,10 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xseano/KekCube"
+    "url": "https://github.com/xseano/xQube"
   },
   "bugs": {
-    "url": "https://github.com/xseano/KekCube/issues"
+    "url": "https://github.com/xseano/xQube/issues"
   },
   "dependencies": {
     "colors": "*",

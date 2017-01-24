@@ -29,22 +29,22 @@ function CubeCollection(id, CamObj, CubeObj) {
     this.CubeObj = CubeObj;
 }
 
-function KekCube() {
+function xQube() {
     this.commands = new Commands(this).start();
 }
 
-KekCube.prototype.start = function() {
+xQube.prototype.start = function() {
     Logger.white(cowsay.say({
-        text : "KekCube",
+        text : "xQube",
         e : "oO",
         T : "U "
     }));
 
     Logger.prompt(this.handleCommand.bind(this));
-    Logger.info("KekCube server deployed and running!".cyan);
+    Logger.info("xQube server deployed and running!".cyan);
 }
 
-KekCube.prototype.handleCommand = function(data) {
+xQube.prototype.handleCommand = function(data) {
 	this.commands.parse(data);
 	Logger.prompt(this.handleCommand.bind(this));
 }
@@ -93,4 +93,4 @@ io.sockets.on('connection', function (socket) {
 });
 
 
-module.exports = KekCube;
+module.exports = xQube;

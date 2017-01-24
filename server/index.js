@@ -1,2 +1,2 @@
-var KekCube = require('./KekCube');
-new KekCube().start();
+var xQube = require('./xQube');
+new xQube().start();
