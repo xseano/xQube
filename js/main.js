@@ -65,6 +65,7 @@ var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7,
 var group = new THREE.Group();
 obj[sceneObjId].add( group );
 obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
+obj[cubeObjId].name = socketID;
 group.add(obj[cubeObjId]);
 
 obj[sceneObjId].add(obj[cubeObjId]);
@@ -117,6 +118,21 @@ document.onkeypress = function (e) {
 			
 };
 
+obj[sceneObjId].socket.on('deleteGridObj', function(userID) {
+	var cuboid = userID + "CubeObj";
+	//var userObj = obj[sceneObjId].getObjectByName(userID);
+	obj[sceneObjId].remove(obj[cuboid]);
+	var render = function () {
+		requestAnimationFrame(render);
+		renderer.render(obj[sceneObjId], obj[camObjId]);
+	};
+
+	render();
+	console.log("removed!");
+});
+
+	
+
 obj[sceneObjId].socket.on('returnUserList', function(userID, userData, data) {	
 	
 		var newCamZ = data.CamObj.z;
@@ -140,6 +156,7 @@ obj[sceneObjId].socket.on('returnUserList', function(userID, userData, data) {
 			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
 			obj[cubeObjId1] = new THREE.Mesh(cubeGeom1, cubeColor1);
 			group.add(obj[cubeObjId1]);
+			obj[cubeObjId1].name = userID;
 			obj[sceneObjId].add(obj[cubeObjId1]);
 			console.log(obj[cubeObjId1]);
 		}

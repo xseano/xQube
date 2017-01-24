@@ -77,7 +77,9 @@ io.sockets.on('connection', function (socket) {
         } else {
             console.log("Couldnt disconnect client: " + socketID);  
         }
-        
+       
+       socket.emit('deleteGridObj', socketID);
+      // socket.emit('updatePlayerList');
        console.log("UserList: " + userList);
     
     });
