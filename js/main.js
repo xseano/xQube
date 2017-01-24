@@ -47,6 +47,7 @@ document.body.appendChild(renderer.domElement);
 
 var scale = 200; 
 var sections = 20; 
+var fogGrid = new THREE.Fog(0x00ff00, 1, 5);
 var baseGrid = new THREE.GridHelper(scale, sections);
 obj[sceneObjId].add(baseGrid);
 
@@ -58,8 +59,11 @@ var camZ = obj[camId].z;
 
 var cubeColorRGB = new THREE.Color(cColor);
 var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB });
+var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+var group = new THREE.Group();
+obj[sceneObjId].add( group );
 obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
+group.add(obj[cubeObjId]);
 
 obj[sceneObjId].add(obj[cubeObjId]);
 obj[camObjId].position.set(0, 12, camZ);
