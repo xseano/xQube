@@ -161,24 +161,6 @@ obj[sceneObjId].socket.on('returnUserList', function(userID, userData, data) {
 
 		render();
 	
-});
-
-obj[sceneObjId].socket.on('move', function(data) {
-		var newCamZ = data.CamObj.z;
-		var newCubeZ = data.CubeObj.z;
-
-		var newCamX = data.CamObj.x;
-		var newCubeX = data.CubeObj.x;
-
-		var render = function () {
-			requestAnimationFrame(render);			
-			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-			obj[camObjId].position.set(newCamX, 12, newCamZ);
-			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
-			renderer.render(obj[sceneObjId], obj[camObjId]);
-		};
-
-		render();
 	});
 	
 });
