@@ -67,7 +67,15 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('disconnect', function () {
-        console.log("Client: " + socketID + " has disconnected!");
+        var userInArr = userList.indexOf(socketID);
+       
+        if (userInArr > -1) {
+            userList.splice(userInArr, 1);
+            console.log("Client: " + socketID + " has disconnected!");
+        } else {
+            console.log("Couldnt disconnect client: " + socketID);  
+        }
+    
     });
     
     socket.on('updatePos', function(data) {
