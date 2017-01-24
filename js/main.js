@@ -68,6 +68,10 @@ obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 group.add(obj[cubeObjId]);
 
 obj[sceneObjId].add(obj[cubeObjId]);
+
+obj[cubeObjId].matrixAutoUpdate  = true;
+obj[cubeObjId].updateMatrix();
+
 obj[camObjId].position.set(0, 12, camZ);
 obj[cubeObjId].position.set(0, 10, 0);
 obj[camObjId].lookAt(new THREE.Vector3(0, 12, -10));
@@ -104,7 +108,6 @@ document.onkeypress = function (e) {
 	if (e.key == 'd') {
 		xx = speed;
 	}
-	console.log(socketID);
 	
 	obj[sceneObjId].socket.emit('updatePos', {
 		'x': xx,
@@ -113,6 +116,52 @@ document.onkeypress = function (e) {
 	});
 			
 };
+
+obj[sceneObjId].socket.on('returnUserList', function(userID, userData, data) {	
+	
+		var newCamZ = data.CamObj.z;
+		var newCubeZ = data.CubeObj.z;
+
+		var newCamX = data.CamObj.x;
+		var newCubeX = data.CubeObj.x;
+		
+		console.log(userData);
+		console.log(userID);
+		var cubeObjId1 = userID + "CubeObj";
+		
+		var cWidth1 = userData.w;
+		var cHeight1 = userData.h;
+		var cDepth1 = userData.d;
+		var cColor1 = userData.color;
+		
+		if (userID != socketID) {
+			var cubeColorRGB1 = new THREE.Color(cColor1);
+			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
+			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
+			obj[cubeObjId1] = new THREE.Mesh(cubeGeom1, cubeColor1);
+			group.add(obj[cubeObjId1]);
+			obj[sceneObjId].add(obj[cubeObjId1]);
+			console.log(obj[cubeObjId1]);
+		}
+		
+		
+		var render = function () {
+			requestAnimationFrame(render);
+			
+			if (userID != socketID) {
+				obj[cubeObjId1].position.set(userData.x, 10, userData.z);
+			}		
+			
+			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
+			obj[camObjId].position.set(newCamX, 12, newCamZ);
+			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
+			
+			renderer.render(obj[sceneObjId], obj[camObjId]);
+		};
+
+		render();
+	
+});
 
 obj[sceneObjId].socket.on('move', function(data) {
 		var newCamZ = data.CamObj.z;
