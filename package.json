@@ -27,5 +27,5 @@
     "socket.io": "^1.7.2"
   },
   "private": false,
-  "license": "Copyright (c) 2016 Mile High Interactive, LLC"
+  "license": "Copyright (c) 2016-2017 Mile High Interactive, LLC"
 }
