@@ -53,7 +53,6 @@ xQube.prototype.handleCommand = function(data) {
 }
 
 io.sockets.on('connection', function (socket) {
-    //var socketID = socket.id;
     
     socket.on('newObj', function(kek) {
       var id = socket.id;
@@ -112,27 +111,7 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('getUserList', function() {
-      var newArr = [];
-
-      /*for (var i = 0; i < userList.length; i++) {
-        var nm = userList[i];
-        var nmID = "user" + nm; 
-        var unmID = obj[nmID];
-        var unmIDe = unmID.id;
-        var unmIDCube = unmID.CubeObj;
-        newArr.push({"id": unmIDe, "cube": unmIDCube});
-      }
-
-      Promise.all(newArr)
-        .then(() => {
-        //  for (var i = 0; i < userList.length; i++) {
-            socket.broadcast.emit('returnUserList', newArr);   
-         // }
-        })
-        .catch((e) => {
-          // handle errors here
-        });*/
-       
+      
       var nmID = "user" + socket.id; 
       var unmID = obj[nmID];
       var unmIDe = unmID.id;
