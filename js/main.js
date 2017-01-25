@@ -15,6 +15,7 @@ obj[sceneObjId].socket.on('connect', function() {
 	var socketID = obj[sceneObjId].socket.id;
 	var camObjId = socketID + "CamObj";
 	var cubeObjId = socketID + "CubeObj";
+	var cubeObjConstruct = socketID + "CubeObjConstruct";
 	
 	obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 	
@@ -42,12 +43,12 @@ obj[sceneObjId].socket.on('connect', function() {
 	var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
 	var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
 	var group = new THREE.Group();
-	obj[sceneObjId].add( group );
+	obj[sceneObjId].add(group);
 	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 	obj[cubeObjId].name = socketID;
 	group.add(obj[cubeObjId]);
-
 	obj[sceneObjId].add(obj[cubeObjId]);
+	
 
 	obj[camObjId].position.set(0, 12, camZ);
 	obj[cubeObjId].position.set(0, 10, 0);

@@ -107,8 +107,6 @@ io.sockets.on('connection', function (socket) {
       
         socket.emit('move', obj[uId]);
         
-      
-        
     });
     
     socket.on('getUserList', function() {
