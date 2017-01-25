@@ -104,15 +104,23 @@ io.sockets.on('connection', function (socket) {
         var cubePos = "gridPos[ x: {" + obj[cubeId].x + "}|| y:{ " + obj[cubeId].y + "}|| z: {" + obj[cubeId].z + "} ]";
         var cubeDebug = "Cube" + ": color{" + obj[cubeId].color + "} || " + cubePos;
         
-        console.log(camDebug + "\n" + cubeDebug);
+       // console.log(camDebug + "\n" + cubeDebug);
+      
+        socket.emit('move', obj[uId]);
         
-        for (var i = 0; i < userList.length; i++) {
-            var nm = userList[i];
-            var nmID = "user" + nm; 
-            var unmID = obj[nmID];
-            socket.emit('returnUserList', unmID.id, unmID.CubeObj, obj[uId]);
-          }
+      
         
+    });
+    
+    socket.on('getUserList', function() {
+      
+      for (var i = 0; i < userList.length; i++) {
+        var nm = userList[i];
+        var nmID = "user" + nm; 
+        var unmID = obj[nmID];
+        socket.broadcast.emit('returnUserList', unmID.id, unmID.CubeObj);
+      }
+    
     });
 
 });
