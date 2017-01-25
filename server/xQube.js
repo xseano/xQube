@@ -5,6 +5,7 @@ const colors = require('colors');
 global.Logger = require('./modules/Logger');
 global.Commands = require('./modules/Commands');
 global.readline = require('readline');
+var Promise = require('promise');
 global.rl = readline.createInterface(process.stdin, process.stdout);
 var userList = [];
 
@@ -28,6 +29,7 @@ function CubeCollection(id, CamObj, CubeObj) {
     this.id = id;
     this.CamObj = CamObj;
     this.CubeObj = CubeObj;
+    this.CubeObj2 = {};
 }
 
 function xQube() {
@@ -51,34 +53,34 @@ xQube.prototype.handleCommand = function(data) {
 }
 
 io.sockets.on('connection', function (socket) {
-    var socketID = socket.id;
+    //var socketID = socket.id;
     
     socket.on('newObj', function(kek) {
-        var id = socketID;
-        var camId = id + "Cam";
-        var cubeId = id + "Cube";
-        var uId = "user" + id;        
-        userList.push(id);
-        obj[camId] = new CameraObject(0, 0, 4);
-        obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
-        obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
+      var id = socket.id;
+      var camId = id + "Cam";
+      var cubeId = id + "Cube";
+      var uId = "user" + id;        
+      userList.push(id);
+      obj[camId] = new CameraObject(0, 0, 4);
+      obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
+      obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
+    
+      console.log("Built new Cube Object with ID: " + obj[uId].id) + "\n";
       
-        console.log("Built new Cube Object with ID: " + obj[uId].id) + "\n";
-        
-        console.log("UserList: " + userList);
+      console.log("UserList: " + userList);
     });
     
     socket.on('disconnect', function () {
-        var userInArr = userList.indexOf(socketID);
+        var userInArr = userList.indexOf(socket.id);
        
         if (userInArr > -1) {
             userList.splice(userInArr, 1);
-            console.log("Client: " + socketID + " has disconnected!");
+            console.log("Client: " + socket.id + " has disconnected!");
         } else {
-            console.log("Couldnt disconnect client: " + socketID);  
+            console.log("Couldnt disconnect client: " + socket.id);  
         }
        
-       socket.broadcast.emit('deleteGridObj', socketID);
+       socket.broadcast.emit('deleteGridObj', socket.id);
        console.log("UserList: " + userList);
     
     });
@@ -86,7 +88,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('updatePos', function(data) {
         var xx = data.x;
         var zz = data.z;
-        var id = socketID;
+        var id = socket.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
         var uId = "user" + id;
@@ -110,13 +112,33 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('getUserList', function() {
-      
-      for (var i = 0; i < userList.length; i++) {
+      var newArr = [];
+
+      /*for (var i = 0; i < userList.length; i++) {
         var nm = userList[i];
         var nmID = "user" + nm; 
         var unmID = obj[nmID];
-        socket.broadcast.emit('returnUserList', unmID.id, unmID.CubeObj);
+        var unmIDe = unmID.id;
+        var unmIDCube = unmID.CubeObj;
+        newArr.push({"id": unmIDe, "cube": unmIDCube});
       }
+
+      Promise.all(newArr)
+        .then(() => {
+        //  for (var i = 0; i < userList.length; i++) {
+            socket.broadcast.emit('returnUserList', newArr);   
+         // }
+        })
+        .catch((e) => {
+          // handle errors here
+        });*/
+       
+      var nmID = "user" + socket.id; 
+      var unmID = obj[nmID];
+      var unmIDe = unmID.id;
+      var unmIDCube = unmID.CubeObj;
+      
+      socket.broadcast.emit('returnUserList', unmIDe, unmIDCube);
     
     });
 

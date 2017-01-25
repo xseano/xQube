@@ -28,6 +28,7 @@
     "colors": "*",
     "cowsay": "*",
     "express": ">=4.2.x",
+    "promise": "^7.1.1",
     "socket.io": "^1.7.2"
   },
   "private": false,

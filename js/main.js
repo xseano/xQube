@@ -46,7 +46,6 @@ obj[sceneObjId].socket.on('connect', function() {
 	obj[cubeObjId].name = socketID;
 	group.add(obj[cubeObjId]);
 	obj[sceneObjId].add(obj[cubeObjId]);
-	
 
 	obj[camObjId].position.set(0, 12, camZ);
 	obj[cubeObjId].position.set(0, 10, 0);
@@ -99,21 +98,41 @@ obj[sceneObjId].socket.on('connect', function() {
 
 	obj[sceneObjId].socket.on('returnUserList', function(userID, userData) {
 		
-		var cubeObjId1 = userID + "CubeObj";
-		var clientCube = obj[cubeObjId1];
+		var userCube = userData;		
+		var uIDCube = userID + "CubeObj";
+		var clientCube = obj[uIDCube];
 		
-		console.log(clientCube);
-		
-		if (clientCube != undefined) {
+		if ((typeof clientCube) != "undefined") {
+			
 			if (userID != socketID) {
-				console.log(clientCube);
 				
+				clientCube.position.z = userCube.z;
+				clientCube.position.x = userCube.x;
 				group.add(clientCube);
 				obj[sceneObjId].add(clientCube);
-				
-				clientCube.position.set(userData.x, 10, userData.z);
+					
 			}
+			
+		} else {
+			var uIDCube1 = userID + "CubeObj";
+			
+			var cWidth1 = userData.w;
+			var cHeight1 = userData.h;
+			var cDepth1 = userData.d;
+			var cColor1 = userData.color;
+			
+			var cubeColorRGB1 = new THREE.Color(cColor1);
+			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
+			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
+			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeColor1);
+			
+			group.add(obj[uIDCube1]);
+			obj[uIDCube1].name = userID;
+			obj[sceneObjId].add(obj[uIDCube1]);
+							
+			obj[uIDCube1].position.set(userData.x, 10, userData.z);
 		}
+		
 	});
 	
 	obj[sceneObjId].socket.on('move', function(data) {
