@@ -97,17 +97,8 @@ obj[sceneObjId].socket.on('connect', function() {
 	};
 
 	obj[sceneObjId].socket.on('deleteGridObj', function(userID) {
-		var cuboid = userID + "CubeObj";
-		//var userObj = obj[sceneObjId].getObjectByName(userID);
-		
-		var render = function () {
-			requestAnimationFrame(render);
-			obj[sceneObjId].remove(obj[cuboid]);
-			renderer.render(obj[sceneObjId], obj[camObjId]);
-		};
-
-		render();
-		console.log("removed!");
+		var clientID = userID + "CubeObj";
+		obj[sceneObjId].remove(obj[clientID]);
 	});
 
 		
