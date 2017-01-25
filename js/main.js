@@ -1,7 +1,6 @@
 var obj = this;	
-var id = getRandomInt(1, 1000);
+var id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-
 obj[sceneObjId] = new THREE.Scene();
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
 
@@ -15,7 +14,6 @@ obj[sceneObjId].socket.on('connect', function() {
 	var socketID = obj[sceneObjId].socket.id;
 	var camObjId = socketID + "CamObj";
 	var cubeObjId = socketID + "CubeObj";
-	var cubeObjConstruct = socketID + "CubeObjConstruct";
 	
 	obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 	
@@ -74,7 +72,6 @@ obj[sceneObjId].socket.on('connect', function() {
 		}
 		
 		if (e.key == 's') {
-			
 			zz = speed;
 		}
 		
@@ -100,8 +97,6 @@ obj[sceneObjId].socket.on('connect', function() {
 		var clientID = userID + "CubeObj";
 		obj[sceneObjId].remove(obj[clientID]);
 	});
-
-		
 
 	obj[sceneObjId].socket.on('returnUserList', function(userID, userData) {
 			console.log(userData);
