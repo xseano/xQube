@@ -1,6 +1,8 @@
 var obj = this;	
 var id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
+const cameraHeight = 26;
+const cameraAngle = 75;
 obj[sceneObjId] = new THREE.Scene();
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
 
@@ -48,8 +50,10 @@ obj[sceneObjId].socket.on('connect', function() {
 	obj[sceneObjId].add(obj[cubeObjId]);
 
 	obj[cubeObjId].position.set(0, 10, camZ);
-	obj[camObjId].position.set(0, 10, camZ);
-	obj[camObjId].up = new THREE.Vector3(0, 12, camZ);
+	obj[camObjId].position.y = cameraHeight;
+	obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+	obj[camObjId].position.x = 0;
+	obj[camObjId].position.z = camZ;
 
 
 	var render = function () {
@@ -116,6 +120,7 @@ obj[sceneObjId].socket.on('connect', function() {
 				
 				clientCube.position.z = userCube.z;
 				clientCube.position.x = userCube.x;
+				clientCube.position.y = 10;
 					
 			}
 			
@@ -137,7 +142,7 @@ obj[sceneObjId].socket.on('connect', function() {
 			obj[uIDCube1].name = userID;
 			obj[sceneObjId].add(obj[uIDCube1]);
 							
-			obj[uIDCube1].position.set(userData.x, 7, userData.z);
+			obj[uIDCube1].position.set(userData.x, 10, userData.z);
 		}
 		
 	});
@@ -150,8 +155,11 @@ obj[sceneObjId].socket.on('connect', function() {
 			var newCubeX = data.CubeObj.x;
 					
 			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-			obj[camObjId].position.set(newCamX, 10, newCubeZ);
-			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
+			obj[camObjId].position.y = cameraHeight;
+			obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+			obj[camObjId].position.x = newCubeX;
+			obj[camObjId].position.z = newCamZ;		
+			
 	});
 	
 });
