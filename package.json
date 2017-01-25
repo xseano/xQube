@@ -1,12 +1,16 @@
 {
   "name": "xQube",
   "version": "1.0.0",
-  "description": "Basic cube movement powered on three.js engine",
+  "description": "Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS",
   "author": "Mile High Interactive, LLC",
   "contributors": [
     {
       "name": "Sean Oberoi",
       "email": "sean.o@mac.com"
+    },
+    {
+      "name": "Stas Darevskiy",
+      "email": "stasadance@gmail.com"
     }
   ],
   "scripts": {
