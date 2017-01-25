@@ -58,28 +58,31 @@ obj[sceneObjId].socket.on('connect', function() {
 	};
 
 	render();
-		
-		
-	document.onkeypress = function (e) {
-		e = e || window.event;
+	
+	var keys = {};
+	
+	$(document).keydown(function (e) {
+		keys[e.key] = true;	
 		var xx = 0;
 		var zz = 0;
-		var speed = 1;
-
-		if (e.key == 'w') {
-			zz = -speed;
-		}
-		
-		if (e.key == 's') {
-			zz = speed;
-		}
-		
-		if (e.key == 'a') {
-			xx = -speed;
-		}
-		
-		if (e.key == 'd') {
-			xx = speed;
+		var speed = 4;
+		for (var i in keys) {
+			if (!keys.hasOwnProperty(i)) continue;
+				if (i == 'w') {
+					zz = -speed;
+				}
+				
+				if (i == 's') {
+					zz = speed;
+				}
+				
+				if (i == 'a') {
+					xx = -speed;
+				}
+				
+				if (i == 'd') {
+					xx = speed;
+				}
 		}
 		
 		obj[sceneObjId].socket.emit('updatePos', {
@@ -88,9 +91,13 @@ obj[sceneObjId].socket.on('connect', function() {
 			'id': socketID
 		});
 		
-		obj[sceneObjId].socket.emit('getUserList');				
-	};
-
+		obj[sceneObjId].socket.emit('getUserList');	
+	});
+	
+	$(document).keyup(function (e) {
+		delete keys[e.key];
+	});
+	
 	obj[sceneObjId].socket.on('deleteGridObj', function(userID) {
 		var clientID = userID + "CubeObj";
 		obj[sceneObjId].remove(obj[clientID]);
