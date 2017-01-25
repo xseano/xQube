@@ -79,7 +79,6 @@ io.sockets.on('connection', function (socket) {
         }
        
        socket.emit('deleteGridObj', socketID);
-      // socket.emit('updatePlayerList');
        console.log("UserList: " + userList);
     
     });

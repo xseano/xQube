@@ -60,8 +60,6 @@ obj[sceneObjId].socket.on('connect', function() {
 	};
 
 	render();
-	setInterval(function(){ render(); }, 3000);
-		
 		
 		
 	document.onkeypress = function (e) {
@@ -128,28 +126,14 @@ obj[sceneObjId].socket.on('connect', function() {
 				var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
 				var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
 				obj[cubeObjId1] = new THREE.Mesh(cubeGeom1, cubeColor1);
+				
 				group.add(obj[cubeObjId1]);
 				obj[cubeObjId1].name = userID;
 				obj[sceneObjId].add(obj[cubeObjId1]);
 				console.log(obj[cubeObjId1]);
+				
+				obj[cubeObjId1].position.set(userData.x, 10, userData.z);
 			}
-			
-			
-			var render = function () {
-				requestAnimationFrame(render);
-				
-				if (userID != socketID) {
-					obj[cubeObjId1].position.set(userData.x, 10, userData.z);
-				}		
-				
-				/*obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-				obj[camObjId].position.set(newCamX, 12, newCamZ);
-				obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);*/
-				
-				renderer.render(obj[sceneObjId], obj[camObjId]);
-			};
-
-			render();
 		
 		});
 	
@@ -159,16 +143,10 @@ obj[sceneObjId].socket.on('connect', function() {
 
 			var newCamX = data.CamObj.x;
 			var newCubeX = data.CubeObj.x;
-
-			var render = function () {
-				requestAnimationFrame(render);			
-				obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-				obj[camObjId].position.set(newCamX, 12, newCamZ);
-				obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
-				renderer.render(obj[sceneObjId], obj[camObjId]);
-			};
-
-			render();
+					
+			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
+			obj[camObjId].position.set(newCamX, 12, newCamZ);
+			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
 	});
 	
 });
