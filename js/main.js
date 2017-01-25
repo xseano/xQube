@@ -47,7 +47,7 @@ obj[sceneObjId].socket.on('connect', function() {
 	group.add(obj[cubeObjId]);
 	obj[sceneObjId].add(obj[cubeObjId]);
 
-	obj[camObjId].position.set(0, 8, camZ);
+	obj[camObjId].position.set(0, 8, camZ-4);
 	obj[cubeObjId].position.set(0, 7, 0);
 	obj[camObjId].lookAt(new THREE.Vector3(0, 8, 0));
 
@@ -144,8 +144,8 @@ obj[sceneObjId].socket.on('connect', function() {
 			var newCubeX = data.CubeObj.x;
 					
 			obj[cubeObjId].position.set(newCamX, 7, newCubeZ);
-			obj[camObjId].position.set(newCamX, 8, newCamZ);
-			obj[camObjId].up = new THREE.Vector3(0, 9, newCamZ);
+			obj[camObjId].position.set(newCamX, 8, newCamZ-4);
+			obj[camObjId].up = new THREE.Vector3(0, 8, newCamZ-4);
 	});
 	
 });
