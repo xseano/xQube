@@ -89,8 +89,7 @@ obj[sceneObjId].socket.on('connect', function() {
 			'id': socketID
 		});
 		
-		obj[sceneObjId].socket.emit('getUserList');
-				
+		obj[sceneObjId].socket.emit('getUserList');				
 	};
 
 	obj[sceneObjId].socket.on('deleteGridObj', function(userID) {
@@ -99,30 +98,23 @@ obj[sceneObjId].socket.on('connect', function() {
 	});
 
 	obj[sceneObjId].socket.on('returnUserList', function(userID, userData) {
-			console.log(userData);
-			console.log(userID);
-			var cubeObjId1 = userID + "CubeObj";
-			
-			var cWidth1 = userData.w;
-			var cHeight1 = userData.h;
-			var cDepth1 = userData.d;
-			var cColor1 = userData.color;
-			
-			if (userID != socketID) {
-				var cubeColorRGB1 = new THREE.Color(cColor1);
-				var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-				var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
-				obj[cubeObjId1] = new THREE.Mesh(cubeGeom1, cubeColor1);
-				
-				group.add(obj[cubeObjId1]);
-				obj[cubeObjId1].name = userID;
-				obj[sceneObjId].add(obj[cubeObjId1]);
-				console.log(obj[cubeObjId1]);
-				
-				obj[cubeObjId1].position.set(userData.x, 10, userData.z);
-			}
 		
-		});
+		var cubeObjId1 = userID + "CubeObj";
+		var clientCube = obj[cubeObjId1];
+		
+		console.log(clientCube);
+		
+		if (clientCube != undefined) {
+			if (userID != socketID) {
+				console.log(clientCube);
+				
+				group.add(clientCube);
+				obj[sceneObjId].add(clientCube);
+				
+				clientCube.position.set(userData.x, 10, userData.z);
+			}
+		}
+	});
 	
 	obj[sceneObjId].socket.on('move', function(data) {
 			var newCamZ = data.CamObj.z;
