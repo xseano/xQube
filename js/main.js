@@ -68,20 +68,21 @@ obj[sceneObjId].socket.on('connect', function() {
 		var speed = 4;
 		for (var i in keys) {
 			if (!keys.hasOwnProperty(i)) continue;
+				
 				if (i == 'w') {
-					zz = -speed;
+					zz -= speed;
 				}
 				
 				if (i == 's') {
-					zz = speed;
+					zz += speed;
 				}
 				
 				if (i == 'a') {
-					xx = -speed;
+					xx -= speed;
 				}
 				
 				if (i == 'd') {
-					xx = speed;
+					xx += speed;
 				}
 		}
 		
