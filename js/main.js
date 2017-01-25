@@ -47,9 +47,9 @@ obj[sceneObjId].socket.on('connect', function() {
 	group.add(obj[cubeObjId]);
 	obj[sceneObjId].add(obj[cubeObjId]);
 
-	obj[camObjId].position.set(0, 12, camZ);
-	obj[cubeObjId].position.set(0, 10, 0);
-	obj[camObjId].lookAt(new THREE.Vector3(0, 12, -10));
+	obj[camObjId].position.set(0, 8, camZ);
+	obj[cubeObjId].position.set(0, 7, 0);
+	obj[camObjId].lookAt(new THREE.Vector3(0, 8, 0));
 
 
 	var render = function () {
@@ -64,7 +64,7 @@ obj[sceneObjId].socket.on('connect', function() {
 		e = e || window.event;
 		var xx = 0;
 		var zz = 0;
-		var speed = 20;
+		var speed = 1;
 
 		if (e.key == 'w') {
 			zz = -speed;
@@ -114,6 +114,7 @@ obj[sceneObjId].socket.on('connect', function() {
 			}
 			
 		} else {
+			
 			var uIDCube1 = userID + "CubeObj";
 			
 			var cWidth1 = userData.w;
@@ -130,7 +131,7 @@ obj[sceneObjId].socket.on('connect', function() {
 			obj[uIDCube1].name = userID;
 			obj[sceneObjId].add(obj[uIDCube1]);
 							
-			obj[uIDCube1].position.set(userData.x, 10, userData.z);
+			obj[uIDCube1].position.set(userData.x, 7, userData.z);
 		}
 		
 	});
@@ -142,9 +143,9 @@ obj[sceneObjId].socket.on('connect', function() {
 			var newCamX = data.CamObj.x;
 			var newCubeX = data.CubeObj.x;
 					
-			obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-			obj[camObjId].position.set(newCamX, 12, newCamZ);
-			obj[camObjId].up = new THREE.Vector3(0, 12, newCamZ);
+			obj[cubeObjId].position.set(newCamX, 7, newCubeZ);
+			obj[camObjId].position.set(newCamX, 8, newCamZ);
+			obj[camObjId].up = new THREE.Vector3(0, 9, newCamZ);
 	});
 	
 });
