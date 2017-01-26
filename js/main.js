@@ -5,6 +5,16 @@ const cameraHeight = 20; // Controls FOV on Cube in context of the plane
 const cameraAngle = 75; // Controls Angle at which camera points towards cube
 obj[sceneObjId] = new THREE.Scene();
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
+var sceneColor = new THREE.Color("rgb(174, 129, 255)");
+var bodyDiv = document.getElementById("bodyDiv");
+
+setInterval(function(){ 
+	if (obj[sceneObjId].socket.connected == false) {
+		bodyDiv.innerHTML = '<center><span class="message" style="position: relative;color: white;font-size: 20px;font: 183px/1.4em &quot;times new roman&quot;,times,serif;margin-left: auto;margin-right: auto;width: 100%;display: inline-table;padding-left: 0px;text-align: center;text-decoration: none;top: -4px;color: #735b3f;text-shadow: 2px 4px 3px #332918;font-size: 147px;">xQube is Connecting...</span></center>';		
+	} else {	
+		bodyDiv.innerHTML = '';
+	}
+}, 2000);
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
