@@ -10,7 +10,7 @@ var bodyDiv = document.getElementById("bodyDiv");
 
 setInterval(function(){ 
 	if (obj[sceneObjId].socket.connected == false) {
-		bodyDiv.innerHTML = '<center class="mBox"><img src="./images/mh_logo.png"/><span class="textMsg">x³ is Connecting...</span><br><br><span class="copyrightMessage">Copyright (c) 2016-2017 Mile High Interactive, LLC</span></center>';		
+		bodyDiv.innerHTML = '<center><img src="./images/mh_logo.png"/><span class="textMsg">x³ is Connecting...</span><br><br><span class="copyrightMessage">Copyright (c) 2016-2017 Mile High Interactive, LLC</span></center>';		
 	} else {	
 		bodyDiv.innerHTML = '';
 	}
