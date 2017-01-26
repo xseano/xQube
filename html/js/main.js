@@ -78,34 +78,14 @@ obj[sceneObjId].socket.on('connect', function() {
 	
 	$(document).keydown(function (e) {
 		keys[e.key] = true;	
-		var xx = 0;
-		var zz = 0;
-		var speed = 4;
 		for (var i in keys) {
 			if (!keys.hasOwnProperty(i)) continue;
 				
-				if (i == 'w') {
-					zz -= speed;
-				}
-				
-				if (i == 's') {
-					zz += speed;
-				}
-				
-				if (i == 'a') {
-					xx -= speed;
-				}
-				
-				if (i == 'd') {
-					xx += speed;
-				}
+			obj[sceneObjId].socket.emit('updatePos', {
+				'key': i,
+				'id': socketID
+			});
 		}
-		
-		obj[sceneObjId].socket.emit('updatePos', {
-			'x': xx,
-			'z': zz,
-			'id': socketID
-		});
 		
 		obj[sceneObjId].socket.emit('getUserList');	
 	});

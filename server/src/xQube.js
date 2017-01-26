@@ -85,8 +85,27 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('updatePos', function(data) {
-        var xx = data.x;
-        var zz = data.z;
+        var xx = 0;
+        var zz = 0;
+        var speed = 4;
+        var key = data.key;
+        
+        if (key == 'w') {
+          zz -= speed;
+        }
+        
+        if (key == 's') {
+          zz += speed;
+        }
+        
+        if (key == 'a') {
+          xx -= speed;
+        }
+        
+        if (key == 'd') {
+          xx += speed;
+        }
+        
         var id = socket.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
