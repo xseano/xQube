@@ -1,8 +1,8 @@
 var obj = this;	
 var id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-const cameraHeight = 20; // Controls FOV on Cube in context of the plane
-const cameraAngle = 75; // Controls Angle at which camera points towards cube
+const cameraHeight = 55; // Controls FOV on Cube in context of the plane
+const cameraAngle = 72; // Controls Angle at which camera points towards cube
 obj[sceneObjId] = new THREE.Scene();
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
@@ -27,7 +27,7 @@ obj[sceneObjId].socket.on('connect', function() {
 	var camObjId = socketID + "CamObj";
 	var cubeObjId = socketID + "CubeObj";
 	
-	obj[camObjId] = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+	obj[camObjId] = new THREE.PerspectiveCamera(105, window.innerWidth/window.innerHeight, 0.1, 1000);
 	
 	obj[sceneObjId].socket.emit("newObj", {
 		"id": socketID
