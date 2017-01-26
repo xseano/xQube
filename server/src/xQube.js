@@ -37,13 +37,15 @@ function xQube() {
 
 xQube.prototype.start = function() {
     Logger.white(cowsay.say({
-        text : "xQube",
+        text : "x³ ( xQube )",
         e : "oO",
         T : "U "
     }));
 
     Logger.prompt(this.handleCommand.bind(this));
-    Logger.info("xQube server deployed and running!".cyan);
+    Logger.info("x³ v1.00 server online!".green);
+    Logger.info("x³ authors: Sean Oberoi and Stas Darevskiy ".green);
+    Logger.info("Copyright (c) 2016-2017 Mile High Interactive, LLC".green);
 }
 
 xQube.prototype.handleCommand = function(data) {

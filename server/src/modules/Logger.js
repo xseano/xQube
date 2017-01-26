@@ -15,8 +15,6 @@ module.exports.write = write;
 module.exports.start = start;
 module.exports.prompt = prompt;
 module.exports.clear = clear;
-
-// Color without prefix
 module.exports.green = green;
 module.exports.white = white;
 
@@ -76,10 +74,6 @@ function white(message) {
     writeCon(colorWhite + colorBright, message);
 };
 
-
-
-// --- utils ---
-
 function getDateTimeString() {
     var date = new Date();
     var dy = date.getFullYear();
@@ -134,9 +128,7 @@ function writeCon(color, message) {
 };
 
 function writeLog(message) {
-    //if (consoleLog == null)
-    //    return;
-    // consoleLog.write(message + EOL);
+    //Do nothing!!! lmao xd
 };
 
 function start() {
@@ -145,21 +137,7 @@ function start() {
     var timeString = getDateTimeString();
     var fileName = logFolder + "/" + logFileName + ".log";
     var fileName2 = logBackupFolder + "/" + logFileName + "-" + timeString + ".log";
-
-    /*if (!fs.existsSync(logFolder)) {
-        // Make log folder
-        fs.mkdirSync(logFolder);
-    } else if (fs.existsSync(fileName)) {
-        if (!fs.existsSync(logBackupFolder)) {
-            // Make log backup folder
-            fs.mkdirSync(logBackupFolder);
-        }
-        // Backup previous log
-        fs.renameSync(fileName, fileName2);
-    }*/
-    //consoleLog = fs.createWriteStream(fileName, { flags: 'w' });
     console.log = function (message) { print(message); };
-	//writeLog("=== Started " + timeString + " ===");
 }
 
 var logFolder = "./logs";

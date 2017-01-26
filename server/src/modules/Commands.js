@@ -15,8 +15,8 @@ Commands.prototype.parse = function(command) {
     switch(split[0].toLowerCase())
     {
         case "quit":
-        case "test":
-        Logger.green("Wus poppin B");
+        case "credit":
+        Logger.green("Authors: Sean Oberoi and Stas Darevskiy");
             break;
         case "exit":
             this.world.exit();
