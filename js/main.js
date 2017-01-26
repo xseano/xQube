@@ -1,7 +1,7 @@
 var obj = this;	
 var id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-const cameraHeight = 26;
+const cameraHeight = 20;
 const cameraAngle = 75;
 obj[sceneObjId] = new THREE.Scene();
 obj[sceneObjId].socket = io.connect('http://localhost:8080');
@@ -27,15 +27,15 @@ obj[sceneObjId].socket.on('connect', function() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
-	var scale = 200; 
-	var sections = 20; 
+	var scale = 2000; 
+	var sections = 200; 
 	var fogGrid = new THREE.Fog(0x00ff00, 1, 5);
 	var baseGrid = new THREE.GridHelper(scale, sections);
 	obj[sceneObjId].add(baseGrid);
 
-	var cWidth = 1;
-	var cHeight = 1;
-	var cDepth = 1;
+	var cWidth = 5;
+	var cHeight = 5;
+	var cDepth = 5;
 	var cColor = "rgb(174, 129, 255)";
 	var camZ = 4;
 
@@ -120,8 +120,7 @@ obj[sceneObjId].socket.on('connect', function() {
 				
 				clientCube.position.z = userCube.z;
 				clientCube.position.x = userCube.x;
-				clientCube.position.y = 10;
-					
+				clientCube.position.y = 10;		
 			}
 			
 		} else {
