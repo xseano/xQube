@@ -1,3 +1,3 @@
 #!/bin/sh
 npm update
-node index.js
+node ./src/index.js
