@@ -10,11 +10,11 @@ var bodyDiv = document.getElementById("bodyDiv");
 
 setInterval(function(){ 
 	if (obj[sceneObjId].socket.connected == false) {
-		bodyDiv.innerHTML = '<center><span class="message" style="position: relative;color: white;font-size: 20px;font: 183px/1.4em &quot;times new roman&quot;,times,serif;margin-left: auto;margin-right: auto;width: 100%;display: inline-table;padding-left: 0px;text-align: center;text-decoration: none;top: -4px;color: #735b3f;text-shadow: 2px 4px 3px #332918;font-size: 147px;">xQube is Connecting...</span></center>';		
+		bodyDiv.innerHTML = '<center class="mBox"><img src="./images/mh_logo.png"/><span class="textMsg">x³ is Connecting...</span><br><br><span class="copyrightMessage">Copyright (c) 2016-2017 Mile High Interactive, LLC</span></center>';		
 	} else {	
 		bodyDiv.innerHTML = '';
 	}
-}, 2000);
+}, 1000);
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
