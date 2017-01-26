@@ -14,9 +14,9 @@
     }
   ],
   "scripts": {
-    "start": "node ./server/index.js"
+    "start": "start.sh"
   },
-  "main": "src/index.js",
+  "main": "start.sh",
   "repository": {
     "type": "git",
     "url": "https://github.com/xseano/xQube"
