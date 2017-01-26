@@ -5,7 +5,6 @@ const colors = require('colors');
 global.Logger = require('./modules/Logger');
 global.Commands = require('./modules/Commands');
 global.readline = require('readline');
-var Promise = require('promise');
 global.rl = readline.createInterface(process.stdin, process.stdout);
 var userList = [];
 

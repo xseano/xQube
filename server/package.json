@@ -14,7 +14,7 @@
     }
   ],
   "scripts": {
-    "start": "./server/start.sh"
+    "start": "./start.sh"
   },
   "main": "start.sh",
   "repository": {
