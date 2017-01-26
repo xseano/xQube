@@ -1,3 +1,7 @@
+var fs = require("fs");
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+
 function Commands(xQube) {
     this.xQube = xQube;
 }
@@ -11,15 +15,15 @@ Commands.prototype.parse = function(command) {
     }
     rest = rest.substr(0, rest.length - 1);
 
-    // Regular Commands
     switch(split[0].toLowerCase())
     {
         case "quit":
         case "credit":
         Logger.green("Authors: Sean Oberoi and Stas Darevskiy");
             break;
-        case "exit":
-            this.world.exit();
+        case "exit":        
+        var cntrlC = '^C';
+        var child = exec(cntrlC, function(err, stdout, stderr) {if (err) throw err;});
             break;
         case "?":
         case "help":
