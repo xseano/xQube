@@ -1,4 +1,4 @@
-# xQube
+# x³ ( xQube )
 
 **Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS**
 
