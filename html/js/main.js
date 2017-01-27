@@ -39,7 +39,6 @@ obj[sceneObjId].socket.on('connect', function() {
 
 	var scale = 2000; 
 	var sections = 200; 
-	var fogGrid = new THREE.Fog(0x00ff00, 1, 5);
 	var baseGrid = new THREE.GridHelper(scale, sections);
 	obj[sceneObjId].add(baseGrid);
 
@@ -51,10 +50,29 @@ obj[sceneObjId].socket.on('connect', function() {
 
 	var cubeColorRGB = new THREE.Color(cColor);
 	var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-	var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+	var txtrLder = new THREE.TextureLoader();
+
+	var dice1 = txtrLder.load( './images/DiceFace_1.png' );
+	var dice2 = txtrLder.load( './images/DiceFace_2.png' );
+	var dice3 = txtrLder.load( './images/DiceFace_3.png' );
+	var dice4 = txtrLder.load( './images/DiceFace_4.png' );
+	var dice5 = txtrLder.load( './images/DiceFace_5.png' );
+	var dice6 = txtrLder.load( './images/DiceFace_6.png' );
+
+	var cubeMaterials = [
+		new THREE.MeshBasicMaterial( { map: dice1 } ),
+		new THREE.MeshBasicMaterial( { map: dice2 } ),
+		new THREE.MeshBasicMaterial( { map: dice3 } ),
+		new THREE.MeshBasicMaterial( { map: dice4 } ),
+		new THREE.MeshBasicMaterial( { map: dice5 } ),
+		new THREE.MeshBasicMaterial( { map: dice6 } )
+	];
+	
+	var cubeFaces = new THREE.MeshFaceMaterial(cubeMaterials);
+	//var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
 	var group = new THREE.Group();
 	obj[sceneObjId].add(group);
-	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
+	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeFaces);
 	obj[cubeObjId].name = socketID;
 	group.add(obj[cubeObjId]);
 	obj[sceneObjId].add(obj[cubeObjId]);
@@ -89,6 +107,7 @@ obj[sceneObjId].socket.on('connect', function() {
 		
 		obj[sceneObjId].socket.emit('getUserList');	
 	});
+	
 	
 	$(document).keyup(function (e) {
 		delete keys[e.key];
@@ -125,8 +144,7 @@ obj[sceneObjId].socket.on('connect', function() {
 			
 			var cubeColorRGB1 = new THREE.Color(cColor1);
 			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
-			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeColor1);
+			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeFaces);
 			
 			group.add(obj[uIDCube1]);
 			obj[uIDCube1].name = userID;

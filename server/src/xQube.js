@@ -112,11 +112,11 @@ io.sockets.on('connection', function (socket) {
         var cubeId = id + "Cube";
         var uId = "user" + id;
         
-        obj[camId].x = obj[camId].x + xx;
-        obj[camId].z = obj[camId].z + zz;
+        obj[camId].x += xx;
+        obj[camId].z += zz;
         
-        obj[cubeId].x = obj[cubeId].x + xx;
-        obj[cubeId].z = obj[cubeId].z + zz;
+        obj[cubeId].x += xx;
+        obj[cubeId].z += zz;
         
         var camPos = "gridPos[ x: {" + obj[camId].x + "}|| y:{ " + obj[camId].y + "}|| z: {" + obj[camId].z + "} ]";
         var camDebug = "Camera" + ": " + camPos;
