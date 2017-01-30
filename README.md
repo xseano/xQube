@@ -3,4 +3,10 @@
 
 **Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS**
 
-Powered by [*three.js*](https://threejs.org/) and (currently) [socket.io :thumbsdown: ](http://socket.io/)
+##Mechanics
+* Core Engine: [*three.js*](https://threejs.org/)
+* Networking Backend: [Socket.IO](http://socket.io/) || [Pure WebSockets](https://github.com/xseano/xQube/tree/master/server/src/lib/)
+
+##Releases
+* [Socket.IO Implementation v1.0.0](https://github.com/xseano/xQube/releases/tag/v1.0.0)
+* WebSockets Implementation v1.0.0 - Coming Soon!
