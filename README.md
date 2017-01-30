@@ -8,5 +8,5 @@
 * Networking Backend: [Socket.IO](http://socket.io/) || [Pure WebSockets](https://github.com/xseano/xQube/tree/master/server/src/lib/)
 
 ##Releases
-* [Socket.IO Implementation v1.0.0](https://github.com/xseano/xQube/releases/tag/v1.0.0)
+* [Socket.IO Implementation v1.0.0](https://github.com/xseano/xQube/releases/tag/v1.0.0-Socket.IO)
 * WebSockets Implementation v1.0.0 - Coming Soon!
