@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  background: url(./images/mh_tile_dark.png) center center repeat;
+}
+
+canvas {
+  width: 100%;
+  height: 100%
+}
+
+.textMsg {
+  position: relative;
+  color: white;
+  font: 120px/1.4em "times new roman",times,serif;
+  width: auto;
+  display: inline-table;
+  text-shadow: 4px 8px 6px rgba(0,0,0,.4);
+}
+
+.copyrightMessage {
+  position: relative;
+  color: white;
+  font: 50px "times new roman",times,serif;
+  width: auto;
+  display: inline-table;
+  text-shadow: 4px 8px 6px rgba(0,0,0,.4);
+}
+
+.mBox {
+  background: rgba(30,30,30,.7);
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  width:auto;
+  position: relative;
+  text-align: center;
+}

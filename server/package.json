@@ -2,7 +2,7 @@
   "name": "xQube",
   "version": "1.0.0",
   "description": "Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS",
-  "author": "Mile High Interactive, LLC",
+  "author": "Sean Oberoi",
   "contributors": [
     {
       "name": "Sean Oberoi",
@@ -34,5 +34,5 @@
     "socket.io": "^1.7.2"
   },
   "private": false,
-  "license": "Copyright (c) 2016-2017 Mile High Interactive, LLC"
+  "license": "Copyright (c) Sean Oberoi"
 }
