@@ -13,13 +13,46 @@ class Block {
         this.uID = new CubeCollection(id, this.getCamID(id), this.getCubeID(id));
     }
 
-    ab2str(buf) {
-      return String.fromCharCode.apply(null, new Uint16Array(buf));
+    str2ab(str) {
+        var escstr = encodeURIComponent(str);
+        var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
+            return String.fromCharCode('0x' + p1);
+        });
+        var ua = new Uint8Array(binstr.length);
+        Array.prototype.forEach.call(binstr, function (ch, i) {
+            ua[i] = ch.charCodeAt(0);
+        });
+        return ua;
+    }
+
+    ab2str(ab) {
+        var binstr = Array.prototype.map.call(ab, function (ch) {
+            return String.fromCharCode(ch);
+        }).join('');
+        var escstr = binstr.replace(/(.)/g, function (m, p) {
+            var code = p.charCodeAt(0).toString(16).toUpperCase();
+            if (code.length < 2) {
+                code = '0' + code;
+            }
+            return '%' + code;
+        });
+        return decodeURIComponent(escstr);
     }
 
     onMessage(msg) {
-        var reader = new BinaryReader(msg);
-        var id = reader.readUInt8();
+        //var reader = new BinaryReader(msg);
+        //var id = reader.readUInt8();
+
+        console.log(msg);
+
+        //var objUArr = new Uint8Array(msg); // Uint8Array[xyx, yzx, yxz, zyx]
+        var objStr = this.ab2str(msg); // "{'x': '1'}"
+        var jsonObj = JSON.parse(objStr); // {'x': '1'}
+
+        console.log(jsonObj.x); // 1
+
+        //console.log('Received obj: ' + String.fromCharCode(abstr));
+        /*
         switch(id) {
             case 1:
                 var abstr = reader.readUInt8();
@@ -29,6 +62,7 @@ class Block {
                 console.log("Unknown packet id: " + id + "!");
                 break;
         }
+        */
     }
 
     getCamID(id) {

@@ -44,25 +44,57 @@ function sendBuffer(dataview) {
 }
 
 function str2ab(str) {
-  var buf = new ArrayBuffer(str.length*2);
-  var bufView = new Uint16Array(buf);
-  for (var i=0, strLen=str.length; i<strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
+    var escstr = encodeURIComponent(str);
+    var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+    });
+    var ua = new Uint8Array(binstr.length);
+    Array.prototype.forEach.call(binstr, function (ch, i) {
+        ua[i] = ch.charCodeAt(0);
+    });
+    return ua;
 }
 
-function sendString(str) {
+function ab2str(ab) {
+    var binstr = Array.prototype.map.call(ab, function (ch) {
+        return String.fromCharCode(ch);
+    }).join('');
+    var escstr = binstr.replace(/(.)/g, function (m, p) {
+        var code = p.charCodeAt(0).toString(16).toUpperCase();
+        if (code.length < 2) {
+            code = '0' + code;
+        }
+        return '%' + code;
+    });
+    return decodeURIComponent(escstr);
+}
+
+function sendData(data) {
     var buffer = createBuffer(2);
     var offset = 0;
     buffer.setUint8(offset++, 1);
-		buffer.setUint8(offset++, str.charCodeAt(0));
+		buffer.setUint8(offset++, data);
     sendBuffer(buffer);
+}
+
+function sendJSONObject(obj) {
+	var stringifiedObj = JSON.stringify(obj); // "{'x': '1'}"
+	var abObj = str2ab(stringifiedObj); // Uint8Array[xyx, yzx, yxz, zyx]
+	var objArr = Array.prototype.slice.call(abObj); // [xyx, yzx, yxz, zyx]
+
+	var objUArr = new Uint8Array(objArr); // Uint8Array[xyx, yzx, yxz, zyx]
+	var objStr = ab2str(objUArr); // "{'x': '1'}"
+	var jsonObj = JSON.parse(objStr); // {'x': '1'}
+
+	console.log(jsonObj.x); // 1
+
+	ws.send(abObj);
+
 }
 
 function open() {
 	bodyDiv.innerHTML = '';
-	sendString('h');
+	sendJSONObject({'x': 1});
 
 	var socketID = obj[sceneObjId].id;
 	var camObjId = socketID + "CamObj";
