@@ -12,7 +12,7 @@ function crc32b($ptf) {
 	  <title>x³ | xQube</title>
 	</head>
 
-  <body>
+  <body onload="onLoad()">
 		<div id="bodyDiv"></div>
     <link href="./resources/css/xqube.css?v=<?php echo crc32b('./resources/css/xqube.css'); ?>" rel="stylesheet">
 		<script src="./resources/js/three.js?v=<?php echo crc32b('./resources/js/three.js'); ?>"></script>

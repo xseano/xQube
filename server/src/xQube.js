@@ -1,4 +1,9 @@
-const io = require('socket.io').listen(8080);
+const WebSocket = require('ws');
+const webSock = new WebSocket.Server({
+  perMessageDeflate: false,
+  port: 8080
+});
+
 var obj = this;
 const cowsay = require('cowsay');
 const colors = require('colors');
@@ -53,95 +58,102 @@ xQube.prototype.handleCommand = function(data) {
 	Logger.prompt(this.handleCommand.bind(this));
 }
 
-io.sockets.on('connection', function (socket) {
-    
-    socket.on('newObj', function(kek) {
-      var id = socket.id;
+webSock.on('connection', function connection(ws) {
+
+    ws.on('newObj', function(kek) {
+      var id = ws.id;
       var camId = id + "Cam";
       var cubeId = id + "Cube";
-      var uId = "user" + id;        
+      var uId = "user" + id;
       userList.push(id);
       obj[camId] = new CameraObject(0, 0, 4);
       obj[cubeId] = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
-      obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);        
-    
+      obj[uId] = new CubeCollection(id, obj[camId], obj[cubeId]);
+
       console.log("Built new Cube Object with ID: " + obj[uId].id) + "\n";
-      
+
       console.log("UserList: " + userList);
     });
-    
-    socket.on('disconnect', function () {
-        var userInArr = userList.indexOf(socket.id);
-       
+
+    ws.on('disconnect', function () {
+        var userInArr = userList.indexOf(ws.id);
+
         if (userInArr > -1) {
             userList.splice(userInArr, 1);
-            console.log("Client: " + socket.id + " has disconnected!");
+            console.log("Client: " + ws.id + " has disconnected!");
         } else {
-            console.log("Couldnt disconnect client: " + socket.id);  
+            console.log("Couldnt disconnect client: " + ws.id);
         }
-       
-       socket.broadcast.emit('deleteGridObj', socket.id);
+
+       ws.clients.forEach(function each(client) {
+         if (client !== ws && client.readyState === WebSocket.OPEN) {
+           client.send('deleteGridObj', ws.id);
+         }
+       });
        console.log("UserList: " + userList);
-    
+
     });
-    
-    socket.on('updatePos', function(data) {
+
+    ws.on('updatePos', function(data) {
         var xx = 0;
         var zz = 0;
         var speed = 4;
         var key = data.key;
-        
+
         if (key == 'w') {
           zz -= speed;
         }
-        
+
         if (key == 's') {
           zz += speed;
         }
-        
+
         if (key == 'a') {
           xx -= speed;
         }
-        
+
         if (key == 'd') {
           xx += speed;
         }
-        
-        var id = socket.id;
+
+        var id = ws.id;
         var camId = id + "Cam";
         var cubeId = id + "Cube";
         var uId = "user" + id;
-        
+
         obj[camId].x += xx;
         obj[camId].z += zz;
-        
+
         obj[cubeId].x += xx;
         obj[cubeId].z += zz;
-        
+
         var camPos = "gridPos[ x: {" + obj[camId].x + "}|| y:{ " + obj[camId].y + "}|| z: {" + obj[camId].z + "} ]";
         var camDebug = "Camera" + ": " + camPos;
-        
+
         var cubePos = "gridPos[ x: {" + obj[cubeId].x + "}|| y:{ " + obj[cubeId].y + "}|| z: {" + obj[cubeId].z + "} ]";
         var cubeDebug = "Cube" + ": color{" + obj[cubeId].color + "} || " + cubePos;
-        
+
        // console.log(camDebug + "\n" + cubeDebug);
-      
-        socket.emit('move', obj[uId]);
-        
+
+        ws.send('move', obj[uId]);
+
     });
-    
-    socket.on('getUserList', function() {
-      
-      var nmID = "user" + socket.id; 
+
+    ws.on('getUserList', function() {
+
+      var nmID = "user" + socket.id;
       var unmID = obj[nmID];
       var unmIDe = unmID.id;
       var unmIDCube = unmID.CubeObj;
-      
-      socket.broadcast.emit('returnUserList', unmIDe, unmIDCube);
-    
+
+      ws.clients.forEach(function each(client) {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send('returnUserList', unmIDe, unmIDCube);
+        }
+      });
     });
 
-});
+  });
 
 
 module.exports = xQube;
