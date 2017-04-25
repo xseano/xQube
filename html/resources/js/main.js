@@ -12,6 +12,11 @@ function SceneObj(id) {
     this.scene = new THREE.Scene();
 }
 
+function DataObject(id, data) {
+	this.id = id;
+	this.data = data;
+}
+
 obj[sceneObjId] = new SceneObj(id);
 var ws = obj[sceneObjId].socket;
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
@@ -78,18 +83,20 @@ function sendData(data) {
 }
 
 function sendJSONObject(obj) {
-	var stringifiedObj = JSON.stringify(obj); // "{'x': '1'}"
+
+	var dataObj = new DataObject('sendJSONObject', obj);
+
+	var stringifiedObj = JSON.stringify(dataObj); // "{'x': '1'}"
 	var abObj = str2ab(stringifiedObj); // Uint8Array[xyx, yzx, yxz, zyx]
 	var objArr = Array.prototype.slice.call(abObj); // [xyx, yzx, yxz, zyx]
 
 	var objUArr = new Uint8Array(objArr); // Uint8Array[xyx, yzx, yxz, zyx]
 	var objStr = ab2str(objUArr); // "{'x': '1'}"
 	var jsonObj = JSON.parse(objStr); // {'x': '1'}
-
 	console.log(jsonObj.x); // 1
 
-	ws.send(abObj);
-
+	ws.send(objUArr);
+	
 }
 
 function open() {

@@ -40,29 +40,16 @@ class Block {
     }
 
     onMessage(msg) {
-        //var reader = new BinaryReader(msg);
-        //var id = reader.readUInt8();
 
-        console.log(msg);
+        var objUArr = new Uint8Array(msg);
+        var objStr = this.ab2str(objUArr);
+        var parsed = JSON.parse(objStr);
+        var mID = parsed.id;
 
-        //var objUArr = new Uint8Array(msg); // Uint8Array[xyx, yzx, yxz, zyx]
-        var objStr = this.ab2str(msg); // "{'x': '1'}"
-        var jsonObj = JSON.parse(objStr); // {'x': '1'}
-
-        console.log(jsonObj.x); // 1
-
-        //console.log('Received obj: ' + String.fromCharCode(abstr));
-        /*
-        switch(id) {
-            case 1:
-                var abstr = reader.readUInt8();
-                console.log('Received str: ' + String.fromCharCode(abstr));
-                break;
-            default:
-                console.log("Unknown packet id: " + id + "!");
-                break;
+        if (mID == 'sendJSONObject') {
+          var jsonObj = parsed.data;
+          //console.log(jsonObj.x); // 1
         }
-        */
     }
 
     getCamID(id) {
