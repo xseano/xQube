@@ -1,3 +1,3 @@
-var xQube = require('./xQube');
-var x = new xQube();
+var xServer = require('./xQube');
+var x = new xServer();
 x.start();

@@ -1,4 +1,4 @@
-var ip = "ws://127.0.0.1/server:8080";
+var ip = "ws://127.0.0.1:8080";
 
 var obj = this;
 var id = getRandomInt(1, 65355);
