@@ -13,9 +13,22 @@ class Block {
         this.uID = new CubeCollection(id, this.getCamID(id), this.getCubeID(id));
     }
 
+    ab2str(buf) {
+      return String.fromCharCode.apply(null, new Uint16Array(buf));
+    }
+
     onMessage(msg) {
         var reader = new BinaryReader(msg);
         var id = reader.readUInt8();
+        switch(id) {
+            case 1:
+                var abstr = reader.readUInt8();
+                console.log('Received str: ' + String.fromCharCode(abstr));
+                break;
+            default:
+                console.log("Unknown packet id: " + id + "!");
+                break;
+        }
     }
 
     getCamID(id) {
