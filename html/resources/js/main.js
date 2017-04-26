@@ -28,7 +28,7 @@ var ws = obj[sceneObjId].socket;
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
 
 function onLoad() {
-    ws.binaryType = "nodebuffer";
+    ws.binaryType = "arraybuffer";
 
     ws.onopen = open;
     ws.onclose = close;
@@ -49,12 +49,20 @@ function close() {
 function message(msg) {
 	var objUArr = new Uint8Array(msg);
 	var objStr = ab2str(objUArr);
-	console.log(msg);
+	var offset = 3;
+	var buffer = new DataView(msg.data);
+	var uint8array = new Uint8Array();
+	for (var iii = 0; iii < buffer.byteLength; buffer++) {
+		uint8array[iii] = buffer.getUint8(iii, true);
+		console.log(uint8array);
+	}
+	console.log(uint8array);
 	var parsed = JSON.parse(objStr);
 	var mID = parsed.id;
 
 	if (mID == 'move') {
 		var jsonObj = parsed.data;
+		console.log('hi');
 		// Do something on returned move packet
 	}
 }
