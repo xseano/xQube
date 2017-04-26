@@ -51,18 +51,21 @@ function message(msg) {
 	var objStr = ab2str(objUArr);
 	var offset = 3;
 	var buffer = new DataView(msg.data);
-	var uint8array = new Uint8Array();
-	for (var iii = 0; iii < buffer.byteLength; buffer++) {
-		uint8array[iii] = buffer.getUint8(iii, true);
-		console.log(uint8array);
+	var newArr = [];
+
+	for (var i = 0; i < buffer.buffer.byteLength; i++) {
+		newArr.push(buffer.getUint8(i, true));
 	}
-	console.log(uint8array);
-	var parsed = JSON.parse(objStr);
+
+	var newUint8Arr = new Uint8Array(newArr);
+	var hr2Arr = ab2str(newUint8Arr);
+
+	var parsed = JSON.parse(hr2Arr);
 	var mID = parsed.id;
 
 	if (mID == 'move') {
 		var jsonObj = parsed.data;
-		console.log('hi');
+		console.log(jsonObj);
 		// Do something on returned move packet
 	}
 }
@@ -191,10 +194,10 @@ function open() {
 	];
 
 	var cubeFaces = new THREE.MeshFaceMaterial(cubeMaterials);
-	//var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+	var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
 	var group = new THREE.Group();
 	obj[sceneObjId].scene.add(group);
-	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeFaces);
+	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
 	obj[cubeObjId].name = socketID;
 	group.add(obj[cubeObjId]);
 	obj[sceneObjId].scene.add(obj[cubeObjId]);
@@ -220,9 +223,7 @@ function open() {
 		keys[e.key] = true;
 		for (var i in keys) {
 			if (!keys.hasOwnProperty(i)) continue;
-
 			sendPos(i, socketID);
-
 		}
 	});
 
