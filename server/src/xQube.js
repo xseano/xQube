@@ -30,7 +30,6 @@ start() {
     }));
 
     Logger.prompt(this.handleCommand.bind(this));
-    Logger.info("x³ v1.00 server online!".green);
     Logger.info("x³ authors: Sean Oberoi and Stas Darevskiy ".green);
     Logger.info("Copyright (c) 2016-2017 Mile High Interactive, LLC".green);
 }
@@ -54,7 +53,7 @@ onConnection(ws) {
 }
 
 onStart() {
-  console.log("WebSocket Server up and running at port: 8080 !");
+  Logger.info("WebSocket server successfully deployed!".green);
 }
 
 getNextID() {
