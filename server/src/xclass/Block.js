@@ -3,12 +3,14 @@ const CameraObject = require('../objects/CameraObject');
 const CubeObject = require('../objects/CubeObject');
 const CubeCollection = require('../objects/CubeCollection');
 const MoveObject = require('../objects/MoveObject');
+const ULObject = require('../objects/ULObject');
 
 class Block {
 
-    constructor(id, ws) {
+    constructor(id, ws, webSock) {
         this.id = id;
         this.socket = ws;
+        this.webSock = webSock;
         this.camID = new CameraObject(0, 0, 4);
         this.cubeID = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         this.uID = new CubeCollection(id, this.camID, this.cubeID);
@@ -55,6 +57,8 @@ class Block {
         //console.log(objStr);
         var parsed = JSON.parse(objStr);
         var mID = parsed.id;
+
+        console.log('Got incoming id... ' + mID);
 
         if (mID == 'sendJSONObject') {
           var jsonObj = parsed.data;
@@ -107,6 +111,23 @@ class Block {
          var u = this.uintIfy(moveObj);
          this.socket.send(u);
         }
+
+      if (mID == 'getUserList') {
+        var nmID = "user" + this.id;
+        var unmIDe = this.id;
+        var unmIDCube = this.cubeID;
+        var ws = this.socket;
+
+        this.webSock.clients.forEach(function each(client) {
+          if (client !== ws) {
+            var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
+            console.log(ulobj);
+            var ulobjarr = this.uintIfy(ulobj);
+            console.log(ulobjarr);
+            client.send(ulobjarr);
+          }
+        });
+      }
     }
 
     getCamID(id) {

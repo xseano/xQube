@@ -10,7 +10,7 @@ canvas {
 
 .textMsg {
   position: relative;
-  color: white;
+  color: rgba(255, 1, 2, 0.2);
   font: 120px/1.4em "times new roman",times,serif;
   width: auto;
   display: inline-table;

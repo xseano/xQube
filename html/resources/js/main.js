@@ -23,6 +23,10 @@ function DataObject(id, data) {
 	this.data = data;
 }
 
+function GetUserList(id) {
+	this.id = id;
+}
+
 obj[sceneObjId] = new SceneObj(id);
 var ws = obj[sceneObjId].socket;
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
@@ -87,6 +91,45 @@ function message(msg) {
 		obj[camObjId].position.x = newCubeX;
 		obj[camObjId].position.z = newCamZ;
 	}
+
+	if (mID == 'returnUserList') {
+		var userData = parsed.CubeObj;
+		var userCube = userData;
+		var userID = parsed.uid;
+		var uIDCube = userID + "CubeObj";
+		var clientCube = obj[uIDCube];
+
+		 console.log(userData);
+
+		if ((typeof clientCube) != "undefined") {
+
+			if (userID != socketID) {
+
+				clientCube.position.z = userCube.z;
+				clientCube.position.x = userCube.x;
+				clientCube.position.y = 10;
+			}
+
+		} else {
+
+			var uIDCube1 = userID + "CubeObj";
+
+			var cWidth1 = userData.w;
+			var cHeight1 = userData.h;
+			var cDepth1 = userData.d;
+			var cColor1 = userData.color;
+
+			var cubeColorRGB1 = new THREE.Color(cColor1);
+			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
+			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeFaces);
+
+			group.add(obj[uIDCube1]);
+			obj[uIDCube1].name = userID;
+			obj[sceneObjId].add(obj[uIDCube1]);
+
+			obj[uIDCube1].position.set(userData.x, 10, userData.z);
+		}
+	}
 }
 
 function str2ab(str) {
@@ -124,9 +167,14 @@ function uintIfy(obj) {
 function sendPos(key, uid) {
 	var keyObj = new KeyObj('updatePos', key, uid);
 	var arr = uintIfy(keyObj);
-	console.log(arr);
 	ws.send(arr);
 
+}
+
+function getUserList() {
+	var ulObj = new GetUserList('getUserList');
+	var ulObjArr = uintIfy(ulObj);
+	ws.send(ulObjArr);
 }
 
 function sendJSONObject(obj) {
@@ -226,6 +274,8 @@ function open() {
 			if (!keys.hasOwnProperty(i)) continue;
 			sendPos(i, socketID);
 		}
+
+		getUserList();
 	});
 
 	$(document).keyup(function (e) {

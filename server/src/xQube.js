@@ -14,6 +14,7 @@ class xServer {
 
 constructor() {
   this.id = 1;
+  this.webSock = new WebSocket.Server({perMessageDeflate: false, port: 8080}, this.onStart.bind(this));
 }
 
 xQube() {
@@ -22,8 +23,7 @@ xQube() {
 
 start() {
 
-    const webSock = new WebSocket.Server({perMessageDeflate: false, port: 8080}, this.onStart.bind(this));
-    webSock.on('connection', this.onConnection.bind(this));
+    this.webSock.on('connection', this.onConnection.bind(this));
     Logger.white(cowsay.say({
         text : "x³ ( xQube )",
         e : "oO",
@@ -41,7 +41,7 @@ handleCommand(data) {
 }
 
 onConnection(ws) {
-  var client = new Block(this.getNextID(), ws);
+  var client = new Block(this.getNextID(), ws, this.webSock);
   client.ip = ws.upgradeReq.connection.remoteAddress;
   client.socket.on('message', client.onMessage.bind(client));
 
