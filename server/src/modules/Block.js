@@ -11,7 +11,7 @@ class Block {
         this.socket = ws;
         this.camID = new CameraObject(0, 0, 4);
         this.cubeID = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
-        this.uID = new CubeCollection(id, this.getCamID(id), this.getCubeID(id));
+        this.uID = new CubeCollection(id, this.camID, this.cubeID);
     }
 
     str2ab(str) {
@@ -106,7 +106,6 @@ class Block {
          var moveObj = new MoveObject('move', this.uID);
          var u = this.uintIfy(moveObj);
          this.socket.send(u);
-         console.log("Sending... " + u);
         }
     }
 

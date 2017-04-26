@@ -63,10 +63,29 @@ function message(msg) {
 	var parsed = JSON.parse(hr2Arr);
 	var mID = parsed.id;
 
+	if (mID == 'create') {
+		this.quid = parsed.uid;
+	}
+
 	if (mID == 'move') {
 		var jsonObj = parsed.data;
 		console.log(jsonObj);
-		// Do something on returned move packet
+
+		var newCamZ = jsonObj.CamObj.z;
+		var newCubeZ = jsonObj.CubeObj.z;
+
+		var newCamX = jsonObj.CamObj.x;
+		var newCubeX = jsonObj.CubeObj.x;
+
+		var socketID = this.quid;
+		var camObjId = socketID + "CamObj";
+		var cubeObjId = socketID + "CubeObj";
+
+		obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
+		obj[camObjId].position.y = cameraHeight;
+		obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+		obj[camObjId].position.x = newCubeX;
+		obj[camObjId].position.z = newCamZ;
 	}
 }
 
@@ -95,24 +114,6 @@ function ab2str(ab) {
     });
     return decodeURIComponent(escstr);
 }
-
-/*
-function obfscData(data) {
-	var options, encrypted;
-
-	options = {
-	    data: data, // input as Uint8Array (or String)
-	    passwords: ['secret stuff'],              // multiple passwords possible
-	    armor: false                              // don't ASCII armor (for Uint8Array output)
-	};
-
-	openpgp.encrypt(options).then(function(ciphertext) {
-	    encrypted = ciphertext.message.packets.write(); // get raw encrypted packets as Uint8Array
-	});
-
-	return encrypted;
-}
-*/
 
 function uintIfy(obj) {
 	var stringifiedObj = JSON.stringify(obj); // "{'x': '1'}"
@@ -152,7 +153,7 @@ function open() {
 	bodyDiv.innerHTML = '';
 	//sendJSONObject({'x': 1});
 
-	var socketID = obj[sceneObjId].id;
+	var socketID = this.quid;
 	var camObjId = socketID + "CamObj";
 	var cubeObjId = socketID + "CubeObj";
 

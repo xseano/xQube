@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 var obj = this;
 const Block = require('./modules/Block');
+const Subscriber = require('./modules/Subscriber');
 const cowsay = require('cowsay');
 const colors = require('colors');
 global.Logger = require('./modules/Logger');
@@ -48,6 +49,10 @@ onConnection(ws) {
   userList.push(id);
 
   console.log("Built new Cube Object with ID: " + client.uID.id) + "\n";
+
+  var subObj = new Subscriber('create', client.uID.id);
+  var user = client.uintIfy(subObj);
+  client.socket.send(user);
 
   console.log("UserList: " + userList);
 }
