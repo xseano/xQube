@@ -1,8 +1,8 @@
 const BinaryReader = require('../lib/BinaryReader');
-const CameraObject = require('./CameraObject');
-const CubeObject = require('./CubeObject');
-const CubeCollection = require('./CubeCollection');
-const MoveObject = require('./MoveObject');
+const CameraObject = require('../objects/CameraObject');
+const CubeObject = require('../objects/CubeObject');
+const CubeCollection = require('../objects/CubeCollection');
+const MoveObject = require('../objects/MoveObject');
 
 class Block {
 

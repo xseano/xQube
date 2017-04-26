@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 var obj = this;
-const Block = require('./modules/Block');
-const Subscriber = require('./modules/Subscriber');
+const Block = require('./xclass/Block');
+const Subscriber = require('./objects/Subscriber');
 const cowsay = require('cowsay');
 const colors = require('colors');
 global.Logger = require('./modules/Logger');

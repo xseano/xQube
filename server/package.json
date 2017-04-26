@@ -33,7 +33,8 @@
     "openpgp": "^2.5.4",
     "promise": "^7.1.1",
     "socket.io": "^1.7.2",
-    "ws": "^2.3.1"
+    "ws": "^2.3.1",
+    "yarn": "^0.22.0"
   },
   "private": false,
   "license": "Copyright (c) Sean Oberoi"
