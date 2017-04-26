@@ -12,6 +12,12 @@ function SceneObj(id) {
     this.scene = new THREE.Scene();
 }
 
+function KeyObj(id, key, uid) {
+	this.id = id;
+	this.key = key;
+	this.uid = uid;
+}
+
 function DataObject(id, data) {
 	this.id = id;
 	this.data = data;
@@ -22,12 +28,12 @@ var ws = obj[sceneObjId].socket;
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
 
 function onLoad() {
-    ws.binaryType = "arraybuffer";
+    ws.binaryType = "nodebuffer";
 
     ws.onopen = open;
     ws.onclose = close;
     ws.onerror = close;
-    //ws.onmessage = message;
+    ws.onmessage = message;
 		window.bodyDiv = document.getElementById("bodyDiv");
 		bodyDiv.innerHTML = '<center><span class="textMsg"> ~ x³ ~ </span><br><br><br><span class="textMsg">xQube is Connecting...</span><br></center>';
 
@@ -40,12 +46,17 @@ function close() {
 	bodyDiv.innerHTML = '<center><span class="textMsg"> ~ x³ ~ </span><br><br><br><span class="textMsg">xQube failed to connect...</span><br></center>';
 }
 
-function createBuffer(size) {
-    return new DataView(new ArrayBuffer(size))
-}
+function message(msg) {
+	var objUArr = new Uint8Array(msg);
+	var objStr = ab2str(objUArr);
+	console.log(msg);
+	var parsed = JSON.parse(objStr);
+	var mID = parsed.id;
 
-function sendBuffer(dataview) {
-    ws.send(dataview.buffer)
+	if (mID == 'move') {
+		var jsonObj = parsed.data;
+		// Do something on returned move packet
+	}
 }
 
 function str2ab(str) {
@@ -74,20 +85,43 @@ function ab2str(ab) {
     return decodeURIComponent(escstr);
 }
 
-function sendData(data) {
-    var buffer = createBuffer(2);
-    var offset = 0;
-    buffer.setUint8(offset++, 1);
-		buffer.setUint8(offset++, data);
-    sendBuffer(buffer);
+/*
+function obfscData(data) {
+	var options, encrypted;
+
+	options = {
+	    data: data, // input as Uint8Array (or String)
+	    passwords: ['secret stuff'],              // multiple passwords possible
+	    armor: false                              // don't ASCII armor (for Uint8Array output)
+	};
+
+	openpgp.encrypt(options).then(function(ciphertext) {
+	    encrypted = ciphertext.message.packets.write(); // get raw encrypted packets as Uint8Array
+	});
+
+	return encrypted;
+}
+*/
+
+function uintIfy(obj) {
+	var stringifiedObj = JSON.stringify(obj); // "{'x': '1'}"
+	var abObj = str2ab(stringifiedObj); // Uint8Array[xyx, yzx, yxz, zyx]
+	return abObj;
+}
+
+function sendPos(key, uid) {
+	var keyObj = new KeyObj('updatePos', key, uid);
+	var arr = uintIfy(keyObj);
+	console.log(arr);
+	ws.send(arr);
+
 }
 
 function sendJSONObject(obj) {
 
 	var dataObj = new DataObject('sendJSONObject', obj);
 
-	var stringifiedObj = JSON.stringify(dataObj); // "{'x': '1'}"
-	var abObj = str2ab(stringifiedObj); // Uint8Array[xyx, yzx, yxz, zyx]
+	var abObj = uintIfy(dataObj);
 	var objArr = Array.prototype.slice.call(abObj); // [xyx, yzx, yxz, zyx]
 
 	var objUArr = new Uint8Array(objArr); // Uint8Array[xyx, yzx, yxz, zyx]
@@ -95,13 +129,17 @@ function sendJSONObject(obj) {
 	var jsonObj = JSON.parse(objStr); // {'x': '1'}
 	console.log(jsonObj.x); // 1
 
+	//var o = obfscData(objUArr);
+
+	console.log(objUArr);
+
 	ws.send(objUArr);
-	
+
 }
 
 function open() {
 	bodyDiv.innerHTML = '';
-	sendJSONObject({'x': 1});
+	//sendJSONObject({'x': 1});
 
 	var socketID = obj[sceneObjId].id;
 	var camObjId = socketID + "CamObj";
@@ -167,6 +205,24 @@ function open() {
 	};
 
 	render();
+
+	var keys = {};
+
+	$(document).keydown(function (e) {
+		keys[e.key] = true;
+		for (var i in keys) {
+			if (!keys.hasOwnProperty(i)) continue;
+
+			sendPos(i, socketID);
+
+		}
+	});
+
+	$(document).keyup(function (e) {
+		delete keys[e.key];
+	});
+
+
 }
 
 function getRandomInt(min, max) {

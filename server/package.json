@@ -30,6 +30,7 @@
     "cowsay": "*",
     "express": ">=4.2.x",
     "fs": "0.0.1-security",
+    "openpgp": "^2.5.4",
     "promise": "^7.1.1",
     "socket.io": "^1.7.2",
     "ws": "^2.3.1"

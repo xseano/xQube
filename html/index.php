@@ -14,7 +14,11 @@ function crc32b($ptf) {
     <script src="./resources/js/three.js?v=<?php echo crc32b('./resources/js/three.js'); ?>"></script>
     <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
-	</head>
+    <!--
+    <script src="http://localhost/server/node_modules/openpgp/dist/openpgp.js?v=<?php echo crc32b('http://localhost/server/node_modules/openpgp/dist/openpgp.js'); ?>"></script>
+    <script src="http://localhost/server/node_modules/openpgp/dist/openpgp.worker.js?v=<?php echo crc32b('http://localhost/server/node_modules/openpgp/dist/openpgp.worker.js'); ?>"></script>
+    -->
+  </head>
 
   <body onload="onLoad()">
 		<div id="bodyDiv"></div>
