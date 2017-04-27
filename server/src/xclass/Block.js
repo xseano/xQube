@@ -118,15 +118,24 @@ class Block {
         var unmIDCube = this.cubeID;
         var ws = this.socket;
 
+        var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
+        var ulobjarr = this.uintIfy(ulobj);
+
         this.webSock.clients.forEach(function each(client) {
-          if (client !== ws) {
-            var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
-            console.log(ulobj);
-            var ulobjarr = this.uintIfy(ulobj);
-            console.log(ulobjarr);
+          if (client !== ws && client.readyState === 1) {
             client.send(ulobjarr);
           }
         });
+
+      //  this.webSock.clients.forEach(function each(client) {
+        //  if (client !== ws) {
+            //var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
+            //console.log(ulobj);
+            //var ulobjarr = this.uintIfy(ulobj);
+            //console.log(ulobjarr);
+            //client.send(ulobjarr);
+        //  }
+      //  });
       }
     }
 

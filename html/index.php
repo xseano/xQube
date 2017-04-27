@@ -14,14 +14,47 @@ function crc32b($ptf) {
     <script src="./resources/js/three.js?v=<?php echo crc32b('./resources/js/three.js'); ?>"></script>
     <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
-    <!--
-    <script src="http://localhost/server/node_modules/openpgp/dist/openpgp.js?v=<?php echo crc32b('http://localhost/server/node_modules/openpgp/dist/openpgp.js'); ?>"></script>
-    <script src="http://localhost/server/node_modules/openpgp/dist/openpgp.worker.js?v=<?php echo crc32b('http://localhost/server/node_modules/openpgp/dist/openpgp.worker.js'); ?>"></script>
-    -->
+    <!-- Loading Bootstrap -->
+    <link href="./resources/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="./resources/css/flat-ui.css" rel="stylesheet">
+    <link href="./resources/css/demo.css" rel="stylesheet">
   </head>
 
-  <body onload="onLoad()">
-		<div id="bodyDiv"></div>
+  <body>
+		<div id="mainScreen">
+      <center>
+        <span class="textMsg">x³ ~ xQube</span>
+        <br>
+        <div style="margin-top: 100px; width: 80%;" class="login-form">
+            <div class="form-group">
+              <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
+              <label class="login-field-icon fui-user" for="login-name"></label>
+            </div>
+            <button style="margin-top: 50px;" class="btn btn-primary btn-lg btn-block" onClick="onLoad()">Play</button>
+          </div>
+      </center>
+    </div>
+    <div style="display: none" id="connectScreen">
+      <center>
+        <span class="textMsg"> ~ x³ ~ </span>
+        <br><br><br>
+        <span class="textMsg">Connecting to server...</span>
+        <br>
+      </center>
+    </div>
+    <div style="display: none" id="failScreen">
+      <center>
+        <span class="textMsg"> ~ x³ ~ </span>
+        <br><br><br>
+        <span class="textMsg">Failed to connect to server!</span>
+        <br>
+      </center>
+    </div>
 	</body>
+
+<?php include 'sections/footer.php'; ?>
+
 
 </html>

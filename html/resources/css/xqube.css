@@ -8,13 +8,70 @@ canvas {
   height: 100%
 }
 
+
 .textMsg {
-  position: relative;
-  color: rgba(255, 1, 2, 0.2);
-  font: 120px/1.4em "times new roman",times,serif;
-  width: auto;
-  display: inline-table;
-  text-shadow: 4px 8px 6px rgba(0,0,0,.4);
+  margin: 0;
+    font: bold 100px/1 "Copperplate", Helvetica, Arial, sans-serif;
+    color: #fff;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    -webkit-transition: .2s all linear;
+}
+
+.dsfsdtextMsg:after {
+    font-family: 'Nova Square';
+    overflow: hidden;
+    display: inline-flex;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026";
+    width: 0px;
+}
+
+.footerText {
+  margin: 0;
+    font: bold 20px/1 "Copperplate", Helvetica, Arial, sans-serif;
+    color: #fff;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    -webkit-transition: .2s all linear;
+}
+
+.mBox {
+  background: white;
+  border-radius: 5px;
+  padding-bottom: 15px;
+  margin-top: 15px;
+  width: 50%;
+  padding-bottom: 50px;
+  box-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+}
+
+.footerText a {
+  margin: 0;
+    font: bold 20px/1 "Copperplate", Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+    -webkit-transition: .2s all linear;
+}
+
+.footBox.right {
+    right: 0;
+    border-radius: 6px 0 0;
+}
+
+.footBox.left {
+    left: 0;
+    border-radius: 0 6px 0 0;
+}
+
+.footBox {
+    z-index: 1000;
+    position: absolute;
+    bottom: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+    opacity: 0.777;
 }
 
 .copyrightMessage {
@@ -23,16 +80,5 @@ canvas {
   font: 50px "times new roman",times,serif;
   width: auto;
   display: inline-table;
-  text-shadow: 4px 8px 6px rgba(0,0,0,.4);
-}
-
-.mBox {
-  background: rgba(30,30,30,.7);
-  border: 1px solid #000;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  width:auto;
-  position: relative;
-  text-align: center;
+  text-shadow: 4px 8px 6px rgba(150, 150, 150, 0.4);
 }

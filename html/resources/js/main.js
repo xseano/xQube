@@ -8,8 +8,8 @@ const cameraAngle = 72; // Controls Angle at which camera points towards cube
 
 function SceneObj(id) {
 		this.id = id;
-    this.socket = new WebSocket(ip);
     this.scene = new THREE.Scene();
+		this.group = new THREE.Group();
 }
 
 function KeyObj(id, key, uid) {
@@ -28,27 +28,54 @@ function GetUserList(id) {
 }
 
 obj[sceneObjId] = new SceneObj(id);
-var ws = obj[sceneObjId].socket;
 var sceneColor = new THREE.Color("rgb(174, 129, 255)");
 
 function onLoad() {
-    ws.binaryType = "arraybuffer";
 
-    ws.onopen = open;
-    ws.onclose = close;
-    ws.onerror = close;
+	$('#mainScreen').fadeOut('fast', function() {
+
+		$('#connectScreen').fadeIn('fast');
+
+		var clientName = document.getElementById('login-name').value;
+
+		obj[sceneObjId].socket = new WebSocket(ip);
+		var ws = obj[sceneObjId].socket;
+
+		ws.binaryType = "arraybuffer";
+    ws.onclose = error;
+    ws.onerror = error;
     ws.onmessage = message;
-		window.bodyDiv = document.getElementById("bodyDiv");
-		bodyDiv.innerHTML = '<center><span class="textMsg"> ~ x³ ~ </span><br><br><br><span class="textMsg">xQube is Connecting...</span><br></center>';
+		ws.onopen = onOpen;
 
-		if (ws.readyState == 1) {
-			open();
+	});
+}
+
+function onConn() {
+	if (obj[sceneObjId].socket.readyState == 1) {
+		console.log('onConn');
+		onOpen();
+	} else {
+		onLoad();
+	}
+}
+
+function error(e) {
+		close(e, true);
+}
+
+function close(e, error) {
+		console.log(e);
+		if (e.code || e.reason) {
+				console.log("Socket Closed! Reason: " + e.code + " " + e.reason);
+				onConn();
+		} else {
+				console.log("Socket Error!");
 		}
+
+		$('#render').fadeOut('fast');
+
 }
 
-function close() {
-	bodyDiv.innerHTML = '<center><span class="textMsg"> ~ x³ ~ </span><br><br><br><span class="textMsg">xQube failed to connect...</span><br></center>';
-}
 
 function message(msg) {
 	var objUArr = new Uint8Array(msg);
@@ -68,7 +95,71 @@ function message(msg) {
 	var mID = parsed.id;
 
 	if (mID == 'create') {
+		console.log('Client ID: ' + parsed.uid);
 		this.quid = parsed.uid;
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.domElement.id = "render";
+		document.body.appendChild(renderer.domElement);
+
+		var scale = 2000;
+		var sections = 200;
+		var baseGrid = new THREE.GridHelper(scale, sections);
+		obj[sceneObjId].scene.add(baseGrid);
+
+		var camObjId = this.quid + "CamObj";
+		var cubeObjId = this.quid + "CubeObj";
+		obj[camObjId] = new THREE.PerspectiveCamera(105, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+		var cWidth = 5;
+		var cHeight = 5;
+		var cDepth = 5;
+		var cColor = "rgb(174, 129, 255)";
+		var camZ = 4;
+
+		var cubeColorRGB = new THREE.Color(cColor);
+		var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
+		var txtrLder = new THREE.TextureLoader();
+
+		var dice1 = txtrLder.load( './resources/images/DiceFace_1.png' );
+		var dice2 = txtrLder.load( './resources/images/DiceFace_2.png' );
+		var dice3 = txtrLder.load( './resources/images/DiceFace_3.png' );
+		var dice4 = txtrLder.load( './resources/images/DiceFace_4.png' );
+		var dice5 = txtrLder.load( './resources/images/DiceFace_5.png' );
+		var dice6 = txtrLder.load( './resources/images/DiceFace_6.png' );
+
+		var cubeMaterials = [
+			new THREE.MeshBasicMaterial( { map: dice1 } ),
+			new THREE.MeshBasicMaterial( { map: dice2 } ),
+			new THREE.MeshBasicMaterial( { map: dice3 } ),
+			new THREE.MeshBasicMaterial( { map: dice4 } ),
+			new THREE.MeshBasicMaterial( { map: dice5 } ),
+			new THREE.MeshBasicMaterial( { map: dice6 } )
+		];
+
+		var cubeFaces = new THREE.MeshFaceMaterial(cubeMaterials);
+		var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+		var group = obj[sceneObjId].group;
+		obj[sceneObjId].scene.add(group);
+		obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
+		obj[cubeObjId].name = socketID;
+		group.add(obj[cubeObjId]);
+		obj[sceneObjId].scene.add(obj[cubeObjId]);
+
+		obj[cubeObjId].position.set(0, 10, camZ);
+		obj[camObjId].position.y = cameraHeight;
+		obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+		obj[camObjId].position.x = 0;
+		obj[camObjId].position.z = camZ;
+
+		var render = function() {
+			requestAnimationFrame(render);
+			renderer.render(obj[sceneObjId].scene, obj[camObjId]);
+			//obj[sceneObjId].socket.emit('getUserList');
+		};
+
+		render();
 	}
 
 	if (mID == 'move') {
@@ -99,7 +190,7 @@ function message(msg) {
 		var uIDCube = userID + "CubeObj";
 		var clientCube = obj[uIDCube];
 
-		 console.log(userData);
+		 console.log(clientCube);
 
 		if ((typeof clientCube) != "undefined") {
 
@@ -123,7 +214,7 @@ function message(msg) {
 			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
 			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeFaces);
 
-			group.add(obj[uIDCube1]);
+			obj[sceneObjId].group.add(obj[uIDCube1]);
 			obj[uIDCube1].name = userID;
 			obj[sceneObjId].add(obj[uIDCube1]);
 
@@ -167,14 +258,14 @@ function uintIfy(obj) {
 function sendPos(key, uid) {
 	var keyObj = new KeyObj('updatePos', key, uid);
 	var arr = uintIfy(keyObj);
-	ws.send(arr);
+	obj[sceneObjId].socket.send(arr);
 
 }
 
 function getUserList() {
 	var ulObj = new GetUserList('getUserList');
 	var ulObjArr = uintIfy(ulObj);
-	ws.send(ulObjArr);
+	obj[sceneObjId].socket.send(ulObjArr);
 }
 
 function sendJSONObject(obj) {
@@ -193,79 +284,15 @@ function sendJSONObject(obj) {
 
 	console.log(objUArr);
 
-	ws.send(objUArr);
+	obj[sceneObjId].socket.send(objUArr);
 
 }
 
-function open() {
-	bodyDiv.innerHTML = '';
-	//sendJSONObject({'x': 1});
+function onOpen() {
+
+	$('#connectScreen').fadeOut('fast');
 
 	var socketID = this.quid;
-	var camObjId = socketID + "CamObj";
-	var cubeObjId = socketID + "CubeObj";
-
-	obj[camObjId] = new THREE.PerspectiveCamera(105, window.innerWidth/window.innerHeight, 0.1, 1000);
-
-	var renderer = new THREE.WebGLRenderer();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
-
-	var scale = 2000;
-	var sections = 200;
-	var baseGrid = new THREE.GridHelper(scale, sections);
-	obj[sceneObjId].scene.add(baseGrid);
-
-	var cWidth = 5;
-	var cHeight = 5;
-	var cDepth = 5;
-	var cColor = "rgb(174, 129, 255)";
-	var camZ = 4;
-
-	var cubeColorRGB = new THREE.Color(cColor);
-	var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-	var txtrLder = new THREE.TextureLoader();
-
-	var dice1 = txtrLder.load( './resources/images/DiceFace_1.png' );
-	var dice2 = txtrLder.load( './resources/images/DiceFace_2.png' );
-	var dice3 = txtrLder.load( './resources/images/DiceFace_3.png' );
-	var dice4 = txtrLder.load( './resources/images/DiceFace_4.png' );
-	var dice5 = txtrLder.load( './resources/images/DiceFace_5.png' );
-	var dice6 = txtrLder.load( './resources/images/DiceFace_6.png' );
-
-	var cubeMaterials = [
-		new THREE.MeshBasicMaterial( { map: dice1 } ),
-		new THREE.MeshBasicMaterial( { map: dice2 } ),
-		new THREE.MeshBasicMaterial( { map: dice3 } ),
-		new THREE.MeshBasicMaterial( { map: dice4 } ),
-		new THREE.MeshBasicMaterial( { map: dice5 } ),
-		new THREE.MeshBasicMaterial( { map: dice6 } )
-	];
-
-	var cubeFaces = new THREE.MeshFaceMaterial(cubeMaterials);
-	var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
-	var group = new THREE.Group();
-	obj[sceneObjId].scene.add(group);
-	obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
-	obj[cubeObjId].name = socketID;
-	group.add(obj[cubeObjId]);
-	obj[sceneObjId].scene.add(obj[cubeObjId]);
-
-	obj[cubeObjId].position.set(0, 10, camZ);
-	obj[camObjId].position.y = cameraHeight;
-	obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
-	obj[camObjId].position.x = 0;
-	obj[camObjId].position.z = camZ;
-
-
-	var render = function () {
-		requestAnimationFrame(render);
-		renderer.render(obj[sceneObjId].scene, obj[camObjId]);
-		//obj[sceneObjId].socket.emit('getUserList');
-	};
-
-	render();
-
 	var keys = {};
 
 	$(document).keydown(function (e) {
