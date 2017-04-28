@@ -286,15 +286,12 @@ function onOpen() {
 			if (!keys.hasOwnProperty(i)) continue;
 			sendPos(i, socketID);
 		}
-
 		getUserList();
 	});
 
 	$(document).keyup(function (e) {
 		delete keys[e.key];
 	});
-
-
 }
 
 function getRandomInt(min, max) {

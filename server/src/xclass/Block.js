@@ -91,41 +91,45 @@ class Block {
 
         if (mID == 'updatePos') {
 
-          var xx = 0;
-          var zz = 0;
-          var speed = 4;
-          var key = parsed.key;
-
-          if (key == 'w') {
-            zz -= speed;
-          }
-
-          if (key == 's') {
-            zz += speed;
-          }
-
-          if (key == 'a') {
-            xx -= speed;
-          }
-
-          if (key == 'd') {
-            xx += speed;
-          }
-
           var id = parsed.id;
           var camId = id + "Cam";
           var cubeId = id + "Cube";
           var uId = "user" + id;
 
-          this.camID.x += xx;
-          this.camID.z += zz;
+          var xx = 0;
+          var zz = 0;
+          var speed = 4;
+          var key = parsed.key;
 
-          this.cubeID.x += xx;
-          this.cubeID.z += zz;
+          var updatePos = function() {
+            var moveObj = new MoveObject('move', this.uID);
+            var u = this.uintIfy(moveObj);
+            this.socket.send(u);
+          };
 
-         var moveObj = new MoveObject('move', this.uID);
-         var u = this.uintIfy(moveObj);
-         this.socket.send(u);
+          if (key == 'w') {
+            this.camID.z -= speed;
+            this.cubeID.z -= speed;
+            updatePos();
+          }
+
+          if (key == 's') {
+            this.camID.z += speed;
+            this.cubeID.z += speed;
+            updatePos();
+          }
+
+          if (key == 'a') {
+            this.camID.x -= speed;
+            this.cubeID.x -= speed;
+            updatePos();
+          }
+
+          if (key == 'd') {
+            this.camID.x += speed;
+            this.cubeID.x += speed;
+            updatePos();
+          }
         }
 
       if (mID == 'getUserList') {
