@@ -9,17 +9,14 @@ function crc32b($ptf) {
 
   <head>
 	  <meta charset="UTF-8">
-	  <title>x³ | xQube</title>
+	  <title>x³</title>
     <link href="./resources/css/xqube.css?v=<?php echo crc32b('./resources/css/xqube.css'); ?>" rel="stylesheet">
     <script src="./resources/js/three.js?v=<?php echo crc32b('./resources/js/three.js'); ?>"></script>
     <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
-    <!-- Loading Bootstrap -->
-    <link href="./resources/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Loading Flat UI -->
-    <link href="./resources/css/flat-ui.css" rel="stylesheet">
-    <link href="./resources/css/demo.css" rel="stylesheet">
+    <link href="./resources/css/vendor/bootstrap/css/bootstrap.min.css?v=<?php echo crc32b('./resources/css/vendor/bootstrap/css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link href="./resources/css/flat-ui.css?v=<?php echo crc32b('./resources/css/flat-ui.css'); ?>" rel="stylesheet">
+    <link href="./resources/css/demo.css?v=<?php echo crc32b('./resources/css/demo.css'); ?>" rel="stylesheet">
   </head>
 
   <body>

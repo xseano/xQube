@@ -42,12 +42,12 @@ class Block {
               var d = this.uintIfy(deleteObj);
 
               this.webSock.clients.forEach(function each(client) {
-                if (client != ws && client.readyState === 1) {
+                if (client.readyState === 1) {
                   client.send(d);
                 }
               });
 
-              this.userList.splice(this.userList[u], 1);
+              this.userList.splice(u, 1);
               console.log("Client with id: " + this.id + " has successfully been disconnected and destroyed!");
               //console.log("User List: " + this.userList);
             }
