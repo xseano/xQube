@@ -44,14 +44,6 @@ function crc32b($ptf) {
         <br>
       </center>
     </div>
-    <div style="display: none" id="failScreen">
-      <center>
-        <span class="textMsg"> ~ x³ ~ </span>
-        <br><br><br>
-        <span class="textMsg">Failed to connect to server!</span>
-        <br>
-      </center>
-    </div>
 	</body>
 
 <?php include 'sections/footer.php'; ?>
