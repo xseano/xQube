@@ -3,6 +3,7 @@ const CameraObject = require('../objects/CameraObject');
 const CubeObject = require('../objects/CubeObject');
 const CubeCollection = require('../objects/CubeCollection');
 const MoveObject = require('../objects/MoveObject');
+const DeleteObject = require('../objects/DeleteObject');
 const ULObject = require('../objects/ULObject');
 
 class Block {
@@ -27,6 +28,29 @@ class Block {
             ua[i] = ch.charCodeAt(0);
         });
         return ua;
+    }
+
+    onCloseConn(code, reason) {
+      //console.log(code + " || " + this.id);
+      for(var u = 0; u < this.userList.length; u++) {
+          var unmIDCube = this.userList[u].data.cubeID;
+          var id = this.userList[u].id;
+          if (id == this.id) {
+            var ws = this.userList[u].socket;
+            var deleteObj = new DeleteObject('rmClient', this.userList[u].data.uID);
+            var d = this.uintIfy(deleteObj);
+
+            this.webSock.clients.forEach(function each(client) {
+              if (client != ws && client.readyState === 1) {
+                client.send(d);
+              }
+            });
+
+            this.userList.splice(this.userList[u], 1);
+            console.log("Client with id: " + this.id + " has successfully been disconnected and destroyed!");
+            //console.log("User List: " + this.userList);
+          }
+      }
     }
 
     uintIfy(obj) {

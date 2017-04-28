@@ -44,6 +44,7 @@ onConnection(ws) {
   var client = new Block(this.getNextID(), ws, this.webSock, this.userList);
   client.ip = ws.upgradeReq.connection.remoteAddress;
   client.socket.on('message', client.onMessage.bind(client));
+  client.socket.on('close', client.onCloseConn.bind(client));
 
   var id = client.id;
   this.userList.push({'id': client.uID.id, 'data': client});

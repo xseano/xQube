@@ -92,6 +92,12 @@ function message(msg) {
 	var parsed = JSON.parse(hr2Arr);
 	var mID = parsed.id;
 
+	if (mID == 'rmClient') {
+		var clientID = parsed.data.id + "CubeObj";
+		console.log(clientID);
+		obj[sceneObjId].scene.remove(obj[clientID]);
+	}
+
 	if (mID == 'create') {
 		console.log('Client ID: ' + parsed.uID.id);
 		this.quid = parsed.uID.id;
