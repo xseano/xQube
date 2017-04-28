@@ -31,25 +31,27 @@ class Block {
     }
 
     onCloseConn(code, reason) {
-      //console.log(code + " || " + this.id);
-      for(var u = 0; u < this.userList.length; u++) {
-          var unmIDCube = this.userList[u].data.cubeID;
-          var id = this.userList[u].id;
-          if (id == this.id) {
-            var ws = this.userList[u].socket;
-            var deleteObj = new DeleteObject('rmClient', this.userList[u].data.uID);
-            var d = this.uintIfy(deleteObj);
+      console.log('Received closing code: ' + code + ' from client (id): ' + this.id);
+      if (code == 1006) {
+        for(var u = 0; u < this.userList.length; u++) {
+            var unmIDCube = this.userList[u].data.cubeID;
+            var id = this.userList[u].id;
+            if (id == this.id) {
+              var ws = this.userList[u].socket;
+              var deleteObj = new DeleteObject('rmClient', this.userList[u].data.uID);
+              var d = this.uintIfy(deleteObj);
 
-            this.webSock.clients.forEach(function each(client) {
-              if (client != ws && client.readyState === 1) {
-                client.send(d);
-              }
-            });
+              this.webSock.clients.forEach(function each(client) {
+                if (client != ws && client.readyState === 1) {
+                  client.send(d);
+                }
+              });
 
-            this.userList.splice(this.userList[u], 1);
-            console.log("Client with id: " + this.id + " has successfully been disconnected and destroyed!");
-            //console.log("User List: " + this.userList);
-          }
+              this.userList.splice(this.userList[u], 1);
+              console.log("Client with id: " + this.id + " has successfully been disconnected and destroyed!");
+              //console.log("User List: " + this.userList);
+            }
+        }
       }
     }
 
