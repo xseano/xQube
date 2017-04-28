@@ -79,47 +79,47 @@ class Block {
     updatePos(completeTime, camDiff, cubeDiff, type) {
       var newCamPos = camDiff * completeTime;
       var newCubePos = cubeDiff * completeTime;
-
+      //console.log('Received type: ' + type);
       for (var cam = camDiff; cam < newCamPos; cam++) {
         if (type == 'w') {
-          this.cubeID.z -= camDiff;
+          this.cubeID.z -= cam;
           this.sendNewPos();
         }
 
         if (type == 'a') {
-          this.cubeID.x -= camDiff;
+          this.cubeID.x -= cam;
           this.sendNewPos();
         }
 
         if (type == 's') {
-          this.cubeID.z += camDiff;
+          this.cubeID.z += cam;
           this.sendNewPos();
         }
 
         if (type == 'd') {
-          this.cubeID.x += camDiff;
+          this.cubeID.x += cam;
           this.sendNewPos();
         }
       }
 
       for (var cube = cubeDiff; cube < newCubePos; cube++) {
         if (type == 'w') {
-          this.camID.z -= cubeDiff;
+          this.camID.z -= cube;
           this.sendNewPos();
         }
 
         if (type == 'a') {
-          this.camID.x -= cubeDiff;
+          this.camID.x -= cube;
           this.sendNewPos();
         }
 
         if (type == 's') {
-          this.camID.z += cubeDiff;
+          this.camID.z += cube;
           this.sendNewPos();
         }
 
         if (type == 'd') {
-          this.camID.x += cubeDiff;
+          this.camID.x += cube;
           this.sendNewPos();
         }
       }
@@ -138,7 +138,7 @@ class Block {
         var parsed = JSON.parse(objStr);
         var mID = parsed.id;
 
-        console.log('Got incoming id... ' + mID);
+        //console.log('Got incoming id... ' + mID);
 
         if (mID == 'sendJSONObject') {
           var jsonObj = parsed.data;
@@ -153,7 +153,7 @@ class Block {
 
           var xx = 0;
           var zz = 0;
-          var speed = 2;
+          var speed = 4;
           var key = parsed.key;
 
           var initCamZPos = this.camID.z;
@@ -166,37 +166,29 @@ class Block {
           var nCamXPos = this.camID.x;
           var nCubeXPos = this.cubeID.x;
 
-          var completeTime = 2;
+          var completeTime = 8;
 
           if (key == 'w') {
-            var camDiff = ((initCamZPos - speed) - initCamZPos) / completeTime;
-            var cubeDiff = ((initCubeZPos - speed) - initCubeZPos) / completeTime;
-            //this.camID.z -= speed;
-            //this.cubeID.z -= speed;
+            var camDiff = ((initCamZPos + speed) - initCamZPos) / completeTime;
+            var cubeDiff = ((initCubeZPos + speed) - initCubeZPos) / completeTime;
             this.updatePos(completeTime, camDiff, cubeDiff, 'w');
           }
 
           if (key == 's') {
             var camDiff = ((initCamZPos + speed) - initCamZPos) / completeTime;
             var cubeDiff = ((initCubeZPos + speed) - initCubeZPos) / completeTime;
-            //this.camID.z += speed;
-            //this.cubeID.z += speed;
             this.updatePos(completeTime, camDiff, cubeDiff, 's');
           }
 
           if (key == 'a') {
-            var camDiff = ((initCamXPos - speed) - initCamXPos) / completeTime;
-            var cubeDiff = ((initCubeXPos - speed) - initCubeXPos) / completeTime;
-            //this.camID.x -= speed;
-            //this.cubeID.x -= speed;
+            var camDiff = ((initCamXPos + speed) - initCamXPos) / completeTime;
+            var cubeDiff = ((initCubeXPos + speed) - initCubeXPos) / completeTime;
             this.updatePos(completeTime, camDiff, cubeDiff, 'a');
           }
 
           if (key == 'd') {
             var camDiff = ((initCamXPos + speed) - initCamXPos) / completeTime;
             var cubeDiff = ((initCubeXPos + speed) - initCubeXPos) / completeTime;
-            //this.camID.x += speed;
-            //this.cubeID.x += speed;
             this.updatePos(completeTime, camDiff, cubeDiff, 'd');
           }
         }
