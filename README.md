@@ -12,5 +12,15 @@
 * WebSockets (Uint8Array) - Coming Soon!
 * Socket.IO - Due to deficiencies in overall performance and stability, we have removed all Socket.IO support.
 
+## Authors
+* [Sean Oberoi](https://github.com/xseano/)
+* [Stas Darevskiy](https://github.com/Stasadance/)
+
+## Links
+* [Binary Data (ArrayBuffers) Introduction](https://github.com/Stasadance/Arraybuffer)
+* [Germs.io](https://germs.io/)
+* [Mile High Interactive](https://milehigh.io/)
+# [Stas' Blog](https://stas.blog/)
+
 ## Preview
 * Coming Soon!
