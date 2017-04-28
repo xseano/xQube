@@ -23,4 +23,4 @@
 * [Stas' Blog](https://stas.blog/)
 
 ## Preview
-* Coming Soon!
+![](https://i.gyazo.com/4b299d5057378ee699ac0a77f4e3d4c5.gif)
