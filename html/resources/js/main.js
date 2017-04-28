@@ -3,8 +3,8 @@ var ip = "ws://127.0.0.1:8080";
 var obj = this;
 const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-const cameraHeight = 55; // Controls FOV on Cube in context of the plane
-const cameraAngle = 72; // Controls Angle at which camera points towards cube
+const cameraHeight = 72; // Controls FOV on Cube in context of the plane
+const cameraAngle = 55; // Controls Angle at which camera points towards cube
 
 function SceneObj(id) {
 		this.id = id;

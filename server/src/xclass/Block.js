@@ -76,6 +76,61 @@ class Block {
         return decodeURIComponent(escstr);
     }
 
+    updatePos(completeTime, camDiff, cubeDiff, type) {
+      var newCamPos = camDiff * completeTime;
+      var newCubePos = cubeDiff * completeTime;
+
+      for (var cam = camDiff; cam < newCamPos; cam++) {
+        if (type == 'w') {
+          this.cubeID.z -= camDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 'a') {
+          this.cubeID.x -= camDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 's') {
+          this.cubeID.z += camDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 'd') {
+          this.cubeID.x += camDiff;
+          this.sendNewPos();
+        }
+      }
+
+      for (var cube = cubeDiff; cube < newCubePos; cube++) {
+        if (type == 'w') {
+          this.camID.z -= cubeDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 'a') {
+          this.camID.x -= cubeDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 's') {
+          this.camID.z += cubeDiff;
+          this.sendNewPos();
+        }
+
+        if (type == 'd') {
+          this.camID.x += cubeDiff;
+          this.sendNewPos();
+        }
+      }
+    }
+
+    sendNewPos() {
+      var moveObj = new MoveObject('move', this.uID);
+      var u = this.uintIfy(moveObj);
+      this.socket.send(u);
+    }
+
     onMessage(msg) {
 
         var objUArr = new Uint8Array(msg);
@@ -98,37 +153,51 @@ class Block {
 
           var xx = 0;
           var zz = 0;
-          var speed = 4;
+          var speed = 2;
           var key = parsed.key;
 
-          var updatePos = function() {
-            var moveObj = new MoveObject('move', this.uID);
-            var u = this.uintIfy(moveObj);
-            this.socket.send(u);
-          };
+          var initCamZPos = this.camID.z;
+          var initCubeZPos = this.cubeID.z;
+          var initCamXPos = this.camID.x;
+          var initCubeXPos = this.cubeID.x;
+
+          var nCamZPos = this.camID.z;
+          var nCubeZPos = this.cubeID.z;
+          var nCamXPos = this.camID.x;
+          var nCubeXPos = this.cubeID.x;
+
+          var completeTime = 2;
 
           if (key == 'w') {
-            this.camID.z -= speed;
-            this.cubeID.z -= speed;
-            updatePos();
+            var camDiff = ((initCamZPos - speed) - initCamZPos) / completeTime;
+            var cubeDiff = ((initCubeZPos - speed) - initCubeZPos) / completeTime;
+            //this.camID.z -= speed;
+            //this.cubeID.z -= speed;
+            this.updatePos(completeTime, camDiff, cubeDiff, 'w');
           }
 
           if (key == 's') {
-            this.camID.z += speed;
-            this.cubeID.z += speed;
-            updatePos();
+            var camDiff = ((initCamZPos + speed) - initCamZPos) / completeTime;
+            var cubeDiff = ((initCubeZPos + speed) - initCubeZPos) / completeTime;
+            //this.camID.z += speed;
+            //this.cubeID.z += speed;
+            this.updatePos(completeTime, camDiff, cubeDiff, 's');
           }
 
           if (key == 'a') {
-            this.camID.x -= speed;
-            this.cubeID.x -= speed;
-            updatePos();
+            var camDiff = ((initCamXPos - speed) - initCamXPos) / completeTime;
+            var cubeDiff = ((initCubeXPos - speed) - initCubeXPos) / completeTime;
+            //this.camID.x -= speed;
+            //this.cubeID.x -= speed;
+            this.updatePos(completeTime, camDiff, cubeDiff, 'a');
           }
 
           if (key == 'd') {
-            this.camID.x += speed;
-            this.cubeID.x += speed;
-            updatePos();
+            var camDiff = ((initCamXPos + speed) - initCamXPos) / completeTime;
+            var cubeDiff = ((initCubeXPos + speed) - initCubeXPos) / completeTime;
+            //this.camID.x += speed;
+            //this.cubeID.x += speed;
+            this.updatePos(completeTime, camDiff, cubeDiff, 'd');
           }
         }
 
