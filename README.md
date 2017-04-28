@@ -20,7 +20,7 @@
 * [Binary Data (ArrayBuffers) Introduction](https://github.com/Stasadance/Arraybuffer)
 * [Germs.io](https://germs.io/)
 * [Mile High Interactive](https://milehigh.io/)
-# [Stas' Blog](https://stas.blog/)
+* [Stas' Blog](https://stas.blog/)
 
 ## Preview
 * Coming Soon!
