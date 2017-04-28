@@ -1,14 +1,16 @@
-# x³ ( xQube )
+# x³
 
 **Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS**
 
 ## Mechanics
-* Core Engine: [*three.js*](https://threejs.org/)
-* Networking Backend: [Socket.IO](http://socket.io/) || [Pure WebSockets](https://github.com/xseano/xQube/tree/master/server/src/lib/)
+* Core Engine (WebGL): [*three.js*](https://threejs.org/)
+* Networking Backend: [Pure WebSockets](https://github.com/xseano/xQube/tree/master/server/src/lib/)
+* Data Mechanics: Various binary datatypes sent and received through ArrayBuffers
 
 ## Releases
-* [Socket.IO Implementation v1.0.0](https://github.com/xseano/xQube/releases/tag/v1.0.0-Socket.IO)
-* WebSockets Implementation v1.0.0 - Coming Soon!
+* WebSockets - Coming Soon!
+* WebSockets (Uint8Array) - Coming Soon!
+* Socket.IO - Due to deficiencies in overall performance and stability, we have removed all Socket.IO support.
 
 ## Preview
-![](https://i.gyazo.com/4b299d5057378ee699ac0a77f4e3d4c5.gif)
+* Coming Soon!
