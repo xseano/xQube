@@ -3,8 +3,8 @@ var ip = "ws://127.0.0.1:8080";
 var obj = this;
 const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-const cameraHeight = 72; // Controls FOV on Cube in context of the plane
-const cameraAngle = 55; // Controls Angle at which camera points towards cube
+const cameraHeight = 16; // Controls FOV on Cube in context of the plane
+const cameraAngle = 25; // Controls Angle at which camera points towards cube
 
 function SceneObj(id) {
 		this.id = id;
@@ -133,16 +133,13 @@ function message(msg) {
 		group.add(obj[cubeObjId]);
 		obj[sceneObjId].scene.add(obj[cubeObjId]);
 
-		obj[cubeObjId].position.set(0, 10, camZ);
-		obj[camObjId].position.y = cameraHeight;
+		obj[cubeObjId].position.set(parsed.cubeID.x, parsed.cubeID.y, parsed.cubeID.z);
+		obj[camObjId].position.set(parsed.camID.x, cameraHeight, parsed.camID.z);
 		obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
-		obj[camObjId].position.x = 0;
-		obj[camObjId].position.z = camZ;
 
 		var render = function() {
 			requestAnimationFrame(render);
 			renderer.render(obj[sceneObjId].scene, obj[camObjId]);
-			//getUserList(this.quid);
 		};
 
 		render();
