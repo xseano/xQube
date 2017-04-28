@@ -7,13 +7,14 @@ const ULObject = require('../objects/ULObject');
 
 class Block {
 
-    constructor(id, ws, webSock) {
+    constructor(id, ws, webSock, userList) {
         this.id = id;
         this.socket = ws;
         this.webSock = webSock;
         this.camID = new CameraObject(0, 0, 4);
         this.cubeID = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         this.uID = new CubeCollection(id, this.camID, this.cubeID);
+        this.userList = userList;
     }
 
     str2ab(str) {
@@ -52,9 +53,7 @@ class Block {
     onMessage(msg) {
 
         var objUArr = new Uint8Array(msg);
-        //console.log(objUArr);
         var objStr = this.ab2str(objUArr);
-        //console.log(objStr);
         var parsed = JSON.parse(objStr);
         var mID = parsed.id;
 
@@ -62,7 +61,6 @@ class Block {
 
         if (mID == 'sendJSONObject') {
           var jsonObj = parsed.data;
-          //console.log(jsonObj.x); // 1
         }
 
         if (mID == 'updatePos') {
@@ -99,43 +97,25 @@ class Block {
           this.cubeID.x += xx;
           this.cubeID.z += zz;
 
-          var camPos = "gridPos[ x: {" + this.camID.x + "}|| y:{ " + this.camID.y + "}|| z: {" + this.camID.z + "} ]";
-          var camDebug = "Camera" + ": " + camPos;
-
-          var cubePos = "gridPos[ x: {" + this.cubeID.x + "}|| y:{ " + this.cubeID.y + "}|| z: {" + this.cubeID.z + "} ]";
-          var cubeDebug = "Cube" + ": color{" + this.cubeID.color + "} || " + cubePos;
-
-         // console.log(camDebug + "\n" + cubeDebug);
-
          var moveObj = new MoveObject('move', this.uID);
          var u = this.uintIfy(moveObj);
          this.socket.send(u);
         }
 
       if (mID == 'getUserList') {
-        var nmID = "user" + this.id;
-        var unmIDe = this.id;
-        var unmIDCube = this.cubeID;
         var ws = this.socket;
 
-        var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
-        var ulobjarr = this.uintIfy(ulobj);
-
-        this.webSock.clients.forEach(function each(client) {
-          if (client !== ws && client.readyState === 1) {
-            client.send(ulobjarr);
-          }
-        });
-
-      //  this.webSock.clients.forEach(function each(client) {
-        //  if (client !== ws) {
-            //var ulobj = new ULObject('returnUserList', unmIDe, unmIDCube);
-            //console.log(ulobj);
-            //var ulobjarr = this.uintIfy(ulobj);
-            //console.log(ulobjarr);
-            //client.send(ulobjarr);
-        //  }
-      //  });
+        for(var u = 0; u < this.userList.length; u++) {
+            var unmIDCube = this.userList[u].data.cubeID;
+            var id = this.userList[u].id;
+            var ulobj = new ULObject('returnUserList', id, unmIDCube);
+            var ulobjarr = this.uintIfy(ulobj);
+            this.webSock.clients.forEach(function each(client) {
+              if (client.readyState === 1) {
+                client.send(ulobjarr);
+              }
+            });
+        }
       }
     }
 

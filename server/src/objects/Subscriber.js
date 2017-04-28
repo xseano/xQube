@@ -1,8 +1,10 @@
 class Subscriber {
 
-    constructor(id, uid) {
+    constructor(id, camObj, cubeObj, uObj) {
         this.id = id;
-        this.uid = uid;
+        this.camID = camObj;
+        this.cubeID = cubeObj;
+        this.uID = uObj;
     }
 
 }

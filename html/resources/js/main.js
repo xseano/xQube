@@ -52,7 +52,6 @@ function onLoad() {
 
 function onConn() {
 	if (obj[sceneObjId].socket.readyState == 1) {
-		console.log('onConn');
 		onOpen();
 	} else {
 		onLoad();
@@ -64,7 +63,6 @@ function error(e) {
 }
 
 function close(e, error) {
-		console.log(e);
 		if (e.code || e.reason) {
 				console.log("Socket Closed! Reason: " + e.code + " " + e.reason);
 				onConn();
@@ -95,8 +93,8 @@ function message(msg) {
 	var mID = parsed.id;
 
 	if (mID == 'create') {
-		console.log('Client ID: ' + parsed.uid);
-		this.quid = parsed.uid;
+		console.log('Client ID: ' + parsed.uID.id);
+		this.quid = parsed.uID.id;
 
 		var renderer = new THREE.WebGLRenderer();
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -112,34 +110,16 @@ function message(msg) {
 		var cubeObjId = this.quid + "CubeObj";
 		obj[camObjId] = new THREE.PerspectiveCamera(105, window.innerWidth/window.innerHeight, 0.1, 1000);
 
-		var cWidth = 5;
-		var cHeight = 5;
-		var cDepth = 5;
-		var cColor = "rgb(174, 129, 255)";
-		var camZ = 4;
+		var cWidth = parsed.cubeID.w;
+		var cHeight = parsed.cubeID.h;
+		var cDepth = parsed.cubeID.d;
+		var cColor = parsed.cubeID.color;
+		var camZ = parsed.camID.z;
 
 		var cubeColorRGB = new THREE.Color(cColor);
 		var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-		var txtrLder = new THREE.TextureLoader();
-
-		var dice1 = txtrLder.load( './resources/images/DiceFace_1.png' );
-		var dice2 = txtrLder.load( './resources/images/DiceFace_2.png' );
-		var dice3 = txtrLder.load( './resources/images/DiceFace_3.png' );
-		var dice4 = txtrLder.load( './resources/images/DiceFace_4.png' );
-		var dice5 = txtrLder.load( './resources/images/DiceFace_5.png' );
-		var dice6 = txtrLder.load( './resources/images/DiceFace_6.png' );
-
-		var cubeMaterials = [
-			new THREE.MeshBasicMaterial( { map: dice1 } ),
-			new THREE.MeshBasicMaterial( { map: dice2 } ),
-			new THREE.MeshBasicMaterial( { map: dice3 } ),
-			new THREE.MeshBasicMaterial( { map: dice4 } ),
-			new THREE.MeshBasicMaterial( { map: dice5 } ),
-			new THREE.MeshBasicMaterial( { map: dice6 } )
-		];
-
-		var cubeFaces = new THREE.MeshFaceMaterial(cubeMaterials);
 		var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+
 		var group = obj[sceneObjId].group;
 		obj[sceneObjId].scene.add(group);
 		obj[cubeObjId] = new THREE.Mesh(cubeGeom, cubeColor);
@@ -156,15 +136,15 @@ function message(msg) {
 		var render = function() {
 			requestAnimationFrame(render);
 			renderer.render(obj[sceneObjId].scene, obj[camObjId]);
-			//obj[sceneObjId].socket.emit('getUserList');
+			//getUserList(this.quid);
 		};
 
 		render();
+		getUserList();
 	}
 
 	if (mID == 'move') {
 		var jsonObj = parsed.data;
-		console.log(jsonObj);
 
 		var newCamZ = jsonObj.CamObj.z;
 		var newCubeZ = jsonObj.CubeObj.z;
@@ -184,17 +164,16 @@ function message(msg) {
 	}
 
 	if (mID == 'returnUserList') {
+
 		var userData = parsed.CubeObj;
 		var userCube = userData;
 		var userID = parsed.uid;
 		var uIDCube = userID + "CubeObj";
 		var clientCube = obj[uIDCube];
 
-		 console.log(clientCube);
-
 		if ((typeof clientCube) != "undefined") {
 
-			if (userID != socketID) {
+			if (userID != this.quid) {
 
 				clientCube.position.z = userCube.z;
 				clientCube.position.x = userCube.x;
@@ -204,7 +183,6 @@ function message(msg) {
 		} else {
 
 			var uIDCube1 = userID + "CubeObj";
-
 			var cWidth1 = userData.w;
 			var cHeight1 = userData.h;
 			var cDepth1 = userData.d;
@@ -212,11 +190,12 @@ function message(msg) {
 
 			var cubeColorRGB1 = new THREE.Color(cColor1);
 			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeFaces);
+			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
+			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeColor1);
 
 			obj[sceneObjId].group.add(obj[uIDCube1]);
 			obj[uIDCube1].name = userID;
-			obj[sceneObjId].add(obj[uIDCube1]);
+			obj[sceneObjId].scene.add(obj[uIDCube1]);
 
 			obj[uIDCube1].position.set(userData.x, 10, userData.z);
 		}

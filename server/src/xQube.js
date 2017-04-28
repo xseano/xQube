@@ -8,13 +8,13 @@ global.Logger = require('./modules/Logger');
 global.Commands = require('./modules/Commands');
 global.readline = require('readline');
 global.rl = readline.createInterface(process.stdin, process.stdout);
-var userList = [];
 
 class xServer {
 
 constructor() {
   this.id = 1;
   this.webSock = new WebSocket.Server({perMessageDeflate: false, port: 8080}, this.onStart.bind(this));
+  this.userList = [];
 }
 
 xQube() {
@@ -41,20 +41,20 @@ handleCommand(data) {
 }
 
 onConnection(ws) {
-  var client = new Block(this.getNextID(), ws, this.webSock);
+  var client = new Block(this.getNextID(), ws, this.webSock, this.userList);
   client.ip = ws.upgradeReq.connection.remoteAddress;
   client.socket.on('message', client.onMessage.bind(client));
 
   var id = client.id;
-  userList.push(id);
+  this.userList.push({'id': client.uID.id, 'data': client});
 
   console.log("Built new Cube Object with ID: " + client.uID.id) + "\n";
 
-  var subObj = new Subscriber('create', client.uID.id);
+  var subObj = new Subscriber('create', client.camID, client.cubeID, client.uID);
   var user = client.uintIfy(subObj);
   client.socket.send(user);
 
-  console.log("UserList: " + userList);
+  console.log("UserList: " + this.userList);
 }
 
 onStart() {
