@@ -23,4 +23,4 @@
 * [Stas' Blog](https://stas.blog/)
 
 ## Preview
-![](https://i.gyazo.com/3c6dae829e21a29f9b184790b9e65f2f.gif)
+![](https://i.gyazo.com/b69fd31eb9b8d67f44ef1e18b189e36b.gif)
