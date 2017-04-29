@@ -1,22 +1,5 @@
 $.getJSON("../../../conf.json", function(conf) {
 		window.conf = conf;
-		/*
-    this.ip = conf.wsServer;
-		this.cameraHeight = conf.cameraHeight;
-		this.cameraAngle = conf.cameraAngle;
-		this.sceneColor = new THREE.Color(conf.sceneColor);
-		this.cubeY = conf.cubeY;
-		this.camAngleFactor = conf.camAngleFactor;
-		this.opacityVal = conf.opacityVal;
-		this.wantTransparent = conf.wantTransparent;
-		this.charCode = conf.charCode;
-		this.dataLength = conf.dataLength;
-		this.camOption1 = conf.camOption1;
-		this.camOption2 = conf.camOption2,
-		this.camOption3 = conf.camOption3;
-		this.scale = conf.scale;
-		this.selections = conf.selections;
-		*/
 });
 
 var obj = this;
@@ -148,7 +131,7 @@ function message(msg) {
 		group.add(obj[cubeObjId]);
 		obj[sceneObjId].scene.add(obj[cubeObjId]);
 
-		obj[cubeObjId].position.set(parsed.cubeID.x, parsed.cubeID.y, parsed.cubeID.z);
+		obj[cubeObjId].position.set(parsed.cubeID.x, conf.cubeY, parsed.cubeID.z);
 		obj[camObjId].position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
 		obj[camObjId].rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 
