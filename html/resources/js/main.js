@@ -1,10 +1,28 @@
-var ip = "ws://127.0.0.1:8080";
+$.getJSON("../../../conf.json", function(conf) {
+		window.conf = conf;
+		/*
+    this.ip = conf.wsServer;
+		this.cameraHeight = conf.cameraHeight;
+		this.cameraAngle = conf.cameraAngle;
+		this.sceneColor = new THREE.Color(conf.sceneColor);
+		this.cubeY = conf.cubeY;
+		this.camAngleFactor = conf.camAngleFactor;
+		this.opacityVal = conf.opacityVal;
+		this.wantTransparent = conf.wantTransparent;
+		this.charCode = conf.charCode;
+		this.dataLength = conf.dataLength;
+		this.camOption1 = conf.camOption1;
+		this.camOption2 = conf.camOption2,
+		this.camOption3 = conf.camOption3;
+		this.scale = conf.scale;
+		this.selections = conf.selections;
+		*/
+});
 
 var obj = this;
 const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
-const cameraHeight = 16; // Controls FOV on Cube in context of the plane
-const cameraAngle = 25; // Controls Angle at which camera points towards cube
+obj[sceneObjId] = new SceneObj(id);
 
 function SceneObj(id) {
 		this.id = id;
@@ -27,9 +45,6 @@ function GetUserList(id) {
 	this.id = id;
 }
 
-obj[sceneObjId] = new SceneObj(id);
-var sceneColor = new THREE.Color("rgb(174, 129, 255)");
-
 function onLoad() {
 
 	$('#mainScreen').fadeOut('fast', function() {
@@ -38,7 +53,7 @@ function onLoad() {
 
 		var clientName = document.getElementById('login-name').value;
 
-		obj[sceneObjId].socket = new WebSocket(ip);
+		obj[sceneObjId].socket = new WebSocket(conf.wsServer);
 		var ws = obj[sceneObjId].socket;
 
 		ws.binaryType = "arraybuffer";
@@ -107,14 +122,14 @@ function message(msg) {
 		renderer.domElement.id = "render";
 		document.body.appendChild(renderer.domElement);
 
-		var scale = 2000;
-		var sections = 200;
+		var scale = conf.scale;
+		var sections = conf.selections;
 		var baseGrid = new THREE.GridHelper(scale, sections);
 		obj[sceneObjId].scene.add(baseGrid);
 
 		var camObjId = this.quid + "CamObj";
 		var cubeObjId = this.quid + "CubeObj";
-		obj[camObjId] = new THREE.PerspectiveCamera(105, window.innerWidth/window.innerHeight, 0.1, 1000);
+		obj[camObjId] = new THREE.PerspectiveCamera(conf.camOption1, window.innerWidth/window.innerHeight, conf.camOption2, conf.camOption3);
 
 		var cWidth = parsed.cubeID.w;
 		var cHeight = parsed.cubeID.h;
@@ -124,7 +139,7 @@ function message(msg) {
 
 		var cubeColorRGB = new THREE.Color(cColor);
 		var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-		var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: 0.7, transparent: true });
+		var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: conf.opacityVal, transparent: conf.wantTransparent });
 
 		var group = obj[sceneObjId].group;
 		obj[sceneObjId].scene.add(group);
@@ -134,8 +149,8 @@ function message(msg) {
 		obj[sceneObjId].scene.add(obj[cubeObjId]);
 
 		obj[cubeObjId].position.set(parsed.cubeID.x, parsed.cubeID.y, parsed.cubeID.z);
-		obj[camObjId].position.set(parsed.camID.x, cameraHeight, parsed.camID.z);
-		obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+		obj[camObjId].position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
+		obj[camObjId].rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 
 		var render = function() {
 			requestAnimationFrame(render);
@@ -159,9 +174,9 @@ function message(msg) {
 		var camObjId = socketID + "CamObj";
 		var cubeObjId = socketID + "CubeObj";
 
-		obj[cubeObjId].position.set(newCamX, 10, newCubeZ);
-		obj[camObjId].position.y = cameraHeight;
-		obj[camObjId].rotation.x = -(cameraAngle * Math.PI / 180);
+		obj[cubeObjId].position.set(newCamX, conf.cubeY, newCubeZ);
+		obj[camObjId].position.y = conf.cameraHeight;
+		obj[camObjId].rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 		obj[camObjId].position.x = newCubeX;
 		obj[camObjId].position.z = newCamZ;
 	}
@@ -180,7 +195,7 @@ function message(msg) {
 
 				clientCube.position.z = userCube.z;
 				clientCube.position.x = userCube.x;
-				clientCube.position.y = 10;
+				clientCube.position.y = conf.cubeY;
 			}
 
 		} else {
@@ -193,14 +208,14 @@ function message(msg) {
 
 			var cubeColorRGB1 = new THREE.Color(cColor1);
 			var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: 0.7, transparent: true });
+			var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: conf.opacityVal, transparent: conf.wantTransparent });
 			obj[uIDCube1] = new THREE.Mesh(cubeGeom1, cubeColor1);
 
 			obj[sceneObjId].group.add(obj[uIDCube1]);
 			obj[uIDCube1].name = userID;
 			obj[sceneObjId].scene.add(obj[uIDCube1]);
 
-			obj[uIDCube1].position.set(userData.x, 10, userData.z);
+			obj[uIDCube1].position.set(userData.x, conf.cubeY, userData.z);
 		}
 	}
 }
@@ -208,7 +223,7 @@ function message(msg) {
 function str2ab(str) {
     var escstr = encodeURIComponent(str);
     var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
-        return String.fromCharCode('0x' + p1);
+        return String.fromCharCode(conf.charCode + p1);
     });
     var ua = new Uint8Array(binstr.length);
     Array.prototype.forEach.call(binstr, function (ch, i) {
@@ -222,7 +237,7 @@ function ab2str(ab) {
         return String.fromCharCode(ch);
     }).join('');
     var escstr = binstr.replace(/(.)/g, function (m, p) {
-        var code = p.charCodeAt(0).toString(16).toUpperCase();
+        var code = p.charCodeAt(0).toString(conf.dataLength).toUpperCase();
         if (code.length < 2) {
             code = '0' + code;
         }
@@ -248,26 +263,6 @@ function getUserList() {
 	var ulObj = new GetUserList('getUserList');
 	var ulObjArr = uintIfy(ulObj);
 	obj[sceneObjId].socket.send(ulObjArr);
-}
-
-function sendJSONObject(obj) {
-
-	var dataObj = new DataObject('sendJSONObject', obj);
-
-	var abObj = uintIfy(dataObj);
-	var objArr = Array.prototype.slice.call(abObj); // [xyx, yzx, yxz, zyx]
-
-	var objUArr = new Uint8Array(objArr); // Uint8Array[xyx, yzx, yxz, zyx]
-	var objStr = ab2str(objUArr); // "{'x': '1'}"
-	var jsonObj = JSON.parse(objStr); // {'x': '1'}
-	console.log(jsonObj.x); // 1
-
-	//var o = obfscData(objUArr);
-
-	console.log(objUArr);
-
-	obj[sceneObjId].socket.send(objUArr);
-
 }
 
 function onOpen() {
