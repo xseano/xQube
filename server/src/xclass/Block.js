@@ -146,8 +146,8 @@ class Block {
 
         if (mID == 'updatePos') {
 
-          var speed = 4;
-          var completeTime = 8;
+          var speed = 2;
+          var completeTime = 4;
           var key = parsed.key;
 
           var initCamZPos = this.camID.z;
