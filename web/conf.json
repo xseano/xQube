@@ -1,5 +1,5 @@
 {
-  "wsServer": "ws://127.0.0.1:8080",
+  "wsServer": "ws://gs01.xseano.tk:999",
   "cameraHeight": 16,
   "cameraAngle": 25,
   "sceneColor": "rgb(174, 129, 255)",

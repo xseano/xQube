@@ -13,7 +13,7 @@ class xServer {
 
 constructor() {
   this.id = 1;
-  this.webSock = new WebSocket.Server({perMessageDeflate: false, port: 8080}, this.onStart.bind(this));
+  this.webSock = new WebSocket.Server({perMessageDeflate: false, port: 999}, this.onStart.bind(this));
   this.userList = [];
 }
 
