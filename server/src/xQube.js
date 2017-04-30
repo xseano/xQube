@@ -49,7 +49,7 @@ onConnection(ws) {
   var id = client.id;
   this.userList.push({'id': client.uID.id, 'data': client});
 
-  console.log("Built new Cube Object with ID: " + client.uID.id) + " from client ip: " + client.ip;
+  console.log("Built new Cube Object with ID: " + client.uID.id + " from client ip: " + client.ip);
 
   var subObj = new Subscriber('create', client.camID, client.cubeID, client.uID);
   var user = client.uintIfy(subObj);
