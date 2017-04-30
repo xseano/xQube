@@ -1,13 +1,3 @@
-useStrict(true);
-
-function useStrict(option) {
-  if (option == true) {
-    "use strict";
-  } else if (option == false) {
-    "don't use strict";
-  }
-}
-
 const WebSocket = require('ws');
 var obj = this;
 const Block = require('./xclass/Block');
