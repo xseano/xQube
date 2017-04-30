@@ -1,4 +1,4 @@
-$.getJSON("../../../conf.json", function(conf) {
+$.getJSON("../../conf/conf.json", function(conf) {
 		window.conf = conf;
 		window.isDevEnv = conf.isDevEnv; // Enable this for developer environment
 });
@@ -38,10 +38,10 @@ function onLoad() {
 		var clientName = document.getElementById('login-name').value;
 
 		if (isDevEnv === true) {
-			var xWebServer = conf.wsServerDev;
+			var xWebServer = conf.wsServerDev + ':' + conf.wsPortDev;
 			obj[sceneObjId].socket = new WebSocket(xWebServer);
 		} else if (isDevEnv === false) {
-			var xWebServer = conf.wsServer;
+			var xWebServer = conf.wsServer + ':' + conf.wsPort;
 			obj[sceneObjId].socket = new WebSocket(xWebServer);
 		}
 
