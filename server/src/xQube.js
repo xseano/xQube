@@ -1,3 +1,4 @@
+require('use-strict');
 useStrict(true);
 
 function useStrict(option) {
