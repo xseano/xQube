@@ -79,7 +79,7 @@ class Block {
     updatePos(completeTime, camDiff, cubeDiff, type) {
       var newCamPos = camDiff * completeTime;
       var newCubePos = cubeDiff * completeTime;
-      //console.log('Received type: ' + type);
+
       for (var cam = camDiff; cam < newCamPos; cam++) {
         if (type == 'w') {
           this.cubeID.z -= cam;
@@ -146,27 +146,14 @@ class Block {
 
         if (mID == 'updatePos') {
 
-          var id = parsed.id;
-          var camId = id + "Cam";
-          var cubeId = id + "Cube";
-          var uId = "user" + id;
-
-          var xx = 0;
-          var zz = 0;
           var speed = 4;
+          var completeTime = 8;
           var key = parsed.key;
 
           var initCamZPos = this.camID.z;
           var initCubeZPos = this.cubeID.z;
           var initCamXPos = this.camID.x;
           var initCubeXPos = this.cubeID.x;
-
-          var nCamZPos = this.camID.z;
-          var nCubeZPos = this.cubeID.z;
-          var nCamXPos = this.camID.x;
-          var nCubeXPos = this.cubeID.x;
-
-          var completeTime = 8;
 
           if (key == 'w') {
             var camDiff = ((initCamZPos + speed) - initCamZPos) / completeTime;
