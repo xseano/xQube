@@ -1,5 +1,6 @@
 $.getJSON("../../../conf.json", function(conf) {
 		window.conf = conf;
+		window.isDevEnv = conf.isDevEnv; // Enable this for developer environment
 });
 
 var obj = this;
@@ -36,7 +37,14 @@ function onLoad() {
 
 		var clientName = document.getElementById('login-name').value;
 
-		obj[sceneObjId].socket = new WebSocket(conf.wsServer);
+		if (isDevEnv === true) {
+			var xWebServer = conf.wsServerDev;
+			obj[sceneObjId].socket = new WebSocket(xWebServer);
+		} else if (isDevEnv === false) {
+			var xWebServer = conf.wsServer;
+			obj[sceneObjId].socket = new WebSocket(xWebServer);
+		}
+
 		var ws = obj[sceneObjId].socket;
 
 		ws.binaryType = "arraybuffer";

@@ -11,9 +11,13 @@ global.rl = readline.createInterface(process.stdin, process.stdout);
 
 class xServer {
 
-constructor() {
+constructor(confData) {
   this.id = 1;
-  this.webSock = new WebSocket.Server({perMessageDeflate: false, port: 999}, this.onStart.bind(this));
+  if (confData['isDevEnv'] == true) {
+    this.webSock = new WebSocket.Server({perMessageDeflate: false, port: confData['wsPortDev']}, this.onStart.bind(this));
+  } else if (confData['isDevEnv'] == false) {
+    this.webSock = new WebSocket.Server({perMessageDeflate: false, port: confData['wsPort']}, this.onStart.bind(this));
+  }
   this.userList = [];
 }
 

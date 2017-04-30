@@ -1,3 +1,10 @@
+const cowsay = require('cowsay');
+const colors = require('colors');
+global.Logger = require('../modules/Logger');
+global.Commands = require('../modules/Commands');
+global.readline = require('readline');
+global.rl = readline.createInterface(process.stdin, process.stdout);
+
 const BinaryReader = require('../lib/BinaryReader');
 const CameraObject = require('../objects/CameraObject');
 const CubeObject = require('../objects/CubeObject');
@@ -31,7 +38,8 @@ class Block {
     }
 
     onCloseConn(code, reason) {
-      console.log('Received closing code: ' + code + ' from client (id): ' + this.id);
+      Logger.info("Client disconnect with code: " + code + " from IP: " + this.ip + "".green);
+
       if (code == 1006) {
         for(var u = 0; u < this.userList.length; u++) {
             var unmIDCube = this.userList[u].data.cubeID;

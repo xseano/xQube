@@ -30,9 +30,12 @@
     "cowsay": "*",
     "express": ">=4.2.x",
     "fs": "0.0.1-security",
+    "jquery": "^3.2.1",
+    "jsdom": "^10.0.0",
     "openpgp": "^2.5.4",
     "promise": "^7.1.1",
     "ws": "^2.3.1",
+    "xmlhttprequest": "^1.8.0",
     "yarn": "^0.22.0"
   },
   "private": false,
