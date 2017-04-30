@@ -113,7 +113,7 @@ function prompt(callback)
 function clear()
 {
     log = "";
-    process.stdout.write('\033c');
+    process.stdout.write("\033c");
     readline.cursorTo(process.stdout, 0);
     process.stdout.write("\r\x1b[K");
     readline.clearLine(process.stdout, 0);
