@@ -17,17 +17,8 @@ function crc32b($ptf) {
     <link href="./resources/css/vendor/bootstrap/css/bootstrap.min.css?v=<?php echo crc32b('./resources/css/vendor/bootstrap/css/bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="./resources/css/flat-ui.css?v=<?php echo crc32b('./resources/css/flat-ui.css'); ?>" rel="stylesheet">
     <link href="./resources/css/demo.css?v=<?php echo crc32b('./resources/css/demo.css'); ?>" rel="stylesheet">
+    <script src="./resources/js/jscolor.js?v=<?php echo crc32b('./resources/js/jscolor.js'); ?>"></script>
   </head>
-
-  <script src="./resources/js/jscolor.js"></script>
-
-
-
-<script>
-function update(picker) {
-    document.getElementById('colorInput').value = picker.toRGBString();
-}
-</script>
 
   <body>
 		<div id="mainScreen">
@@ -38,7 +29,7 @@ function update(picker) {
             <div class="form-group">
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
               <br>
-              Cube Color: <input class="jscolor {onFineChange:'update(this)'}" value="ffcc00">
+              Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="ffcc00">
               <input id="colorInput" type="hidden" name="colorInput">
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>

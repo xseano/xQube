@@ -3,6 +3,10 @@ $.getJSON("../../conf/conf.json", function(conf) {
 		window.isDevEnv = conf.isDevEnv; // Enable this for developer environment
 });
 
+function updateColor(picker) {
+    document.getElementById('colorInput').value = picker.toRGBString();
+}
+
 var obj = this;
 const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
