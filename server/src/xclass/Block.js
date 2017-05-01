@@ -197,7 +197,9 @@ class Block {
         for(var u = 0; u < this.userList.length; u++) {
             var unmIDCube = this.userList[u].cubeID;
             var id = this.userList[u].id;
-            var ulobj = new ULObject('returnUserList', id, unmIDCube);
+            var name = this.userList[u].name;
+            var color = unmIDCube.color;
+            var ulobj = new ULObject('returnUserList', id, unmIDCube, name, color);
             var ulobjarr = this.uintIfy(ulobj);
             this.webSock.clients.forEach(function each(client) {
               if (client.readyState === 1) {

@@ -81,6 +81,7 @@ function close(e, error) {
 		}
 
 		$('#render').fadeOut('fast');
+		$('#userList').fadeOut('fast');
 
 }
 
@@ -104,6 +105,7 @@ function message(msg) {
 
 	if (mID == 'rmClient') {
 		var clientID = parsed.data.id + "CubeObj";
+		$('#'+parsed.data.id).remove();
 		console.log(clientID);
 		obj[sceneObjId].scene.remove(obj[clientID]);
 	}
@@ -188,6 +190,19 @@ function message(msg) {
 		var userID = parsed.uid;
 		var uIDCube = userID + "CubeObj";
 		var clientCube = obj[uIDCube];
+		var userColor = parsed.color;
+		var userName = parsed.name;
+
+		var userListElement = document.getElementById('uList');
+
+		if (document.getElementById(userID) == null) {
+			var listElement = document.createElement("li");
+			listElement.id = userID;
+			listElement.className = 'userInList';
+			listElement.innerHTML = userName;
+			listElement.style.color = userColor;
+			userListElement.appendChild(listElement);
+		}
 
 		if ((typeof clientCube) != "undefined") {
 
@@ -275,6 +290,7 @@ function getUserList() {
 function onOpen() {
 
 	$('#connectScreen').fadeOut('fast');
+	$('#userList').fadeIn('fast');
 
 	var socketID = this.quid;
 	var keys = {};

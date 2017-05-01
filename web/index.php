@@ -46,6 +46,7 @@ function update(picker) {
           </div>
       </center>
     </div>
+
     <div style="display: none" id="connectScreen">
       <center>
         <span class="textMsg"> ~ x³ ~ </span>
@@ -55,6 +56,13 @@ function update(picker) {
       </center>
     </div>
 	</body>
+
+  <div style="display: none" id="userList" class="userList">
+    <center>
+      <span class="footerText">USER LIST</span>
+      <ul id="uList" class="uList"></ul>
+    </center>
+  </div>
 
 <?php include 'sections/footer.php'; ?>
 
