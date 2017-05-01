@@ -28,7 +28,7 @@ class Block {
     onCloseConn(code, reason) {
       Logger.info("Client disconnect with code: " + code + " from IP: " + this.ip + "".green);
 
-      if (code == 1006) {
+      if (code == 1001 || code == 1006) {
         for(var u = 0; u < this.userList.length; u++) {
             var unmIDCube = this.userList[u].cubeID;
             var id = this.userList[u].id;
