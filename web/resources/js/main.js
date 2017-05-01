@@ -22,6 +22,7 @@ function SceneObj(id) {
 		this.id = id;
     this.scene = new THREE.Scene();
 		this.group = new THREE.Group();
+		this.date = new Date();
 }
 
 function KeyObj(id, key, uid) {
@@ -132,6 +133,10 @@ function makeTextSprite(message, parameters) {
 		return sprite;
 }
 
+function lerp(a, b, f) {
+    return a + f * (b - a);
+}
+
 function message(msg) {
 	var objUArr = new Uint8Array(msg);
 	var objStr = ab2str(objUArr);
@@ -227,9 +232,11 @@ function message(msg) {
 		obj[camObjId].position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
 		obj[camObjId].rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 
+
 		var render = function() {
 			requestAnimationFrame(render);
 			renderer.render(obj[sceneObjId].scene, obj[camObjId]);
+			obj[sceneObjId].date = new Date();
 		};
 
 		render();
@@ -237,6 +244,7 @@ function message(msg) {
 	}
 
 	if (mID == 'move') {
+
 		var jsonObj = parsed.data;
 
 		var newCamZ = jsonObj.CamObj.z;
@@ -249,11 +257,22 @@ function message(msg) {
 		var camObjId = socketID + "CamObj";
 		var cubeObjId = socketID + "CubeObj";
 
-		obj[cubeObjId].position.set(newCamX, conf.cubeY, newCubeZ);
+		var cubeObjId = this.quid + "CubeObj";
+
+		var now = new Date();
+		var delta = (Date.now() - obj[sceneObjId].date) / 120;
+
+		var x = lerp(obj[cubeObjId].position.x, newCubeX, delta);
+		var z = lerp(obj[cubeObjId].position.z, newCubeZ, delta);
+
+		var cx = lerp(obj[camObjId].position.x, newCamX, delta);
+		var cz = lerp(obj[camObjId].position.z, newCamZ, delta);
+
+		obj[cubeObjId].position.set(x, conf.cubeY, z);
 		obj[camObjId].position.y = conf.cameraHeight;
+		obj[camObjId].position.x = cx;
+		obj[camObjId].position.z = cz;
 		obj[camObjId].rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
-		obj[camObjId].position.x = newCubeX;
-		obj[camObjId].position.z = newCamZ;
 	}
 
 	if (mID == 'returnUserList') {
