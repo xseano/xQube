@@ -42,11 +42,11 @@ class Block {
 
       if (code == 1006) {
         for(var u = 0; u < this.userList.length; u++) {
-            var unmIDCube = this.userList[u].data.cubeID;
+            var unmIDCube = this.userList[u].cubeID;
             var id = this.userList[u].id;
             if (id == this.id) {
               var ws = this.userList[u].socket;
-              var deleteObj = new DeleteObject('rmClient', this.userList[u].data.uID);
+              var deleteObj = new DeleteObject('rmClient', this.userList[u].uID);
               var d = this.uintIfy(deleteObj);
 
               this.webSock.clients.forEach(function each(client) {
@@ -148,6 +148,10 @@ class Block {
 
         //console.log('Got incoming id... ' + mID);
 
+        if (mID == 'sendClientData') {
+          this.name = parsed.name;
+        }
+
         if (mID == 'sendJSONObject') {
           var jsonObj = parsed.data;
         }
@@ -192,7 +196,7 @@ class Block {
         var ws = this.socket;
 
         for(var u = 0; u < this.userList.length; u++) {
-            var unmIDCube = this.userList[u].data.cubeID;
+            var unmIDCube = this.userList[u].cubeID;
             var id = this.userList[u].id;
             var ulobj = new ULObject('returnUserList', id, unmIDCube);
             var ulobjarr = this.uintIfy(ulobj);

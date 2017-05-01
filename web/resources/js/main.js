@@ -8,6 +8,11 @@ const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
 obj[sceneObjId] = new SceneObj(id);
 
+function ClientData(id, name) {
+	this.id = id;
+	this.name = name;
+}
+
 function SceneObj(id) {
 		this.id = id;
     this.scene = new THREE.Scene();
@@ -34,8 +39,6 @@ function onLoad() {
 	$('#mainScreen').fadeOut('fast', function() {
 
 		$('#connectScreen').fadeIn('fast');
-
-		var clientName = document.getElementById('login-name').value;
 
 		if (isDevEnv === true) {
 			var xWebServer = conf.wsServerDev + ':' + conf.wsPortDev;
@@ -105,6 +108,9 @@ function message(msg) {
 	}
 
 	if (mID == 'create') {
+		var clientName = document.getElementById('login-name').value;
+		this.cName = clientName;
+		sendClientData(this.cName);
 		console.log('Client ID: ' + parsed.uID.id);
 		this.quid = parsed.uID.id;
 
@@ -247,6 +253,13 @@ function sendPos(key, uid) {
 	var keyObj = new KeyObj('updatePos', key, uid);
 	var arr = uintIfy(keyObj);
 	obj[sceneObjId].socket.send(arr);
+
+}
+
+function sendClientData(name) {
+	var cData = new ClientData('sendClientData', name);
+	var c = uintIfy(cData);
+	obj[sceneObjId].socket.send(c);
 
 }
 

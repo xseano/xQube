@@ -1,5 +1,5 @@
 {
-  "isDevEnv": false,
+  "isDevEnv": true,
   "wsServer": "ws://gs01.xseano.tk",
   "wsPort": "999",
   "wsServerDev": "ws://127.0.0.1",

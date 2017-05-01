@@ -51,15 +51,13 @@ onConnection(ws) {
   client.socket.on('close', client.onCloseConn.bind(client));
 
   var id = client.id;
-  this.userList.push({'id': client.uID.id, 'data': client});
-
-  Logger.info("ID: " + client.uID.id + " with IP: "  + client.ip + "".white);
+  this.userList.push(client);
 
   var subObj = new Subscriber('create', client.camID, client.cubeID, client.uID);
   var user = client.uintIfy(subObj);
   client.socket.send(user);
 
-  console.log("UserList: " + this.userList);
+  Logger.info("ID: " + client.uID.id + " with IP: "  + client.ip + "".white);
 }
 
 onStart() {
