@@ -29,7 +29,7 @@ function crc32b($ptf) {
             <div class="form-group">
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
               <br>
-              Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="ffcc00">
+              Choose Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="FFCC00">
               <input id="colorInput" type="hidden" name="colorInput">
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
@@ -50,8 +50,20 @@ function crc32b($ptf) {
 
   <div style="display: none" id="userList" class="userList">
     <center>
-      <span class="footerText">USER LIST</span>
+      <span class="headerText">USER LIST</span>
       <ul id="uList" class="uList"></ul>
+    </center>
+  </div>
+
+  <div style="display: none" id="chatList" class="chatList">
+    <center>
+      <span class="headerText">CHAT</span>
+      <ul id="cList" class="cList"></ul>
+      <div id="enterChat">
+        <input type="text" class="form-control login-field" value="" placeholder="Type something!" id="chat-text">
+        <button style="margin-top: 10px;" class="btn btn-primary btn-lg btn-block" onClick="sendChat()">Send</button>
+      </div>
+  </div>
     </center>
   </div>
 

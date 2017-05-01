@@ -86,9 +86,16 @@ function close(e, error) {
 
 		$('#render').fadeOut('fast');
 		$('#userList').fadeOut('fast');
+		$('#chatList').fadeOut('fast');
 
 }
 
+function sendChat() {
+	var chatText = document.getElementById('chat-text').value;
+	var chatObj = new DataObject('chatMessage', chatText);
+	var cO = uintIfy(chatObj);
+	obj[sceneObjId].socket.send(cO);
+}
 
 function message(msg) {
 	var objUArr = new Uint8Array(msg);
@@ -112,6 +119,19 @@ function message(msg) {
 		$('#'+parsed.data.id).remove();
 		console.log(clientID);
 		obj[sceneObjId].scene.remove(obj[clientID]);
+	}
+
+	if (mID == 'chatObject') {
+		var chatColor = parsed.color;
+		var chatName = parsed.name;
+		var chatMsg = parsed.msg;
+
+		var chatListElement = document.getElementById('cList');
+		var listElement = document.createElement("li");
+		listElement.className = 'chatInList';
+		listElement.innerHTML = chatName + ": " + chatMsg;
+		listElement.style.color = chatColor;
+		chatListElement.appendChild(listElement);
 	}
 
 	if (mID == 'create') {
@@ -295,6 +315,7 @@ function onOpen() {
 
 	$('#connectScreen').fadeOut('fast');
 	$('#userList').fadeIn('fast');
+	$('#chatList').fadeIn('fast');
 
 	var socketID = this.quid;
 	var keys = {};

@@ -12,6 +12,7 @@ const CubeCollection = require('../objects/CubeCollection');
 const MoveObject = require('../objects/MoveObject');
 const DeleteObject = require('../objects/DeleteObject');
 const ULObject = require('../objects/ULObject');
+const ChatObject = require('../objects/ChatObject');
 
 class Block {
 
@@ -149,6 +150,18 @@ class Block {
         if (mID == 'sendClientData') {
           this.name = parsed.name;
           this.cubeID.color = parsed.color;
+        }
+
+        if (mID == 'chatMessage') {
+          var chatMsg = parsed.data;
+          var chatObject = new ChatObject('chatObject', chatMsg, this.name, this.cubeID.color);
+          var chatObjectArr = this.uintIfy(chatObject);
+          this.webSock.clients.forEach(function each(client) {
+            if (client.readyState === 1) {
+              client.send(chatObjectArr);
+            }
+          });
+
         }
 
         if (mID == 'sendJSONObject') {

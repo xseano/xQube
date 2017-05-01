@@ -10,14 +10,14 @@ canvas {
 
 .uList {
   padding: 0;
-  list-style: none;
+  list-style: decimal;
   height: 305px;
   overflow: hidden;
   overflow-y: scroll;
 }
 
 .userInList {
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 5px;
   text-align: center;
   border-bottom: 1px solid white;
@@ -28,12 +28,44 @@ canvas {
     border: 1px solid #000;
     border-radius: 5px;
     padding-bottom: 15px;
-    margin-top: 15px;
     padding-bottom: 50px;
     right: 0;
     top: 0;
     border-radius: 6px 0 0;
     height: 50%;
+    z-index: 1000;
+    position: absolute;
+    bottom: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+    opacity: 0.777;
+}
+
+.cList {
+  padding: 0;
+  list-style: none;
+  height: 305px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.chatInList {
+  font-size: 15px;
+  text-align: left;
+}
+
+.chatList {
+    width: 20%;
+    height: 50%;
+    background: rgba(30,30,30,.7);
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding-bottom: 15px;
+    padding-bottom: 50px;
+    left: 0;
+    top: 0;
+    border-radius: 6px 0 0;
+    height: 65%;
     z-index: 1000;
     position: absolute;
     bottom: 0;
@@ -52,24 +84,24 @@ canvas {
     -webkit-transition: .2s all linear;
 }
 
-.dsfsdtextMsg:after {
-    font-family: 'Nova Square';
-    overflow: hidden;
-    display: inline-flex;
-    vertical-align: bottom;
-    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
-    animation: ellipsis steps(4,end) 900ms infinite;
-    content: "\2026";
-    width: 0px;
-}
-
 .footerText {
   margin: 0;
-    font: bold 35px/1 "Copperplate", Helvetica, Arial, sans-serif;
-    color: #fff;
-    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
-    -webkit-transition: .2s all linear;
+  font: bold 35px/1 "Copperplate", Helvetica, Arial, sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+  -webkit-transition: .2s all linear;
 }
+
+
+.headerText {
+  border-bottom: 1px solid white;
+  margin: 0;
+  font: bold 35px/1 "Copperplate", Helvetica, Arial, sans-serif;
+  color: #fff;
+  text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+  -webkit-transition: .2s all linear;
+}
+
 
 .mBox {
   background: white;
@@ -82,7 +114,7 @@ canvas {
 }
 
 .footerText a {
-  margin: 0;
+    margin: 0;
     font: bold 35px/1 "Copperplate", Helvetica, Arial, sans-serif;
     text-decoration: none;
     color: #fff;
