@@ -11,6 +11,20 @@ BinaryReader.prototype.readUInt8 = function () {
     return value;
 };
 
+BinaryReader.prototype.readArray = function (ab) {
+    var binstr = Array.prototype.map.call(ab, function (ch) {
+        return String.fromCharCode(ch);
+    }).join('');
+    var escstr = binstr.replace(/(.)/g, function (m, p) {
+        var code = p.charCodeAt(0).toString(16).toUpperCase();
+        if (code.length < 2) {
+            code = '0' + code;
+        }
+        return '%' + code;
+    });
+    return decodeURIComponent(escstr);
+};
+
 BinaryReader.prototype.readInt8 = function () {
     var value = this._buffer.readInt8(this._offset);
     this._offset += 1;

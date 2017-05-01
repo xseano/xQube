@@ -61,6 +61,18 @@ BinaryWriter.prototype.writeFloat = function (value) {
     this._length += 4;
 };
 
+BinaryWriter.prototype.writeArray = function (str)  {
+    var escstr = encodeURIComponent(str);
+    var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+    });
+    var ua = new Uint8Array(binstr.length);
+    Array.prototype.forEach.call(binstr, function (ch, i) {
+        ua[i] = ch.charCodeAt(0);
+    });
+    return ua;
+};
+
 BinaryWriter.prototype.writeDouble = function (value) {
     var offset = this._length;
     this._writers.push(function (buffer) {

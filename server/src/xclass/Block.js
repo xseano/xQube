@@ -1,11 +1,3 @@
-const cowsay = require('cowsay');
-const colors = require('colors');
-global.Logger = require('../modules/Logger');
-global.Commands = require('../modules/Commands');
-global.readline = require('readline');
-global.rl = readline.createInterface(process.stdin, process.stdout);
-
-const BinaryReader = require('../lib/BinaryReader');
 const CameraObject = require('../objects/CameraObject');
 const CubeObject = require('../objects/CubeObject');
 const CubeCollection = require('../objects/CubeCollection');
@@ -13,6 +5,13 @@ const MoveObject = require('../objects/MoveObject');
 const DeleteObject = require('../objects/DeleteObject');
 const ULObject = require('../objects/ULObject');
 const ChatObject = require('../objects/ChatObject');
+
+const cowsay = require('cowsay');
+const colors = require('colors');
+global.Logger = require('../modules/Logger');
+global.Commands = require('../modules/Commands');
+global.readline = require('readline');
+global.rl = readline.createInterface(process.stdin, process.stdout);
 
 class Block {
 
@@ -24,18 +23,6 @@ class Block {
         this.cubeID = new CubeObject(0, 0, 0, 5, 5, 5, "rgb(174, 129, 255)");
         this.uID = new CubeCollection(id, this.camID, this.cubeID);
         this.userList = userList;
-    }
-
-    str2ab(str) {
-        var escstr = encodeURIComponent(str);
-        var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
-            return String.fromCharCode('0x' + p1);
-        });
-        var ua = new Uint8Array(binstr.length);
-        Array.prototype.forEach.call(binstr, function (ch, i) {
-            ua[i] = ch.charCodeAt(0);
-        });
-        return ua;
     }
 
     onCloseConn(code, reason) {
@@ -65,24 +52,10 @@ class Block {
     }
 
     uintIfy(obj) {
-    	var stringifiedObj = JSON.stringify(obj); // "{'x': '1'}"
-    	var abObj = this.str2ab(stringifiedObj); // Uint8Array[xyx, yzx, yxz, zyx]
+    	var stringifiedObj = JSON.stringify(obj);
+    	var abObj = this.writer.writeArray(stringifiedObj);
       var objUArr = new Uint8Array(abObj);
     	return objUArr;
-    }
-
-    ab2str(ab) {
-        var binstr = Array.prototype.map.call(ab, function (ch) {
-            return String.fromCharCode(ch);
-        }).join('');
-        var escstr = binstr.replace(/(.)/g, function (m, p) {
-            var code = p.charCodeAt(0).toString(16).toUpperCase();
-            if (code.length < 2) {
-                code = '0' + code;
-            }
-            return '%' + code;
-        });
-        return decodeURIComponent(escstr);
     }
 
     updatePos(completeTime, camDiff, cubeDiff, type) {
@@ -141,9 +114,8 @@ class Block {
     }
 
     onMessage(msg) {
-
         var objUArr = new Uint8Array(msg);
-        var objStr = this.ab2str(objUArr);
+        var objStr = this.reader.readArray(objUArr);
         var parsed = JSON.parse(objStr);
         var mID = parsed.id;
 

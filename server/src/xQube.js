@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
-var obj = this;
+const BinaryWriter = require('./lib/BinaryWriter');
+const BinaryReader = require('./lib/BinaryReader');
 const Block = require('./xclass/Block');
 const Subscriber = require('./objects/Subscriber');
 const cowsay = require('cowsay');
@@ -49,6 +50,8 @@ onConnection(ws) {
   client.ip = ws.upgradeReq.connection.remoteAddress;
   client.socket.on('message', client.onMessage.bind(client));
   client.socket.on('close', client.onCloseConn.bind(client));
+  client.writer = new BinaryWriter();
+  client.reader = new BinaryReader(client.onMessage.bind(client));
 
   var id = client.id;
   this.userList.push(client);
