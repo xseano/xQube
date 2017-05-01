@@ -4,8 +4,8 @@
 
 ## Mechanics
 * Core Engine (WebGL): [*three.js*](https://threejs.org/)
-* Networking Backend: [Pure WebSockets](https://github.com/xseano/xQube/tree/master/server/src/lib/)
-* Data Mechanics: Various binary datatypes sent and received through ArrayBuffers
+* Networking Backend: [Pure WebSockets](https://github.com/websockets/ws)
+* Data Mechanics: Various [binary datatypes](https://github.com/xseano/xQube/tree/master/server/src/lib/) sent and received through ArrayBuffers
 
 ## Releases
 * WebSockets - Coming Soon!
