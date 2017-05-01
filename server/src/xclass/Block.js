@@ -34,7 +34,7 @@ class Block {
             var id = this.userList[u].id;
             if (id == this.id) {
               var ws = this.userList[u].socket;
-              var deleteObj = new DeleteObject('rmClient', this.userList[u].uID);
+              var deleteObj = new DeleteObject('rmClient', this.userList[u].uID, this.name, this.cubeID.color);
               var d = this.uintIfy(deleteObj);
 
               this.webSock.clients.forEach(function each(client) {

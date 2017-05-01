@@ -152,8 +152,17 @@ function message(msg) {
 	if (mID == 'rmClient') {
 		var clientID = parsed.data.id + "CubeObj";
 		$('#'+parsed.data.id).remove();
-		console.log(clientID);
 		obj[sceneObjId].scene.remove(obj[clientID]);
+
+		var chatColor = parsed.color;
+		var chatName = parsed.name;
+
+		var chatListElement = document.getElementById('cList');
+		var listElement = document.createElement("li");
+		listElement.className = 'chatInList';
+		listElement.innerHTML = "User: " + chatName + " has gone offline!";
+		listElement.style.color = 'white';
+		chatListElement.appendChild(listElement);
 	}
 
 	if (mID == 'chatObject') {
