@@ -97,6 +97,41 @@ function sendChat() {
 	obj[sceneObjId].socket.send(cO);
 }
 
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r); ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+
+function makeTextSprite(message, parameters) {
+		if ( parameters === undefined ) parameters = {};
+		var fontface = parameters.hasOwnProperty("fontface") ? parameters["fontface"] : "Arial";
+		var fontsize = parameters.hasOwnProperty("fontsize") ? parameters["fontsize"] : 15;
+		var borderThickness = parameters.hasOwnProperty("borderThickness") ? parameters["borderThickness"] : 4;
+		var borderColor = parameters.hasOwnProperty("borderColor") ?parameters["borderColor"] : { r:0, g:0, b:0, a:0 };
+		var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?parameters["backgroundColor"] : { r:0, g:0, b:0, a:0 };
+		var textColor = parameters.hasOwnProperty("textColor") ?parameters["textColor"] : { r:0, g:0, b:0, a:1.0 };
+
+		var canvas = document.createElement('canvas');
+		var context = canvas.getContext('2d');
+		context.font = "Bold " + fontsize + "px " + fontface;
+		var metrics = context.measureText( message );
+		var textWidth = metrics.width;
+
+		context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
+		context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
+
+		context.lineWidth = borderThickness;
+		roundRect(context, borderThickness/2, borderThickness/2, (textWidth + borderThickness) * 1.1, fontsize * 1.4 + borderThickness, 8);
+
+		context.fillStyle = textColor;
+		context.fillText( message, borderThickness, fontsize + borderThickness);
+
+		var texture = new THREE.Texture(canvas)
+		texture.needsUpdate = true;
+
+		var spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false } );
+		var sprite = new THREE.Sprite( spriteMaterial );
+		sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
+		return sprite;
+}
+
 function message(msg) {
 	var objUArr = new Uint8Array(msg);
 	var objStr = ab2str(objUArr);
@@ -154,6 +189,7 @@ function message(msg) {
 		obj[sceneObjId].scene.add(baseGrid);
 
 		var camObjId = this.quid + "CamObj";
+		var textObjId = this.quid + "TextObj";
 		var cubeObjId = this.quid + "CubeObj";
 		obj[camObjId] = new THREE.PerspectiveCamera(conf.camOption1, window.innerWidth/window.innerHeight, conf.camOption2, conf.camOption3);
 
@@ -173,6 +209,10 @@ function message(msg) {
 		obj[cubeObjId].name = socketID;
 		group.add(obj[cubeObjId]);
 		obj[sceneObjId].scene.add(obj[cubeObjId]);
+
+		obj[textObjId] = makeTextSprite(this.cName, {'textColor': this.cColor});
+		obj[cubeObjId].add(obj[textObjId]);
+		obj[textObjId].position.set(3.5, 2.5, 2.5);
 
 		obj[cubeObjId].position.set(parsed.cubeID.x, conf.cubeY, parsed.cubeID.z);
 		obj[camObjId].position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
@@ -240,6 +280,7 @@ function message(msg) {
 		} else {
 
 			var uIDCube1 = userID + "CubeObj";
+			var textObjId1 = userID + "TextObj";
 			var cWidth1 = userData.w;
 			var cHeight1 = userData.h;
 			var cDepth1 = userData.d;
@@ -253,6 +294,10 @@ function message(msg) {
 			obj[sceneObjId].group.add(obj[uIDCube1]);
 			obj[uIDCube1].name = userID;
 			obj[sceneObjId].scene.add(obj[uIDCube1]);
+
+			obj[textObjId1] = makeTextSprite(userName, {'textColor': cColor1});
+			obj[uIDCube1].add(obj[textObjId1]);
+			obj[textObjId1].position.set(3.5, 2.5, 2.5);
 
 			obj[uIDCube1].position.set(userData.x, conf.cubeY, userData.z);
 		}
