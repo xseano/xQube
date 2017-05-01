@@ -29,8 +29,8 @@ function crc32b($ptf) {
             <div class="form-group">
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
               <br>
-              Choose Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="FFCC00">
-              <input id="colorInput" type="hidden" name="colorInput">
+              Choose Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="FFFFFF">
+              <input id="colorInput" type="hidden" name="colorInput" value="rgb(255, 255, 255)">
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
             <button style="margin-top: 50px;" class="btn btn-primary btn-lg btn-block" onClick="onLoad()">Play</button>
