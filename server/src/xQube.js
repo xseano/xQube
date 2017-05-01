@@ -16,7 +16,8 @@ constructor(confData) {
   if (confData['isDevEnv'] == true) {
     this.webSock = new WebSocket.Server({perMessageDeflate: false, port: confData['wsPortDev']}, this.onStart.bind(this));
   } else if (confData['isDevEnv'] == false) {
-    this.webSock = new WebSocket.Server({perMessageDeflate: false, port: confData['wsPort']}, this.onStart.bind(this));
+    var srvr = confData['wsServer'] + ":" + confData['wsPort'];
+    this.webSock = new WebSocket.Server({perMessageDeflate: false, server: srvr}, this.onStart.bind(this));
   }
   this.userList = [];
 }
