@@ -378,7 +378,10 @@ function onOpen() {
 		keys[e.key] = true;
 		for (var i in keys) {
 			if (!keys.hasOwnProperty(i)) continue;
-			sendPos(i, socketID);
+			console.log($("#chat-text").is(":focus"));
+			if ($("#chat-text").is(":focus") == false) {
+				sendPos(i, socketID);
+			}
 		}
 		getUserList();
 	});
