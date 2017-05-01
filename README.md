@@ -1,11 +1,18 @@
 # x³
 
-**Boilerplate for 3D rendering and server-side physics in HTML5 and NodeJS**
+**Boilerplate for realtime 3D rendering and server-side physics in HTML5 and NodeJS**
 
 ## Mechanics
 * Core Engine (WebGL): [*three.js*](https://threejs.org/)
 * Networking Backend: [Pure WebSockets](https://github.com/websockets/ws)
 * Data Mechanics: Various [binary datatypes](https://github.com/xseano/xQube/tree/master/server/src/lib/) sent and received through ArrayBuffers
+
+## Features
+* Realtime client construction / deconstruction
+* Custom cube coloring and naming
+* Realtime movement
+* Realtime chat
+* Realtime user list
 
 ## Releases
 * WebSockets - Coming Soon!
