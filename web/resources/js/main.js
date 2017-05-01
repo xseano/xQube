@@ -8,9 +8,10 @@ const id = getRandomInt(1, 65355);
 var sceneObjId = id + "SceneObj";
 obj[sceneObjId] = new SceneObj(id);
 
-function ClientData(id, name) {
+function ClientData(id, name, color) {
 	this.id = id;
 	this.name = name;
+	this.color = color;
 }
 
 function SceneObj(id) {
@@ -109,8 +110,10 @@ function message(msg) {
 
 	if (mID == 'create') {
 		var clientName = document.getElementById('login-name').value;
+		var clientColor = document.getElementById('colorInput').value;
 		this.cName = clientName;
-		sendClientData(this.cName);
+		this.cColor = clientColor;
+		sendClientData(this.cName, this.cColor);
 		console.log('Client ID: ' + parsed.uID.id);
 		this.quid = parsed.uID.id;
 
@@ -134,7 +137,7 @@ function message(msg) {
 		var cColor = parsed.cubeID.color;
 		var camZ = parsed.camID.z;
 
-		var cubeColorRGB = new THREE.Color(cColor);
+		var cubeColorRGB = new THREE.Color(this.cColor);
 		var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
 		var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: conf.opacityVal, transparent: conf.wantTransparent });
 
@@ -256,8 +259,8 @@ function sendPos(key, uid) {
 
 }
 
-function sendClientData(name) {
-	var cData = new ClientData('sendClientData', name);
+function sendClientData(name, color) {
+	var cData = new ClientData('sendClientData', name, color);
 	var c = uintIfy(cData);
 	obj[sceneObjId].socket.send(c);
 

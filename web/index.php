@@ -19,6 +19,16 @@ function crc32b($ptf) {
     <link href="./resources/css/demo.css?v=<?php echo crc32b('./resources/css/demo.css'); ?>" rel="stylesheet">
   </head>
 
+  <script src="./resources/js/jscolor.js"></script>
+
+
+
+<script>
+function update(picker) {
+    document.getElementById('colorInput').value = picker.toRGBString();
+}
+</script>
+
   <body>
 		<div id="mainScreen">
       <center>
@@ -27,6 +37,9 @@ function crc32b($ptf) {
         <div style="margin-top: 100px; width: 80%;" class="login-form">
             <div class="form-group">
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
+              <br>
+              Cube Color: <input class="jscolor {onFineChange:'update(this)'}" value="ffcc00">
+              <input id="colorInput" type="hidden" name="colorInput">
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
             <button style="margin-top: 50px;" class="btn btn-primary btn-lg btn-block" onClick="onLoad()">Play</button>

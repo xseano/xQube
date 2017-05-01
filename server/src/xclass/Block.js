@@ -146,10 +146,9 @@ class Block {
         var parsed = JSON.parse(objStr);
         var mID = parsed.id;
 
-        //console.log('Got incoming id... ' + mID);
-
         if (mID == 'sendClientData') {
           this.name = parsed.name;
+          this.cubeID.color = parsed.color;
         }
 
         if (mID == 'sendJSONObject') {
