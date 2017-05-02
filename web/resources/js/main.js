@@ -168,6 +168,8 @@ function message(msg) {
 		listElement.innerHTML = "User: " + chatName + " has gone offline!";
 		listElement.style.color = 'white';
 		chatListElement.appendChild(listElement);
+
+		$('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
 	}
 
 	if (mID == 'chatObject') {
@@ -181,6 +183,8 @@ function message(msg) {
 		listElement.innerHTML = chatName + ": " + chatMsg;
 		listElement.style.color = chatColor;
 		chatListElement.appendChild(listElement);
+
+		$('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
 	}
 
 	if (mID == 'create') {
