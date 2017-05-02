@@ -61,7 +61,7 @@ class Block {
     updatePos(completeTime, camDiff, cubeDiff, type) {
       var newCamPos = camDiff * completeTime;
       var newCubePos = cubeDiff * completeTime;
-      
+
         if (type == 'w') {
           this.cubeID.z -= newCubePos;
           this.sendNewPos();
@@ -106,6 +106,7 @@ class Block {
     sendNewPos() {
       var moveObj = new MoveObject('move', this.uID);
       var u = this.uintIfy(moveObj);
+      console.log(u);
       this.socket.send(u);
     }
 
