@@ -10,7 +10,7 @@
 ## Features
 * Realtime client construction / deconstruction
 * Custom cube coloring and naming
-* Realtime movement
+* Realtime interpolated movement
 * Realtime chat
 * Realtime user list
 
