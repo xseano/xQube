@@ -61,50 +61,46 @@ class Block {
     updatePos(completeTime, camDiff, cubeDiff, type) {
       var newCamPos = camDiff * completeTime;
       var newCubePos = cubeDiff * completeTime;
-
-      for (var cam = camDiff; cam < newCamPos; cam++) {
+      
         if (type == 'w') {
-          this.cubeID.z -= cam;
+          this.cubeID.z -= newCubePos;
           this.sendNewPos();
         }
 
         if (type == 'a') {
-          this.cubeID.x -= cam;
+          this.cubeID.x -= newCubePos;
           this.sendNewPos();
         }
 
         if (type == 's') {
-          this.cubeID.z += cam;
+          this.cubeID.z += newCubePos;
           this.sendNewPos();
         }
 
         if (type == 'd') {
-          this.cubeID.x += cam;
+          this.cubeID.x += newCubePos;
           this.sendNewPos();
         }
-      }
 
-      for (var cube = cubeDiff; cube < newCubePos; cube++) {
         if (type == 'w') {
-          this.camID.z -= cube;
+          this.camID.z -= newCamPos;
           this.sendNewPos();
         }
 
         if (type == 'a') {
-          this.camID.x -= cube;
+          this.camID.x -= newCamPos;
           this.sendNewPos();
         }
 
         if (type == 's') {
-          this.camID.z += cube;
+          this.camID.z += newCamPos;
           this.sendNewPos();
         }
 
         if (type == 'd') {
-          this.camID.x += cube;
+          this.camID.x += newCamPos;
           this.sendNewPos();
         }
-      }
     }
 
     sendNewPos() {
