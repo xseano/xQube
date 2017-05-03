@@ -3,15 +3,14 @@ class Game {
     constructor(conf) {
         this.id = this.getRandomInt(1, 65355);
 				this.conf = conf;
+        this.network = new Network(this);
     }
 
 		start() {
-      this.network = new Network(this);
 			this.network.onLoad();
 		}
 
     startOpen() {
-      this.network = new Network(this);
       this.network.onOpen();
     }
 

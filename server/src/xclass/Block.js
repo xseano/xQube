@@ -136,6 +136,14 @@ class Block {
           var jsonObj = parsed.data;
         }
 
+        if (mID == 'updateDate') {
+          for (var ud = 0; ud < this.userList.length; ud++) {
+            if (this.userList[ud].id == parsed.uid) {
+              this.userList[ud].date = Date.now();
+            }
+          }
+        }
+
         if (mID == 'updatePos') {
 
           var speed = 2;

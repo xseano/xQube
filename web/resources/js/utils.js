@@ -54,6 +54,12 @@ class Utils {
 
   }
 
+  sendDate(uid, date) {
+    var dateObj = {'id': 'updateDate', 'uid': uid}
+    var arr = this.uintIfy(dateObj);
+  	this.socket.send(arr);
+  }
+
   sendClientData(name, color) {
   	var cData = {'id': 'sendClientData', 'name': name, 'color': color};
   	var c = this.uintIfy(cData);

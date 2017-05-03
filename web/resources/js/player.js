@@ -55,12 +55,14 @@ class Player {
     var scn = this.scene;
     var cm = this.camObj;
     var dtObj = this;
+    var utls = this.utils;
 
 
     var render = function() {
       requestAnimationFrame(render);
       rndr.render(scn, cm);
       dtObj.date = new Date();
+      dtObj.utils.sendDate(dtObj.id);
     };
 
     render();
@@ -157,14 +159,23 @@ class Player {
 
         cube.position.set(ulist[t].cubeID.x, conf.cubeY, ulist[t].cubeID.z);
 
-        console.log(cube);
-
       } else if (result.length == 1) {
 
         if (result[0].name != this.id) {
+
+          console.log(ulist[t]);
+
+          var now = new Date();
+          var delta = (Date.now() - this.date) / 120;
+          console.log(delta);
+
+          var x = this.utils.lerp(result[0].position.z, ulist[t].cubeID.x, delta);
+          var z = this.utils.lerp(result[0].position.z, ulist[t].cubeID.z, delta);
+
           result[0].position.z = ulist[t].cubeID.z;
           result[0].position.x = ulist[t].cubeID.x;
           result[0].position.y = conf.cubeY;
+
         }
 
     } else {
