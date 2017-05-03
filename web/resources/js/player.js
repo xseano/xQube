@@ -95,21 +95,23 @@ class Player {
   }
 
   removeClient(parsed) {
-    var clientID = parsed.data.id + "CubeObj";
-		$('#'+parsed.data.id).remove();
-		this.scene.remove(this.cubeObj);
+    var result = $.grep(this.scene.children, function(e){ return e.name == parsed.data.id; });
 
-		var chatColor = parsed.color;
-		var chatName = parsed.name;
+    if (result.length == 1) {
+      $('#' + parsed.data.id).remove();
+      this.scene.remove(result[0]);
 
-		var chatListElement = document.getElementById('cList');
-		var listElement = document.createElement("li");
-		listElement.className = 'chatInList';
-		listElement.innerHTML = "User: " + chatName + " has gone offline!";
-		listElement.style.color = 'white';
-		chatListElement.appendChild(listElement);
-		$('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
+      var chatColor = parsed.color;
+      var chatName = parsed.name;
 
+      var chatListElement = document.getElementById('cList');
+      var listElement = document.createElement("li");
+      listElement.className = 'chatInList';
+      listElement.innerHTML = "User: " + chatName + " has gone offline!";
+      listElement.style.color = 'white';
+      chatListElement.appendChild(listElement);
+      $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
+    }
   }
 
   returnUserList(parsed) {
