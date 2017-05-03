@@ -106,7 +106,6 @@ class Block {
     sendNewPos() {
       var moveObj = new MoveObject('move', this.uID);
       var u = this.uintIfy(moveObj);
-      console.log(u);
       this.socket.send(u);
     }
 

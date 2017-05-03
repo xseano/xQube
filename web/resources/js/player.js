@@ -10,7 +10,6 @@ class Player {
     this.utils = netObj.utils;
     this.conf = netObj.conf;
     this.renderer = netObj.renderer;
-    this.playerList = netObj.playerList;
 
   }
 
@@ -79,7 +78,6 @@ class Player {
 
     var now = new Date();
     var delta = (Date.now() - this.date) / 120;
-    console.log(this.date);
 
     var x = this.utils.lerp(this.cubeObj.position.x, newCubeX, delta);
     var z = this.utils.lerp(this.cubeObj.position.z, newCubeZ, delta);
@@ -118,7 +116,6 @@ class Player {
 
     var CircularJSON = window.CircularJSON;
     var ulist = CircularJSON.parse(parsed.userList);
-    console.log(ulist);
 
     for (var t = 0; t < ulist.length; t++) {
 

@@ -1,14 +1,14 @@
 class Network {
 
   constructor(game) {
-    //this.id = game.id;
+    this.id = game.id;
+    this.game = game;
     this.scene = new THREE.Scene();
     this.group = new THREE.Group();
     this.renderer = new THREE.WebGLRenderer();
     this.date = new Date();
     this.conf = game.conf;
     this.isConnected = false;
-    this.playerList = [];
   }
 
   onLoad() {
@@ -19,11 +19,9 @@ class Network {
 
   		if (isDevEnv === true) {
   			var xWebServer = conf.wsServerDev + ':' + conf.wsPortDev;
-        console.log(xWebServer);
   			this.socket = new WebSocket(xWebServer);
   		} else if (isDevEnv === false) {
   			var xWebServer = conf.wsServer + ':' + conf.wsPort;
-        console.log(xWebServer);
   			this.socket = new WebSocket(xWebServer);
   		}
 
@@ -42,7 +40,7 @@ class Network {
   	$('#chatList').fadeIn('fast');
 
   	var keys = {};
-    var utl = this.utils;
+    var utl = new Utils(this.socket);
     var pObj = this;
 
     $(document).keydown(function (e) {
@@ -81,8 +79,6 @@ class Network {
   	var parsed = JSON.parse(hr2Arr);
   	var mID = parsed.id;
 
-    console.log(mID);
-
   	if (mID == 'rmClient') {
       this.player.removeClient(parsed);
   	}
@@ -96,7 +92,6 @@ class Network {
       var clientColor = document.getElementById('colorInput').value;
       this.player = new Player(parsed.uID.id, clientName, clientColor, this)
       this.player.create(parsed);
-      this.playerList.push(this.player);
       this.isConnected = true;
   	}
 
@@ -115,9 +110,9 @@ class Network {
 
   onConn() {
   	if (this.socket.readyState == 1) {
-  		this.onOpen();
+      this.game.startOpen();
   	} else {
-  		this.onLoad();
+  		this.game.start();
   	}
   }
 
