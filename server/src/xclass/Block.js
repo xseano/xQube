@@ -5,7 +5,7 @@ const MoveObject = require('../objects/MoveObject');
 const DeleteObject = require('../objects/DeleteObject');
 const ULObject = require('../objects/ULObject');
 const ChatObject = require('../objects/ChatObject');
-
+const CircularJSON = require('circular-json');
 const cowsay = require('cowsay');
 const colors = require('colors');
 global.Logger = require('../modules/Logger');
@@ -175,20 +175,14 @@ class Block {
 
       if (mID == 'getUserList') {
         var ws = this.socket;
-
-        for(var u = 0; u < this.userList.length; u++) {
-            var unmIDCube = this.userList[u].cubeID;
-            var id = this.userList[u].id;
-            var name = this.userList[u].name;
-            var color = unmIDCube.color;
-            var ulobj = new ULObject('returnUserList', id, unmIDCube, name, color);
-            var ulobjarr = this.uintIfy(ulobj);
-            this.webSock.clients.forEach(function each(client) {
-              if (client.readyState === 1) {
-                client.send(ulobjarr);
-              }
-            });
-        }
+        var circJson = CircularJSON.stringify(this.userList);
+        var ulobj = new ULObject('returnUserList', circJson);
+        var ulobjarr = this.uintIfy(ulobj);
+        this.webSock.clients.forEach(function each(client) {
+          if (client.readyState === 1) {
+            client.send(ulobjarr);
+          }
+        });
       }
     }
 

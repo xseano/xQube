@@ -10,6 +10,7 @@ class Player {
     this.utils = netObj.utils;
     this.conf = netObj.conf;
     this.renderer = netObj.renderer;
+    this.playerList = netObj.playerList;
 
   }
 
@@ -43,9 +44,9 @@ class Player {
     this.group.add(this.cubeObj);
     this.scene.add(this.cubeObj);
 
-    //this.nameText = this.makeTextSprite(this.cName, {'textColor': this.cColor});
-    //this.cubeObj.add(this.nameText);
-    //this.nameText.position.set(3.5, 2.5, 2.5);
+    this.nameText = this.makeTextSprite(this.cName, {'textColor': this.cColor});
+    this.cubeObj.add(this.nameText);
+    this.nameText.position.set(3.5, 2.5, 2.5);
 
     this.cubeObj.position.set(parsed.cubeID.x, conf.cubeY, parsed.cubeID.z);
     this.camObj.position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
@@ -54,13 +55,13 @@ class Player {
     var rndr = this.renderer;
     var scn = this.scene;
     var cm = this.camObj;
-    var dt = this.date;
+    var dtObj = this;
 
 
     var render = function() {
       requestAnimationFrame(render);
       rndr.render(scn, cm);
-      dt = new Date();
+      dtObj.date = new Date();
     };
 
     render();
@@ -77,7 +78,8 @@ class Player {
     var newCubeX = jsonObj.CubeObj.x;
 
     var now = new Date();
-    var delta = (Date.now() - this.scene.date) / 120;
+    var delta = (Date.now() - this.date) / 120;
+    console.log(this.date);
 
     var x = this.utils.lerp(this.cubeObj.position.x, newCubeX, delta);
     var z = this.utils.lerp(this.cubeObj.position.z, newCubeZ, delta);
@@ -111,54 +113,52 @@ class Player {
   }
 
   returnUserList(parsed) {
-    var userData = parsed.CubeObj;
-    var userID = parsed.uid;
-    var userColor = parsed.color;
-    var userName = parsed.name;
 
-    var userListElement = document.getElementById('uList');
+    var CircularJSON = window.CircularJSON;
+    var ulist = CircularJSON.parse(parsed.userList);
+    console.log(ulist);
 
-    if (document.getElementById(userID) == null) {
-      var listElement = document.createElement("li");
-      listElement.id = userID;
-      listElement.className = 'userInList';
-      listElement.innerHTML = userName;
-      listElement.style.color = userColor;
-      userListElement.appendChild(listElement);
-    }
+    for (var t = 0; t < ulist.length; t++) {
+      var userID = ulist[t].id;
+      var result = $.grep(this.scene.children, function(e){ return e.name == userID; });
 
-    if ((typeof clientCube) != "undefined") {
+      if (result.length == 0) {
 
-      if (parsed.uid != this.id) {
+        var cWidth1 = ulist[t].cubeID.w;
+        var cHeight1 = ulist[t].cubeID.h;
+        var cDepth1 = ulist[t].cubeID.d;
+        var cColor1 = ulist[t].cubeID.color;
 
-        this.cubeObj.position.z = parsed.CubeObj.z;
-        this.cubeObj.position.x = parsed.CubeObj.x;
-        this.cubeObj.position.y = conf.cubeY;
-      }
+        var cubeColorRGB1 = new THREE.Color(cColor1);
+        var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
+        var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: conf.opacityVal, transparent: conf.wantTransparent });
+        var cube = new THREE.Mesh(cubeGeom1, cubeColor1);
+
+        this.group.add(cube);
+        cube.name = ulist[t].id;
+        this.scene.add(cube);
+
+        var nt = this.makeTextSprite(userName, {'textColor': cColor1});
+        cube.add(nt);
+        nt.position.set(3.5, 2.5, 2.5);
+
+        cube.position.set(ulist[t].cubeID.x, conf.cubeY, ulist[t].cubeID.z);
+
+        console.log(cube);
+
+      } else if (result.length == 1) {
+
+        if (result[0].name != this.id) {
+          result[0].position.z = ulist[t].cubeID.z;
+          result[0].position.x = ulist[t].cubeID.x;
+          result[0].position.y = conf.cubeY;
+        }
 
     } else {
-
-      var cWidth1 = userData.w;
-      var cHeight1 = userData.h;
-      var cDepth1 = userData.d;
-      var cColor1 = userData.color;
-
-      var cubeColorRGB1 = new THREE.Color(cColor1);
-      var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-      var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: conf.opacityVal, transparent: conf.wantTransparent });
-      this.camObj1 = new THREE.Mesh(cubeGeom1, cubeColor1);
-
-      this.group.add(this.camObj1);
-      this.camObj1.name = userID;
-      this.scene.add(this.camObj1);
-
-      //this.nameText1 = this.makeTextSprite(userName, {'textColor': cColor1});
-      //this.camObj1.add(this.nameText1);
-      //this.nameText1.position.set(3.5, 2.5, 2.5);
-
-      this.camObj1.position.set(userData.x, conf.cubeY, userData.z);
+        console.log("Found results: " + result);
     }
   }
+}
 
 
   handleChat(parsed) {

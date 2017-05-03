@@ -1,12 +1,14 @@
 class Network {
 
   constructor(game) {
-    this.id = game.id;
+    //this.id = game.id;
     this.scene = new THREE.Scene();
     this.group = new THREE.Group();
     this.renderer = new THREE.WebGLRenderer();
     this.date = new Date();
     this.conf = game.conf;
+    this.isConnected = false;
+    this.playerList = [];
   }
 
   onLoad() {
@@ -39,24 +41,27 @@ class Network {
   	$('#userList').fadeIn('fast');
   	$('#chatList').fadeIn('fast');
 
-  	var socketID = this.quid;
   	var keys = {};
     var utl = this.utils;
+    var pObj = this;
 
-  	$(document).keydown(function (e) {
-  		keys[e.key] = true;
-  		for (var i in keys) {
-  			if (!keys.hasOwnProperty(i)) continue;
-  			if ($("#chat-text").is(":focus") == false) {
-  				utl.sendPos(i, this.id);
-  			}
-  		}
-  		utl.getUserList();
-  	});
+    $(document).keydown(function (e) {
+      keys[e.key] = true;
+      for (var i in keys) {
+        if (!keys.hasOwnProperty(i)) continue;
+        if ($("#chat-text").is(":focus") == false) {
+          if (pObj.isConnected == true) {
+            var di = pObj.player.id;
+            utl.sendPos(i, di);
+          }
+        }
+      }
+      utl.getUserList();
+    });
 
-  	$(document).keyup(function (e) {
-  		delete keys[e.key];
-  	});
+    $(document).keyup(function (e) {
+      delete keys[e.key];
+    });
   }
 
   onMessage(msg) {
@@ -91,6 +96,8 @@ class Network {
       var clientColor = document.getElementById('colorInput').value;
       this.player = new Player(parsed.uID.id, clientName, clientColor, this)
       this.player.create(parsed);
+      this.playerList.push(this.player);
+      this.isConnected = true;
   	}
 
   	if (mID == 'move') {

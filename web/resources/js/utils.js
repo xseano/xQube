@@ -48,7 +48,8 @@ class Utils {
   }
 
   sendPos(key, uid) {
-  	var keyObj = {'id': 'updatePos', key: 'key', 'uid': uid};
+  	var keyObj = {'id': 'updatePos', 'key': key, 'uid': uid};
+    console.log(keyObj);
   	var arr = this.uintIfy(keyObj);
   	this.socket.send(arr);
 

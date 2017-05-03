@@ -13,6 +13,7 @@ function crc32b($ptf) {
     <link href="./resources/css/xqube.css?v=<?php echo crc32b('./resources/css/xqube.css'); ?>" rel="stylesheet">
     <script src="./resources/js/three.min.js?v=<?php echo crc32b('./resources/js/three.min.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
+    <script src="./resources/js/cjson.js?v=<?php echo crc32b('./resources/js/cjson.js'); ?>"></script>
     <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <script src="./resources/js/game.js?v=<?php echo crc32b('./resources/js/game.js'); ?>"></script>
     <script src="./resources/js/network.js?v=<?php echo crc32b('./resources/js/network.js'); ?>"></script>
