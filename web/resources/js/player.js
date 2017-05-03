@@ -62,7 +62,7 @@ class Player {
       requestAnimationFrame(render);
       rndr.render(scn, cm);
       dtObj.date = new Date();
-      dtObj.utils.sendDate(dtObj.id);
+      //dtObj.utils.sendDate(dtObj.id);
     };
 
     render();
