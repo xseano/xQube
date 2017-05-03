@@ -121,8 +121,22 @@ class Player {
     console.log(ulist);
 
     for (var t = 0; t < ulist.length; t++) {
+
       var userID = ulist[t].id;
-      var result = $.grep(this.scene.children, function(e){ return e.name == userID; });
+      var userName = ulist[t].name;
+      var userColor = ulist[t].cubeID.color;
+      var userListElement = document.getElementById('uList');
+
+      if (document.getElementById(userID) == null) {
+        var listElement = document.createElement("li");
+        listElement.id = userID;
+        listElement.className = 'userInList';
+        listElement.innerHTML = userName;
+        listElement.style.color = userColor;
+        userListElement.appendChild(listElement);
+      }
+
+      var result = $.grep(this.scene.children, function(e) { return e.name == userID; });
 
       if (result.length == 0) {
 
