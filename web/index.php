@@ -14,11 +14,11 @@ function crc32b($ptf) {
     <script src="./resources/js/three.min.js?v=<?php echo crc32b('./resources/js/three.min.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
     <script src="./resources/js/cjson.js?v=<?php echo crc32b('./resources/js/cjson.js'); ?>"></script>
-    <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <script src="./resources/js/game.js?v=<?php echo crc32b('./resources/js/game.js'); ?>"></script>
     <script src="./resources/js/network.js?v=<?php echo crc32b('./resources/js/network.js'); ?>"></script>
     <script src="./resources/js/utils.js?v=<?php echo crc32b('./resources/js/utils.js'); ?>"></script>
     <script src="./resources/js/player.js?v=<?php echo crc32b('./resources/js/player.js'); ?>"></script>
+    <script src="./resources/js/main.js?v=<?php echo crc32b('./resources/js/main.js'); ?>"></script>
     <link href="./resources/css/vendor/bootstrap/css/bootstrap.min.css?v=<?php echo crc32b('./resources/css/vendor/bootstrap/css/bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="./resources/css/flat-ui.css?v=<?php echo crc32b('./resources/css/flat-ui.css'); ?>" rel="stylesheet">
     <link href="./resources/css/demo.css?v=<?php echo crc32b('./resources/css/demo.css'); ?>" rel="stylesheet">
