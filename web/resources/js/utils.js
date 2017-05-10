@@ -23,32 +23,6 @@ class Utils {
       return a + f * (b - a);
   }
 
-  str2ab(str) {
-      var escstr = encodeURIComponent(str);
-      var binstr = escstr.replace(/%([0-9A-F]{2})/g, function(match, p1) {
-          return String.fromCharCode(conf.charCode + p1);
-      });
-      var ua = new Uint8Array(binstr.length);
-      Array.prototype.forEach.call(binstr, function (ch, i) {
-          ua[i] = ch.charCodeAt(0);
-      });
-      return ua;
-  }
-
-  ab2str(ab) {
-      var binstr = Array.prototype.map.call(ab, function (ch) {
-          return String.fromCharCode(ch);
-      }).join('');
-      var escstr = binstr.replace(/(.)/g, function (m, p) {
-          var code = p.charCodeAt(0).toString(conf.dataLength).toUpperCase();
-          if (code.length < 2) {
-              code = '0' + code;
-          }
-          return '%' + code;
-      });
-      return decodeURIComponent(escstr);
-  }
-
   hashCode(str) {
   	var hash = 0;
   	if (str.length == 0) return hash;

@@ -65,27 +65,6 @@ class Block {
 
     }
 
-    toStr(bytes) {
-        var str = "";
-        for(var i = 0; i < bytes.length; i += 2) {
-            var char = bytes[i] << 8;
-            if (bytes[i + 1])
-                char |= bytes[i + 1];
-            str += String.fromCharCode(char);
-        }
-        return str;
-    }
-
-    toByt(str) {
-        var bytes = [];
-        for(var i = 0; i < str.length; i++) {
-            var char = str.charCodeAt(i);
-            bytes.push(char >>> 8);
-            bytes.push(char & 0xFF);
-        }
-        return bytes;
-    }
-
     updatePos() {
       var writer = new BinaryWriter();
       writer.writeUInt8('m'.charCodeAt(0));
@@ -124,7 +103,7 @@ class Block {
       for (var i = 10; i < buffer.byteLength; i+=2) {
         if (buffer[i]) {
           var k = String.fromCharCode(reader.readUInt16(i, true));
-          color += k;  
+          color += k;
         }
       }
       this.cubeID.color = color;
