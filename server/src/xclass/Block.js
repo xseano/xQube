@@ -6,6 +6,8 @@ const DeleteObject = require('../objects/DeleteObject');
 const ULObject = require('../objects/ULObject');
 const ChatObject = require('../objects/ChatObject');
 const CircularJSON = require('circular-json');
+const BinaryReader = require('../lib/BinaryReader');
+const BinaryWriter = require('../lib/BinaryWriter');
 const cowsay = require('cowsay');
 const colors = require('colors');
 global.Logger = require('../modules/Logger');
@@ -34,12 +36,16 @@ class Block {
             var id = this.userList[u].id;
             if (id == this.id) {
               var ws = this.userList[u].socket;
-              var deleteObj = new DeleteObject('rmClient', this.userList[u].uID, this.name, this.cubeID.color);
-              var d = this.uintIfy(deleteObj);
+              var name = this.name;
+              var color = this.cubeID.color;
+              var obj = this;
+              //var deleteObj = new DeleteObject('rmClient', this.userList[u].uID, this.name, this.cubeID.color);
+              //var d = this.uintIfy(deleteObj);
 
               this.webSock.clients.forEach(function each(client) {
                 if (client.readyState === 1) {
-                  client.send(d);
+                  obj.rmClient(client, id, name);
+                  //client.send(d);
                 }
               });
 
@@ -52,64 +58,118 @@ class Block {
     }
 
     uintIfy(obj) {
-    	var stringifiedObj = JSON.stringify(obj);
-    	var abObj = this.writer.writeArray(stringifiedObj);
-      var objUArr = new Uint8Array(abObj);
-    	return objUArr;
-    }
 
-    updatePos(completeTime, camDiff, cubeDiff, type) {
-      var newCamPos = camDiff * completeTime;
-      var newCubePos = cubeDiff * completeTime;
-
-        if (type == 'w') {
-          this.cubeID.z -= newCubePos;
-          this.sendNewPos();
-        }
-
-        if (type == 'a') {
-          this.cubeID.x -= newCubePos;
-          this.sendNewPos();
-        }
-
-        if (type == 's') {
-          this.cubeID.z += newCubePos;
-          this.sendNewPos();
-        }
-
-        if (type == 'd') {
-          this.cubeID.x += newCubePos;
-          this.sendNewPos();
-        }
-
-        if (type == 'w') {
-          this.camID.z -= newCamPos;
-          this.sendNewPos();
-        }
-
-        if (type == 'a') {
-          this.camID.x -= newCamPos;
-          this.sendNewPos();
-        }
-
-        if (type == 's') {
-          this.camID.z += newCamPos;
-          this.sendNewPos();
-        }
-
-        if (type == 'd') {
-          this.camID.x += newCamPos;
-          this.sendNewPos();
-        }
     }
 
     sendNewPos() {
-      var moveObj = new MoveObject('move', this.uID);
-      var u = this.uintIfy(moveObj);
-      this.socket.send(u);
+
+    }
+
+    toStr(bytes) {
+        var str = "";
+        for(var i = 0; i < bytes.length; i += 2) {
+            var char = bytes[i] << 8;
+            if (bytes[i + 1])
+                char |= bytes[i + 1];
+            str += String.fromCharCode(char);
+        }
+        return str;
+    }
+
+    toByt(str) {
+        var bytes = [];
+        for(var i = 0; i < str.length; i++) {
+            var char = str.charCodeAt(i);
+            bytes.push(char >>> 8);
+            bytes.push(char & 0xFF);
+        }
+        return bytes;
+    }
+
+    updatePos() {
+      var writer = new BinaryWriter();
+      writer.writeUInt8('m'.charCodeAt(0));
+      writer.writeInt32(this.cubeID.x);
+      writer.writeInt32(this.cubeID.z);
+      writer.writeInt32(this.camID.x);
+      writer.writeInt32(this.camID.z);
+      this.socket.send(writer.toBuffer());
+    }
+
+    rmClient(client, id, name) {
+      var writer = new BinaryWriter();
+      writer.writeUInt8('r'.charCodeAt(0));
+      writer.writeUInt8(id);
+
+      for (var i = 0; i < name.length; i++) {
+          writer.writeUInt16(name.charCodeAt(i));
+      }
+
+      client.send(writer.toBuffer());
+    }
+
+    setName(buffer, reader) {
+      var name = "";
+      for (var i = 10; i < buffer.byteLength; i+=2) {
+        if (buffer[i]) {
+          var k = String.fromCharCode(reader.readUInt16(i, true));
+          name += k;
+        }
+      }
+      this.name = name;
+    }
+
+    setColor(buffer, reader) {
+      var color = "";
+      for (var i = 10; i < buffer.byteLength; i+=2) {
+        if (buffer[i]) {
+          var k = String.fromCharCode(reader.readUInt16(i, true));
+          color += k;  
+        }
+      }
+      this.cubeID.color = color;
     }
 
     onMessage(msg) {
+
+        var reader = new BinaryReader(msg);
+        var id = String.fromCharCode(reader.readUInt8());
+
+        console.log('Recieved id: ' + id);
+
+        var speed = 2;
+
+        switch (id) {
+          case 'w':
+            this.cubeID.z -= speed;
+            this.camID.z -= speed;
+            this.updatePos();
+            break;
+          case 'a':
+            this.cubeID.x -= speed;
+            this.camID.x -= speed;
+            this.updatePos();
+            break;
+          case 's':
+            this.cubeID.z += speed;
+            this.camID.z += speed;
+            this.updatePos();
+            break;
+          case 'd':
+            this.cubeID.x += speed;
+            this.camID.x += speed;
+            this.updatePos();
+            break;
+          case 'n':
+            this.setName(msg.buffer, reader);
+            break;
+          case 'c':
+            this.setColor(msg.buffer, reader);
+            break;
+        }
+
+        /*
+
         var objUArr = new Uint8Array(msg);
         var objStr = this.reader.readArray(objUArr);
         var parsed = JSON.parse(objStr);
@@ -191,6 +251,7 @@ class Block {
           }
         });
       }
+      */
     }
 
     getCamID(id) {

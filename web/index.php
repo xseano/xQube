@@ -11,6 +11,7 @@ function crc32b($ptf) {
 	  <meta charset="UTF-8">
 	  <title>x³</title>
     <link href="./resources/css/xqube.css?v=<?php echo crc32b('./resources/css/xqube.css'); ?>" rel="stylesheet">
+    <script src='./resources/js/threex.keyboardstate.js?v=<?php echo crc32b('./resources/js/threex.keyboardstate.js'); ?>'></script>
     <script src="./resources/js/three.min.js?v=<?php echo crc32b('./resources/js/three.min.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
     <script src="./resources/js/cjson.js?v=<?php echo crc32b('./resources/js/cjson.js'); ?>"></script>
@@ -35,7 +36,7 @@ function crc32b($ptf) {
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
               <br>
               Choose Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="FFFFFF">
-              <input id="colorInput" type="hidden" name="colorInput" value="rgb(255, 255, 255)">
+              <input id="colorInput" type="hidden" name="colorInput" value="#FFFFFF">
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
             <button style="margin-top: 50px;" class="btn btn-primary btn-lg btn-block" onClick="startGame()">Play</button>

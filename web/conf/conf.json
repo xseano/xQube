@@ -1,6 +1,6 @@
 {
-  "isDevEnv": false,
-  "wsServer": "ws://gs01.xseano.tk",
+  "isDevEnv": true,
+  "wsServer": "ws://gs01.xseano.io",
   "wsPort": "999",
   "wsServerDev": "ws://127.0.0.1",
   "wsPortDev": "8080",
@@ -17,5 +17,6 @@
   "camOption2": 0.1,
   "camOption3": 1000,
   "scale": 2000,
-  "selections": 200
+  "selections": 200,
+  "wantLerp": false
 }

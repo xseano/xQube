@@ -5,6 +5,7 @@ class Network {
     this.game = game;
     this.scene = new THREE.Scene();
     this.group = new THREE.Group();
+    this.keyboard = new THREEx.KeyboardState();
     this.renderer = new THREE.WebGLRenderer();
     this.date = new Date();
     this.conf = game.conf;
@@ -39,73 +40,97 @@ class Network {
   	$('#userList').fadeIn('fast');
   	$('#chatList').fadeIn('fast');
 
-  	var keys = {};
-    var utl = new Utils(this.socket);
-    var pObj = this;
+  }
 
-    $(document).keydown(function (e) {
-      keys[e.key] = true;
-      for (var i in keys) {
-        if (!keys.hasOwnProperty(i)) continue;
-        if ($("#chat-text").is(":focus") == false) {
-          if (pObj.isConnected == true) {
-            var di = pObj.player.id;
-            utl.sendPos(i, di);
-          }
-        }
-      }
-      utl.getUserList();
-    });
+  update() {
 
-    $(document).keyup(function (e) {
-      delete keys[e.key];
-    });
+    if (this.keyboard.pressed('w') || this.keyboard.pressed('up')) {
+        this.utils.sendKey('w');
+    }
+
+    if (this.keyboard.pressed('a') || this.keyboard.pressed('left')) {
+        this.utils.sendKey('a');
+    }
+
+    if (this.keyboard.pressed('s') || this.keyboard.pressed('down')) {
+        this.utils.sendKey('s');
+    }
+
+    if (this.keyboard.pressed('d') || this.keyboard.pressed('right')) {
+        this.utils.sendKey('d');
+    }
+
   }
 
   onMessage(msg) {
-  	var objUArr = new Uint8Array(msg);
-  	var objStr = this.utils.ab2str(objUArr);
-  	var offset = 3;
-  	var buffer = new DataView(msg.data);
-  	var newArr = [];
 
-  	for (var i = 0; i < buffer.buffer.byteLength; i++) {
-  		newArr.push(buffer.getUint8(i, true));
-  	}
+    msg = new DataView(msg.data);
 
-  	var newUint8Arr = new Uint8Array(newArr);
-  	var hr2Arr = this.utils.ab2str(newUint8Arr);
+    var offset = 0;
+    var id = String.fromCharCode(msg.getUint8(offset++));
 
-  	var parsed = JSON.parse(hr2Arr);
-  	var mID = parsed.id;
+    //console.log("Got id: " + id);
 
-  	if (mID == 'rmClient') {
-      this.player.removeClient(parsed);
-  	}
+    switch (id) {
 
-  	if (mID == 'chatObject') {
-      this.player.handleChat(parsed);
-  	}
-
-  	if (mID == 'create') {
-      var clientName = document.getElementById('login-name').value;
-      var clientColor = document.getElementById('colorInput').value;
-      this.player = new Player(parsed.uID.id, clientName, clientColor, this)
-      this.player.create(parsed);
-      this.isConnected = true;
-  	}
-
-  	if (mID == 'move') {
-      this.player.move(parsed);
-  	}
-
-  	if (mID == 'returnUserList') {
-      this.player.returnUserList(parsed);
-  }
+        case 'c':
+          this.createClient(msg, offset);
+          break;
+        case 'm':
+          this.player.move(msg, offset);
+          break;
+        case 'r':
+          //console.log(this.readStringUtf8(msg, offset, msg.buffer.byteLength));
+          this.player.removeClient(msg, offset);
+          break;
+        case 'h':
+          this.player.handleChat(msg, offset);
+          break;
+        case 'u':
+          this.player.returnUserList(msg, offset);
+          break;
+    }
 }
 
   chatMsg() {
     this.utils.sendChat();
+  }
+
+  createClient(msg, offset) {
+
+    var id = msg.getUint32(offset, true);
+    offset += 4;
+    var x = msg.getUint32(offset, true);
+    offset += 4;
+    var z = msg.getUint32(offset, true);
+    offset += 4;
+    var w = msg.getUint32(offset, true);
+    offset += 4;
+    var h = msg.getUint32(offset, true);
+    offset += 4;
+    var d = msg.getUint32(offset, true);
+    offset += 4;
+    var cx = msg.getUint32(offset, true);
+    offset += 4;
+    var cz = msg.getUint32(offset, true);
+    offset += 4;
+
+    var clientName = document.getElementById('login-name').value;
+    var clientColor = document.getElementById('colorInput').value;
+
+    if (((clientName != undefined) && (clientName != '')) && ((clientColor != undefined) && (clientColor != ''))) {
+      var cn = clientName;
+      var cc = clientColor;
+    } else {
+      var cn = 'Player';
+      var cc = '#FFFFFF';
+    }
+
+    this.player = new Player(id, cn, cc, this);
+    console.log(cn);
+    console.log(cc);
+    this.player.create(x, z, w, h, d, clientColor, cx, cz);
+    this.isConnected = true;
   }
 
   onConn() {

@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
-const BinaryWriter = require('./lib/BinaryWriter');
-const BinaryReader = require('./lib/BinaryReader');
 const Block = require('./xclass/Block');
 const Subscriber = require('./objects/Subscriber');
+const BinaryReader = require('./lib/BinaryReader');
+const BinaryWriter = require('./lib/BinaryWriter');
 const cowsay = require('cowsay');
 const colors = require('colors');
 global.Logger = require('./modules/Logger');
@@ -45,20 +45,32 @@ handleCommand(data) {
 	Logger.prompt(this.handleCommand.bind(this));
 }
 
+createClient(client) {
+  var writer = new BinaryWriter();
+  writer.writeUInt8('c'.charCodeAt(0));
+  writer.writeUInt32(client.uID.id);
+  writer.writeUInt32(client.cubeID.x);
+  writer.writeUInt32(client.cubeID.z);
+  writer.writeUInt32(client.cubeID.w);
+  writer.writeUInt32(client.cubeID.h);
+  writer.writeUInt32(client.cubeID.d);
+  writer.writeUInt32(client.camID.x);
+  writer.writeUInt32(client.camID.z);
+  client.socket.send(writer.toBuffer());
+}
+
 onConnection(ws) {
   var client = new Block(this.getNextID(), ws, this.webSock, this.userList);
   client.ip = ws.upgradeReq.connection.remoteAddress;
   client.socket.on('message', client.onMessage.bind(client));
   client.socket.on('close', client.onCloseConn.bind(client));
-  client.writer = new BinaryWriter();
-  client.reader = new BinaryReader(client.onMessage.bind(client));
+  //client.writer = new BinaryWriter();
+  //client.reader = new BinaryReader(0, client.onMessage.bind(client));
 
   var id = client.id;
   this.userList.push(client);
 
-  var subObj = new Subscriber('create', client.camID, client.cubeID, client.uID);
-  var user = client.uintIfy(subObj);
-  client.socket.send(user);
+  this.createClient(client);
 
   Logger.info("ID: " + client.uID.id + " with IP: "  + client.ip + "".white);
 }

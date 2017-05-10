@@ -10,11 +10,14 @@ class Player {
     this.utils = netObj.utils;
     this.conf = netObj.conf;
     this.renderer = netObj.renderer;
+    this.network = netObj;
 
   }
 
-  create(parsed) {
-    this.utils.sendClientData(this.cName, this.cColor);;
+  create(x, z, w, h, d, c, cx, cz) {
+
+    this.utils.sendName(this.cName);
+    this.utils.sendColor(this.cColor);
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.domElement.id = "render";
@@ -27,11 +30,11 @@ class Player {
 
     this.camObj = new THREE.PerspectiveCamera(conf.camOption1, window.innerWidth/window.innerHeight, conf.camOption2, conf.camOption3);
 
-    var cWidth = parsed.cubeID.w;
-    var cHeight = parsed.cubeID.h;
-    var cDepth = parsed.cubeID.d;
-    var cColor = parsed.cubeID.color;
-    var camZ = parsed.camID.z;
+    var cWidth = w;
+    var cHeight = h;
+    var cDepth = d;
+    var cColor = c;
+    var camZ = cz;
 
     var cubeColorRGB = new THREE.Color(this.cColor);
     var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
@@ -47,55 +50,80 @@ class Player {
     this.cubeObj.add(this.nameText);
     this.nameText.position.set(3.5, 2.5, 2.5);
 
-    this.cubeObj.position.set(parsed.cubeID.x, conf.cubeY, parsed.cubeID.z);
-    this.camObj.position.set(parsed.camID.x, conf.cameraHeight, parsed.camID.z);
+    this.cubeObj.position.set(x, conf.cubeY, z);
+    this.camObj.position.set(cx, conf.cameraHeight, cz);
     this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 
     var rndr = this.renderer;
     var scn = this.scene;
     var cm = this.camObj;
-    var dtObj = this;
+    var thObj = this;
     var utls = this.utils;
 
-
     var render = function() {
+      thObj.network.update();
       requestAnimationFrame(render);
       rndr.render(scn, cm);
-      dtObj.date = new Date();
+      thObj.date = new Date();
       //dtObj.utils.sendDate(dtObj.id);
     };
 
     render();
-    this.utils.getUserList();
+    //this.utils.getUserList();
   }
 
-  move(parsed) {
-    var jsonObj = parsed.data;
+  move(msg, offset) {
 
-    var newCamZ = jsonObj.CamObj.z;
-    var newCubeZ = jsonObj.CubeObj.z;
-
-    var newCamX = jsonObj.CamObj.x;
-    var newCubeX = jsonObj.CubeObj.x;
+    var x = msg.getInt32(offset, true);
+    offset += 4;
+    var z = msg.getInt32(offset, true);
+    offset += 4;
+    var cx = msg.getInt32(offset, true);
+    offset += 4;
+    var cz = msg.getInt32(offset, true);
+    offset += 4;
 
     var now = new Date();
     var delta = (Date.now() - this.date) / 120;
 
-    var x = this.utils.lerp(this.cubeObj.position.x, newCubeX, delta);
-    var z = this.utils.lerp(this.cubeObj.position.z, newCubeZ, delta);
+    var lX = this.utils.lerp(this.cubeObj.position.x, x, delta);
+    var lZ = this.utils.lerp(this.cubeObj.position.z, z, delta);
 
-    var cx = this.utils.lerp(this.camObj.position.x, newCamX, delta);
-    var cz = this.utils.lerp(this.camObj.position.z, newCamZ, delta);
+    var lCx = this.utils.lerp(this.camObj.position.x, cx, delta);
+    var lCz = this.utils.lerp(this.camObj.position.z, cz, delta);
 
-    this.cubeObj.position.set(x, conf.cubeY, z);
-    this.camObj.position.y = conf.cameraHeight;
-    this.camObj.position.x = cx;
-    this.camObj.position.z = cz;
-    this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
+    if(conf.wantLerp == true) {
+      this.cubeObj.position.set(lX, conf.cubeY, lZ);
+      this.camObj.position.y = conf.cameraHeight;
+      this.camObj.position.x = lCx;
+      this.camObj.position.z = lCz;
+      this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
+    } else {
+      this.cubeObj.position.set(x, conf.cubeY, z);
+      this.camObj.position.y = conf.cameraHeight;
+      this.camObj.position.x = cx;
+      this.camObj.position.z = cz;
+      this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
+    }
+
   }
 
-  removeClient(parsed) {
-    var result = $.grep(this.scene.children, function(e){ return e.name == parsed.data.id; });
+  removeClient(msg, offset) {
+
+    var uid = msg.getUint8(offset, true);
+    offset += 1;
+    name = '';
+
+    for (var i = offset; i < msg.buffer.byteLength; i+=2) {
+      var k = msg.getUint16(i, true);
+      //name += String.fromCharCode(k);
+      //offset += 2;
+      console.log(k);
+      console.log(i + " - " + msg.buffer.byteLength);
+    }
+
+
+    var result = $.grep(this.scene.children, function(e){ return e.name == uid; });
 
     if (result.length == 1) {
       $('#' + parsed.data.id).remove();
