@@ -114,19 +114,23 @@ class Player {
     var uid = msg.getUint8(offset++);
     offset++;
 
-    console.log('uid: ' + uid);
+    var userName = "";
+
+    for (var i = offset; i < msg.byteLength; i++) {
+      var letter = String.fromCharCode(msg.getUint8(i));
+      userName += letter;
+    }
 
     var result = $.grep(this.scene.children, function(e){ return e.name == uid; });
 
     if (result.length == 1) {
       $('#' + uid).remove();
       this.scene.remove(result[0]);
-      var chatName = uid; // userName
 
       var chatListElement = document.getElementById('cList');
       var listElement = document.createElement("li");
       listElement.className = 'chatInList';
-      listElement.innerHTML = "<b>User: " + chatName + " has gone offline!</b>";
+      listElement.innerHTML = "<b>User: " + userName + " has gone offline!</b>";
       listElement.style.color = 'white';
       chatListElement.appendChild(listElement);
       $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);

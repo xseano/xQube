@@ -58,12 +58,21 @@ class Block {
 
       for (var i = 0; i < this.xQube.userList.length; i++) {
         var writer = new BinaryWriter();
+        var reader = new BinaryReader(this.nameBin);
+        var len = this.nameBin.byteLength;
+
         writer.writeUInt8('r'.charCodeAt(0));
         writer.writeUInt8(this.id);
-        if (this.xQube.userList[i].socket.readyState === 1) {
-          this.xQube.userList[i].socket.send(writer.toBuffer());
+
+        for (var t = 1; t < len; t++) {
+          writer.writeUInt8(reader.readUInt8(t));
         }
-        this.xQube.userList.splice(i, 1);
+
+        if ((this.xQube.userList[i].socket.readyState === 1) && (this.xQube.userList[i].id != this.id)) {
+          this.xQube.userList[i].socket.send(writer.toBuffer());
+        } else if(this.xQube.userList[i].id === this.id) {
+          this.xQube.userList.splice(i, 1);
+        }
       }
 
     }
@@ -77,6 +86,7 @@ class Block {
         name += letter;
       }
       this.name = name;
+      this.nameBin = msg;
     }
 
     setColor(msg, reader, offset) {
