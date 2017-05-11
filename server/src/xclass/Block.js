@@ -17,7 +17,8 @@ global.rl = readline.createInterface(process.stdin, process.stdout);
 
 class Block {
 
-    constructor(id, ws, webSock, userList) {
+    constructor(xQube, id, ws, webSock, userList) {
+        this.xQube = xQube;
         this.id = id;
         this.socket = ws;
         this.webSock = webSock;
@@ -119,6 +120,26 @@ class Block {
       this.cubeID.b = b;
     }
 
+    returnUList() {
+
+      for (var i = 0; i < this.xQube.userList.length; i++) {
+        for (var t = 0; t < this.xQube.userList.length; t++) {
+          var writer = new BinaryWriter();
+          writer.writeUInt8('u'.charCodeAt(0));
+          writer.writeInt32(this.xQube.userList[t].id);
+          writer.writeInt32(this.xQube.userList[t].cubeID.x);
+          writer.writeInt32(this.xQube.userList[t].cubeID.z);
+          writer.writeInt32(this.xQube.userList[t].cubeID.w);
+          writer.writeInt32(this.xQube.userList[t].cubeID.h);
+          writer.writeInt32(this.xQube.userList[t].cubeID.d);
+          if (this.xQube.userList[i].socket.readyState === 1) {
+            this.xQube.userList[i].socket.send(writer.toBuffer());
+          }
+        }
+      }
+
+    }
+
     onMessage(msg) {
 
         var offset = 0;
@@ -156,6 +177,9 @@ class Block {
             break;
           case 'c':
             this.setColor(msg, reader, offset);
+            break;
+          case 'g':
+            this.returnUList();
             break;
         }
 

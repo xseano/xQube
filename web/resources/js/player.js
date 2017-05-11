@@ -16,6 +16,8 @@ class Player {
 
   create(x, z, w, h, d, c, cx, cz) {
 
+    console.log(this.id);
+
     this.utils.sendName(this.cName);
     this.utils.sendColor(this.cColor);
 
@@ -68,7 +70,7 @@ class Player {
     };
 
     render();
-    //this.utils.getUserList();
+    this.utils.getUserList();
   }
 
   move(msg, offset) {
@@ -109,6 +111,8 @@ class Player {
 
   removeClient(msg, offset) {
 
+    /*
+
     var uid = msg.getUint8(offset, true);
     offset += 1;
     name = '';
@@ -119,6 +123,7 @@ class Player {
       //offset += 2;
       console.log(k);
       console.log(i + " - " + msg.buffer.byteLength);
+
     }
 
 
@@ -139,76 +144,79 @@ class Player {
       chatListElement.appendChild(listElement);
       $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
     }
+    */
   }
 
-  returnUserList(parsed) {
+  returnUserList(msg, offset) {
 
-    var CircularJSON = window.CircularJSON;
-    var ulist = CircularJSON.parse(parsed.userList);
+    var userID = msg.getInt32(offset, true);
+    offset += 2;
+    var x = msg.getInt32(offset, true);
+    offset += 2;
+    var z = msg.getInt32(offset, true);
+    offset += 2;
+    var w = msg.getInt32(offset, true);
+    offset += 2;
+    var h = msg.getInt32(offset, true);
+    offset += 2;
+    var d = msg.getInt32(offset, true);
+    offset += 2;
 
-    for (var t = 0; t < ulist.length; t++) {
+    var userListElement = document.getElementById('uList');
 
-      var userID = ulist[t].id;
-      var userName = ulist[t].name;
-      var userColor = ulist[t].cubeID.color;
-      var userListElement = document.getElementById('uList');
+    if (document.getElementById(userID) == null) {
+      var listElement = document.createElement("li");
+      listElement.id = userID;
+      listElement.className = 'userInList';
+      listElement.innerHTML = userID; // userName
+      //listElement.style.color = userColor;
+      userListElement.appendChild(listElement);
+    }
 
-      if (document.getElementById(userID) == null) {
-        var listElement = document.createElement("li");
-        listElement.id = userID;
-        listElement.className = 'userInList';
-        listElement.innerHTML = userName;
-        listElement.style.color = userColor;
-        userListElement.appendChild(listElement);
+    var result = $.grep(this.scene.children, function(e) { return e.name == userID; });
+
+    if (result.length == 0) {
+
+      var cWidth1 = w;
+      var cHeight1 = h;
+      var cDepth1 = d;
+      var cColor1 = "rgb(255,255,255)"; // userColor
+
+      var cubeColorRGB1 = new THREE.Color(cColor1);
+      var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
+      var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: conf.opacityVal, transparent: conf.wantTransparent });
+      var cube = new THREE.Mesh(cubeGeom1, cubeColor1);
+
+      this.group.add(cube);
+      cube.name = userID;
+      this.scene.add(cube);
+
+      var nt = this.makeTextSprite(userID/* userName */, {'textColor': cColor1});
+      cube.add(nt);
+      nt.position.set(3.5, 2.5, 2.5);
+
+      cube.position.set(x, conf.cubeY, z);
+
+    } else if (result.length == 1) {
+
+      if (result[0].name != this.id) {
+
+        var now = new Date();
+        var delta = (Date.now() - this.date) / 120;
+        //console.log(delta);
+
+        var nx = this.utils.lerp(result[0].position.z, x, delta);
+        var nz = this.utils.lerp(result[0].position.z, z, delta);
+
+        result[0].position.z = z;
+        result[0].position.x = x;
+        result[0].position.y = conf.cubeY;
+
       }
-
-      var result = $.grep(this.scene.children, function(e) { return e.name == userID; });
-
-      if (result.length == 0) {
-
-        var cWidth1 = ulist[t].cubeID.w;
-        var cHeight1 = ulist[t].cubeID.h;
-        var cDepth1 = ulist[t].cubeID.d;
-        var cColor1 = ulist[t].cubeID.color;
-
-        var cubeColorRGB1 = new THREE.Color(cColor1);
-        var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
-        var cubeColor1 = new THREE.MeshBasicMaterial({ color: cubeColorRGB1, opacity: conf.opacityVal, transparent: conf.wantTransparent });
-        var cube = new THREE.Mesh(cubeGeom1, cubeColor1);
-
-        this.group.add(cube);
-        cube.name = ulist[t].id;
-        this.scene.add(cube);
-
-        var nt = this.makeTextSprite(userName, {'textColor': cColor1});
-        cube.add(nt);
-        nt.position.set(3.5, 2.5, 2.5);
-
-        cube.position.set(ulist[t].cubeID.x, conf.cubeY, ulist[t].cubeID.z);
-
-      } else if (result.length == 1) {
-
-        if (result[0].name != this.id) {
-
-          console.log(ulist[t]);
-
-          var now = new Date();
-          var delta = (Date.now() - this.date) / 120;
-          console.log(delta);
-
-          var x = this.utils.lerp(result[0].position.z, ulist[t].cubeID.x, delta);
-          var z = this.utils.lerp(result[0].position.z, ulist[t].cubeID.z, delta);
-
-          result[0].position.z = ulist[t].cubeID.z;
-          result[0].position.x = ulist[t].cubeID.x;
-          result[0].position.y = conf.cubeY;
-
-        }
 
     } else {
         console.log("Found results: " + result);
     }
-  }
 }
 
 

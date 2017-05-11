@@ -46,18 +46,22 @@ class Network {
 
     if (this.keyboard.pressed('w') || this.keyboard.pressed('up')) {
         this.utils.sendKey('w');
+        this.utils.getUserList();
     }
 
     if (this.keyboard.pressed('a') || this.keyboard.pressed('left')) {
         this.utils.sendKey('a');
+        this.utils.getUserList();
     }
 
     if (this.keyboard.pressed('s') || this.keyboard.pressed('down')) {
         this.utils.sendKey('s');
+        this.utils.getUserList();
     }
 
     if (this.keyboard.pressed('d') || this.keyboard.pressed('right')) {
         this.utils.sendKey('d');
+        this.utils.getUserList();
     }
 
   }

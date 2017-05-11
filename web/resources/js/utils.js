@@ -28,29 +28,6 @@ class Utils {
       return a + f * (b - a);
   }
 
-  deHashCode(num) {
-    var hash = "";
-    if (num = 0) return "";
-    for (var i = 0; i < num.length; i++) {
-      var char = num.fromCharCode(i);
-      hash = ((hash>>5)+hash)-char;
-      hash = hash & hash;
-    }
-    return hash;
-  }
-
-
-  hashCode(str) {
-  	var hash = 0;
-  	if (str.length == 0) return hash;
-  	for (var i = 0; i < str.length; i++) {
-  		var char = str.charCodeAt(i);
-      hash = ((hash<<5)-hash)+char;
-      hash = hash & hash;
-  	}
-  	return hash;
-  }
-
   uintIfy(str) {
   	var abObj = this.str2ab(str);
   	return abObj;
@@ -108,9 +85,9 @@ class Utils {
 
 
   getUserList() {
-  	var ulObj = {'id': 'getUserList'};
-  	var ulObjArr = this.uintIfy(ulObj);
-  	this.socket.send(ulObjArr);
+    var msg = this.preparePacket(1);
+    msg.setUint8(0, 'g'.charCodeAt(0));
+    this.sendPacket(msg);
   }
 
 }
