@@ -111,8 +111,6 @@ class Block {
 				b + ')'
 			);
 
-      console.log(rgb);
-
       this.cubeID.color = rgb;
       this.cubeID.r = r;
       this.cubeID.g = g;
@@ -131,6 +129,9 @@ class Block {
           writer.writeUInt8(this.xQube.userList[t].cubeID.w);
           writer.writeUInt8(this.xQube.userList[t].cubeID.h);
           writer.writeUInt8(this.xQube.userList[t].cubeID.d);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.r);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.g);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.b);
           if (this.xQube.userList[i].socket.readyState === 1) {
             this.xQube.userList[i].socket.send(writer.toBuffer());
           }

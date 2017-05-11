@@ -62,7 +62,7 @@ class Utils {
       this.sendPacket(msg);
   }
 
-  sendColor(color) {
+  sendColor() {
 
       var colorObj = JSON.parse(document.getElementById('colorInputJSON').value);
       var len = 4;

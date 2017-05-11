@@ -127,13 +127,11 @@ class Network {
       var cc = clientColor;
     } else {
       var cn = 'Player';
-      var cc = '#FFFFFF';
+      var cc = 'rgb(255, 255, 255)';
     }
 
     this.player = new Player(id, cn, cc, this);
-    console.log(cn);
-    console.log(cc);
-    this.player.create(x, z, w, h, d, clientColor, cx, cz);
+    this.player.create(x, z, w, h, d, cc, cx, cz);
     this.isConnected = true;
   }
 

@@ -161,6 +161,14 @@ class Player {
     offset++;
     var d = msg.getUint8(offset, true);
     offset++;
+    var r = msg.getUint8(offset, true);
+    offset++;
+    var g = msg.getUint8(offset, true);
+    offset++;
+    var b = msg.getUint8(offset, true);
+    offset++;
+
+    var userColor = ( 'rgb(' + r + ',' + g + ',' + b + ')' );
 
     var userListElement = document.getElementById('uList');
 
@@ -169,7 +177,7 @@ class Player {
       listElement.id = userID;
       listElement.className = 'userInList';
       listElement.innerHTML = userID; // userName
-      //listElement.style.color = userColor;
+      listElement.style.color = userColor;
       userListElement.appendChild(listElement);
     }
 
@@ -180,7 +188,7 @@ class Player {
       var cWidth1 = w;
       var cHeight1 = h;
       var cDepth1 = d;
-      var cColor1 = "rgb(255,255,255)"; // userColor
+      var cColor1 = userColor; // userColor
 
       var cubeColorRGB1 = new THREE.Color(cColor1);
       var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
