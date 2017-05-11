@@ -14,6 +14,10 @@ function crc32b($ptf) {
     <script src='./resources/js/threex.keyboardstate.js?v=<?php echo crc32b('./resources/js/threex.keyboardstate.js'); ?>'></script>
     <script src="./resources/js/three.min.js?v=<?php echo crc32b('./resources/js/three.min.js'); ?>"></script>
     <script src="./resources/js/jquery-1.12.4.min.js?v=<?php echo crc32b('./resources/js/jquery-1.12.4.min.js'); ?>"></script>
+    <script src="./resources/js/OrbitControls.js?v=<?php echo crc32b('./resources/js/OrbitControls.js'); ?>"></script>
+    <script src="./resources/js/WaterShader.js?v=<?php echo crc32b('./resources/js/WaterShader.js'); ?>"></script>
+    <script src="./resources/js/Detector.js?v=<?php echo crc32b('./resources/js/Detector.js'); ?>"></script>
+    <script src="./resources/js/stats.min.js?v=<?php echo crc32b('./resources/js/stats.min.js'); ?>"></script>
     <script src="./resources/js/cjson.js?v=<?php echo crc32b('./resources/js/cjson.js'); ?>"></script>
     <script src="./resources/js/game.js?v=<?php echo crc32b('./resources/js/game.js'); ?>"></script>
     <script src="./resources/js/network.js?v=<?php echo crc32b('./resources/js/network.js'); ?>"></script>
@@ -36,7 +40,8 @@ function crc32b($ptf) {
               <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
               <br>
               Choose Cube Color: <input class="jscolor {onFineChange:'updateColor(this)'}" value="FFFFFF">
-              <input id="colorInput" type="hidden" name="colorInput" value="#FFFFFF">
+              <input id="colorInput" type="hidden" name="colorInput" value="rgb(255, 255, 255)">
+              <input id="colorInputJSON" type="hidden" name="colorInputJSON" value='{"r":255,"g":255,"b":255}'>
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
             <button style="margin-top: 50px;" class="btn btn-primary btn-lg btn-block" onClick="startGame()">Play</button>

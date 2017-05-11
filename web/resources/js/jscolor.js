@@ -1256,6 +1256,21 @@ var jsc = {
 			);
 		};
 
+		this.rgbObj = function () {
+			var r = Math.round(this.rgb[0]);
+			var g = Math.round(this.rgb[1]);
+			var b = Math.round(this.rgb[2]);
+			return (
+				JSON.stringify(
+					{
+						'r' : r,
+						'g': g,
+						'b': b
+					}
+				)
+			);
+		};
+
 
 		this.isLight = function () {
 			return (

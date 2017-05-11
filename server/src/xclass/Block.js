@@ -87,32 +87,44 @@ class Block {
       client.send(writer.toBuffer());
     }
 
-    setName(buffer, reader) {
+    setName(msg, reader, offset) {
       var name = "";
-      for (var i = 10; i < buffer.byteLength; i+=2) {
-        if (buffer[i]) {
-          var k = String.fromCharCode(reader.readUInt16(i, true));
-          name += k;
-        }
+      var len = msg.byteLength;
+
+      for (var i = offset; i < len; i++) {
+        var letter = String.fromCharCode(reader.readUInt8());
+        name += letter;
       }
       this.name = name;
     }
 
-    setColor(buffer, reader) {
-      var color = "";
-      for (var i = 10; i < buffer.byteLength; i+=2) {
-        if (buffer[i]) {
-          var k = String.fromCharCode(reader.readUInt16(i, true));
-          color += k;
-        }
-      }
-      this.cubeID.color = color;
+    setColor(msg, reader, offset) {
+
+      var r = reader.readUInt16(offset, true);
+      offset += 2;
+      var g = reader.readUInt16(offset, true);
+      offset += 2;
+      var b = reader.readUInt16(offset, true);
+      offset += 2;
+
+      var rgb = ('rgb(' +
+				r + ',' +
+				g + ',' +
+				b + ')'
+			);
+
+      this.cubeID.color = rgb;
+      this.cubeID.r = r;
+      this.cubeID.g = g;
+      this.cubeID.b = b;
     }
 
     onMessage(msg) {
 
+        var offset = 0;
         var reader = new BinaryReader(msg);
         var id = String.fromCharCode(reader.readUInt8());
+        offset++;
 
         console.log('Recieved id: ' + id);
 
@@ -140,10 +152,10 @@ class Block {
             this.updatePos();
             break;
           case 'n':
-            this.setName(msg.buffer, reader);
+            this.setName(msg, reader, offset);
             break;
           case 'c':
-            this.setColor(msg.buffer, reader);
+            this.setColor(msg, reader, offset);
             break;
         }
 

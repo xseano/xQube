@@ -5,6 +5,7 @@ $.getJSON("../../conf/conf.json", function(conf) {
 
 function updateColor(picker) {
     document.getElementById('colorInput').value = picker.toHEXString();
+		document.getElementById('colorInputJSON').value = picker.rgbObj();
 }
 
 function startGame() {
