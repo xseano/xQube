@@ -149,18 +149,18 @@ class Player {
 
   returnUserList(msg, offset) {
 
-    var userID = msg.getInt32(offset, true);
-    offset += 2;
+    var userID = msg.getUint8(offset, true);
+    offset++;
     var x = msg.getInt32(offset, true);
-    offset += 2;
+    offset += 4;
     var z = msg.getInt32(offset, true);
-    offset += 2;
-    var w = msg.getInt32(offset, true);
-    offset += 2;
-    var h = msg.getInt32(offset, true);
-    offset += 2;
-    var d = msg.getInt32(offset, true);
-    offset += 2;
+    offset += 4;
+    var w = msg.getUint8(offset, true);
+    offset++;
+    var h = msg.getUint8(offset, true);
+    offset++;
+    var d = msg.getUint8(offset, true);
+    offset++;
 
     var userListElement = document.getElementById('uList');
 
@@ -200,6 +200,8 @@ class Player {
     } else if (result.length == 1) {
 
       if (result[0].name != this.id) {
+
+        //console.log(result[0]);
 
         var now = new Date();
         var delta = (Date.now() - this.date) / 120;

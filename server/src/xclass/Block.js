@@ -125,12 +125,12 @@ class Block {
         for (var t = 0; t < this.xQube.userList.length; t++) {
           var writer = new BinaryWriter();
           writer.writeUInt8('u'.charCodeAt(0));
-          writer.writeInt32(this.xQube.userList[t].id);
+          writer.writeUInt8(this.xQube.userList[t].id);
           writer.writeInt32(this.xQube.userList[t].cubeID.x);
           writer.writeInt32(this.xQube.userList[t].cubeID.z);
-          writer.writeInt32(this.xQube.userList[t].cubeID.w);
-          writer.writeInt32(this.xQube.userList[t].cubeID.h);
-          writer.writeInt32(this.xQube.userList[t].cubeID.d);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.w);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.h);
+          writer.writeUInt8(this.xQube.userList[t].cubeID.d);
           if (this.xQube.userList[i].socket.readyState === 1) {
             this.xQube.userList[i].socket.send(writer.toBuffer());
           }
