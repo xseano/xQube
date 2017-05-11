@@ -84,7 +84,6 @@ class Network {
           this.player.move(msg, offset);
           break;
         case 'r':
-          //console.log(this.readStringUtf8(msg, offset, msg.buffer.byteLength));
           this.player.removeClient(msg, offset);
           break;
         case 'h':

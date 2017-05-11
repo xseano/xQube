@@ -111,40 +111,26 @@ class Player {
 
   removeClient(msg, offset) {
 
-    /*
+    var uid = msg.getUint8(offset++);
+    offset++;
 
-    var uid = msg.getUint8(offset, true);
-    offset += 1;
-    name = '';
-
-    for (var i = offset; i < msg.buffer.byteLength; i+=2) {
-      var k = msg.getUint16(i, true);
-      //name += String.fromCharCode(k);
-      //offset += 2;
-      console.log(k);
-      console.log(i + " - " + msg.buffer.byteLength);
-
-    }
-
+    console.log('uid: ' + uid);
 
     var result = $.grep(this.scene.children, function(e){ return e.name == uid; });
 
     if (result.length == 1) {
-      $('#' + parsed.data.id).remove();
+      $('#' + uid).remove();
       this.scene.remove(result[0]);
-
-      var chatColor = parsed.color;
-      var chatName = parsed.name;
+      var chatName = uid; // userName
 
       var chatListElement = document.getElementById('cList');
       var listElement = document.createElement("li");
       listElement.className = 'chatInList';
-      listElement.innerHTML = "User: " + chatName + " has gone offline!";
+      listElement.innerHTML = "<b>User: " + chatName + " has gone offline!</b>";
       listElement.style.color = 'white';
       chatListElement.appendChild(listElement);
       $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
     }
-    */
   }
 
   returnUserList(msg, offset) {

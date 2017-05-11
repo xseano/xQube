@@ -29,32 +29,10 @@ class Block {
     }
 
     onCloseConn(code, reason) {
-      Logger.info("Client disconnect with code: " + code + " from IP: " + this.ip + "".green);
+      Logger.info("Client " + this.id + " disconnect with code: " + code + " from IP: " + this.ip + "".green);
 
       if (code == 1001 || code == 1006) {
-        for(var u = 0; u < this.userList.length; u++) {
-            var unmIDCube = this.userList[u].cubeID;
-            var id = this.userList[u].id;
-            if (id == this.id) {
-              var ws = this.userList[u].socket;
-              var name = this.name;
-              var color = this.cubeID.color;
-              var obj = this;
-              //var deleteObj = new DeleteObject('rmClient', this.userList[u].uID, this.name, this.cubeID.color);
-              //var d = this.uintIfy(deleteObj);
-
-              this.webSock.clients.forEach(function each(client) {
-                if (client.readyState === 1) {
-                  obj.rmClient(client, id, name);
-                  //client.send(d);
-                }
-              });
-
-              this.userList.splice(u, 1);
-              console.log("Client with id: " + this.id + " has successfully been disconnected and destroyed!");
-              //console.log("User List: " + this.userList);
-            }
-        }
+        this.rmClient();
       }
     }
 
@@ -76,16 +54,18 @@ class Block {
       this.socket.send(writer.toBuffer());
     }
 
-    rmClient(client, id, name) {
-      var writer = new BinaryWriter();
-      writer.writeUInt8('r'.charCodeAt(0));
-      writer.writeUInt8(id);
+    rmClient() {
 
-      for (var i = 0; i < name.length; i++) {
-          writer.writeUInt16(name.charCodeAt(i));
+      for (var i = 0; i < this.xQube.userList.length; i++) {
+        var writer = new BinaryWriter();
+        writer.writeUInt8('r'.charCodeAt(0));
+        writer.writeUInt8(this.id);
+        if (this.xQube.userList[i].socket.readyState === 1) {
+          this.xQube.userList[i].socket.send(writer.toBuffer());
+        }
+        this.xQube.userList.splice(i, 1);
       }
 
-      client.send(writer.toBuffer());
     }
 
     setName(msg, reader, offset) {
