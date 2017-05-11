@@ -155,8 +155,18 @@ class Player {
     offset++;
     var g = msg.getUint8(offset, true);
     offset++;
-    var b = msg.getUint8(offset, true);
+    var b = msg.getUint8(offset++, true);
     offset++;
+
+    var userName = "";
+    console.log(offset + " - " + msg.byteLength);
+
+    for (var i = offset; i < msg.byteLength; i++) {
+      var letter = String.fromCharCode(msg.getUint8(i));
+      userName += letter;
+    }
+
+    //console.log(String.fromCharCode(msg.getUint8(offset++)));
 
     var userColor = ( 'rgb(' + r + ',' + g + ',' + b + ')' );
 
