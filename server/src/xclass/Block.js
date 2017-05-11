@@ -101,18 +101,17 @@ class Block {
 
     setColor(msg, reader, offset) {
 
-      var r = reader.readUInt16(offset, true);
-      offset += 2;
-      var g = reader.readUInt16(offset, true);
-      offset += 2;
-      var b = reader.readUInt16(offset, true);
-      offset += 2;
+      var r = reader.readUInt8();
+      var g = reader.readUInt8();
+      var b = reader.readUInt8();
 
       var rgb = ('rgb(' +
 				r + ',' +
 				g + ',' +
 				b + ')'
 			);
+
+      console.log(rgb);
 
       this.cubeID.color = rgb;
       this.cubeID.r = r;

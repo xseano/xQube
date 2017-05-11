@@ -47,9 +47,8 @@ class Utils {
 
   sendName(name) {
 
-      var len =  1 + (name.length);
+      var len =  1 + name.length;
       var offset = 0;
-      console.log(len);
 
       var msg = this.preparePacket(len);
       msg.setUint8(offset, 'n'.charCodeAt(0));
@@ -66,19 +65,18 @@ class Utils {
   sendColor(color) {
 
       var colorObj = JSON.parse(document.getElementById('colorInputJSON').value);
-      var len = 2 + 2 * color.length + 2;
+      var len = 4;
       var offset = 0;
-      console.log(len);
 
       var msg = this.preparePacket(len);
       msg.setUint8(offset, 'c'.charCodeAt(0));
       offset++;
-      msg.setUint16(offset, colorObj.r, true);
-      offset += 2;
-      msg.setUint16(offset, colorObj.g, true);
-      offset += 2;
-      msg.setUint16(offset, colorObj.b, true);
-      offset += 2;
+      msg.setUint8(offset, colorObj.r, true);
+      offset++;
+      msg.setUint8(offset, colorObj.g, true);
+      offset++;
+      msg.setUint8(offset, colorObj.b, true);
+      offset++;
 
       this.sendPacket(msg);
   }
