@@ -24,8 +24,8 @@ class Utils {
   	this.socket.send(cO);
   }
 
-  lerp(a, b, f) {
-      return a + f * (b - a);
+  lerp(a, b, f, dt) {
+      return a + (1 - (Math.pow(f, dt))) * (b - a);
   }
 
   uintIfy(str) {

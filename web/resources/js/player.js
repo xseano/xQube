@@ -87,11 +87,11 @@ class Player {
     var now = new Date();
     var delta = (Date.now() - this.date) / 120;
 
-    var lX = this.utils.lerp(this.cubeObj.position.x, x, delta);
-    var lZ = this.utils.lerp(this.cubeObj.position.z, z, delta);
+    var lX = this.utils.lerp(this.cubeObj.position.x, x, 0.25, delta);
+    var lZ = this.utils.lerp(this.cubeObj.position.z, z, 0.25, delta);
 
-    var lCx = this.utils.lerp(this.camObj.position.x, cx, delta);
-    var lCz = this.utils.lerp(this.camObj.position.z, cz, delta);
+    var lCx = this.utils.lerp(this.camObj.position.x, cx, 0.25, delta);
+    var lCz = this.utils.lerp(this.camObj.position.z, cz, 0.25, delta);
 
     if(conf.wantLerp == true) {
       this.cubeObj.position.set(lX, conf.cubeY, lZ);
@@ -159,7 +159,7 @@ class Player {
     offset++;
 
     var userName = "";
-    console.log(offset + " - " + msg.byteLength);
+    //console.log(offset + " - " + msg.byteLength);
 
     for (var i = offset; i < msg.byteLength; i++) {
       var letter = String.fromCharCode(msg.getUint8(i));
