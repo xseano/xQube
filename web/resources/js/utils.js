@@ -31,10 +31,8 @@ class Utils {
       this.sendPacket(msg);
   }
 
-
-
   lerp(a, b, f, dt) {
-      return a + (1 - (Math.pow(f, dt))) * (b - a);
+    return a + f * (b - a);
   }
 
   uintIfy(str) {

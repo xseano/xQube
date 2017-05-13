@@ -211,17 +211,21 @@ class Player {
         var now = new Date();
         var delta = (Date.now() - this.date) / 120;
 
-        var nx = this.utils.lerp(result[0].position.z, x, delta);
-        var nz = this.utils.lerp(result[0].position.z, z, delta);
+        var lX = this.utils.lerp(result[0].position.x, x, 0.25, delta);
+        var lZ = this.utils.lerp(result[0].position.z, z, 0.25, delta);
 
-        result[0].position.z = z;
-        result[0].position.x = x;
-        result[0].position.y = conf.cubeY;
-
+        if(conf.wantLerp == true) {
+          result[0].position.z = lZ;
+          result[0].position.x = lX;
+          result[0].position.y = conf.cubeY;
+        } else {
+          result[0].position.z = z;
+          result[0].position.x = x;
+          result[0].position.y = conf.cubeY;
+        }
       }
-
     }
-}
+  }
 
 
   handleChat(msg, offset) {
