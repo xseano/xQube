@@ -69,7 +69,6 @@ onConnection(ws) {
 
   this.createClient(client);
   this.userList.push(client);
-  //client.returnUList();
 
   Logger.info("ID: " + client.uID.id + " with IP: "  + client.ip + "".white);
 }

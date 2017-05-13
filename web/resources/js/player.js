@@ -1,6 +1,7 @@
 class Player {
 
   constructor(id, name, color, netObj) {
+
     this.id = id;
     this.cName = name;
     this.cColor = color;
@@ -12,6 +13,12 @@ class Player {
     this.renderer = netObj.renderer;
     this.network = netObj;
 
+  }
+
+  querySceneItem(identifier) {
+    return ($.grep(this.scene.children, function(e) {
+      return e.name == identifier;
+    }));
   }
 
   create(x, z, w, h, d, c, cx, cz) {
@@ -115,11 +122,7 @@ class Player {
   removeClient(msg, offset) {
 
     var uid = msg.getUint8();
-    console.log('Client: ' + uid);
-
-    var result = $.grep(this.scene.children, function(e){ return e.name == uid; });
-
-    console.log(result);
+    var result = this.querySceneItem(uid);
 
     if (result.length == 1) {
       $('#' + uid).remove();
@@ -174,7 +177,7 @@ class Player {
       userListElement.appendChild(listElement);
     }
 
-    var result = $.grep(this.scene.children, function(e) { return e.name == userID; });
+    var result = this.querySceneItem(userID);
 
     if (result.length == 0) {
 
@@ -217,8 +220,6 @@ class Player {
 
       }
 
-    } else {
-        console.log("Found results: " + result);
     }
 }
 
@@ -234,7 +235,7 @@ class Player {
       chatText += letter;
     }
 
-    var result = $.grep(this.scene.children, function(e) { return e.name == id; });
+    var result = this.querySceneItem(id);
 
     if (result.length == 1) {
       var chatListElement = document.getElementById('cList');

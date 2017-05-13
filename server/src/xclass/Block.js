@@ -162,7 +162,7 @@ class Block {
         var id = String.fromCharCode(reader.readUInt8());
         offset++;
 
-        console.log('Recieved id: ' + id);
+        //console.log('Recieved id: ' + id);
 
         var speed = 2;
 
