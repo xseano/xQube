@@ -44,7 +44,10 @@ class Player {
 
     this.scene.add(this.group);
     this.cubeObj = new THREE.Mesh(cubeGeom, cubeColor);
+    this.cubeObj.uName = this.cName;
     this.cubeObj.name = this.id;
+    this.cubeObj.uId = this.id;
+    this.cubeObj.uColor = this.cColor;
     this.group.add(this.cubeObj);
     this.scene.add(this.cubeObj);
 
@@ -111,29 +114,23 @@ class Player {
 
   removeClient(msg, offset) {
 
-    var uid = msg.getUint8(offset++);
-    offset++;
-
-    var userName = "";
-
-    for (var i = offset; i < msg.byteLength; i++) {
-      var letter = String.fromCharCode(msg.getUint8(i));
-      userName += letter;
-    }
+    var uid = msg.getUint8();
+    console.log('Client: ' + uid);
 
     var result = $.grep(this.scene.children, function(e){ return e.name == uid; });
 
+    console.log(result);
+
     if (result.length == 1) {
       $('#' + uid).remove();
-      this.scene.remove(result[0]);
-
       var chatListElement = document.getElementById('cList');
       var listElement = document.createElement("li");
       listElement.className = 'chatInList';
-      listElement.innerHTML = "<b>User: " + userName + " has gone offline!</b>";
-      listElement.style.color = 'white';
+      listElement.innerHTML = "<b>User: " + result[0].uName + " has gone offline!</b>";
+      listElement.style.color = 'white'; // result[0].uColor
       chatListElement.appendChild(listElement);
       $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
+      this.scene.remove(result[0]);
     }
   }
 
@@ -156,17 +153,13 @@ class Player {
     var g = msg.getUint8(offset, true);
     offset++;
     var b = msg.getUint8(offset++, true);
-    offset++;
 
     var userName = "";
-    //console.log(offset + " - " + msg.byteLength);
 
     for (var i = offset; i < msg.byteLength; i++) {
       var letter = String.fromCharCode(msg.getUint8(i));
       userName += letter;
     }
-
-    //console.log(String.fromCharCode(msg.getUint8(offset++)));
 
     var userColor = ( 'rgb(' + r + ',' + g + ',' + b + ')' );
 
@@ -176,7 +169,7 @@ class Player {
       var listElement = document.createElement("li");
       listElement.id = userID;
       listElement.className = 'userInList';
-      listElement.innerHTML = userID; // userName
+      listElement.innerHTML = userName;
       listElement.style.color = userColor;
       userListElement.appendChild(listElement);
     }
@@ -188,7 +181,7 @@ class Player {
       var cWidth1 = w;
       var cHeight1 = h;
       var cDepth1 = d;
-      var cColor1 = userColor; // userColor
+      var cColor1 = userColor;
 
       var cubeColorRGB1 = new THREE.Color(cColor1);
       var cubeGeom1 = new THREE.BoxGeometry(cWidth1, cHeight1, cDepth1);
@@ -196,10 +189,13 @@ class Player {
       var cube = new THREE.Mesh(cubeGeom1, cubeColor1);
 
       this.group.add(cube);
+      cube.uName = userName;
       cube.name = userID;
+      cube.uId = userID;
+      cube.uColor = userColor;
       this.scene.add(cube);
 
-      var nt = this.makeTextSprite(userID/* userName */, {'textColor': cColor1});
+      var nt = this.makeTextSprite(userName, {'textColor': cColor1});
       cube.add(nt);
       nt.position.set(3.5, 2.5, 2.5);
 
@@ -209,11 +205,8 @@ class Player {
 
       if (result[0].name != this.id) {
 
-        //console.log(result[0]);
-
         var now = new Date();
         var delta = (Date.now() - this.date) / 120;
-        //console.log(delta);
 
         var nx = this.utils.lerp(result[0].position.z, x, delta);
         var nz = this.utils.lerp(result[0].position.z, z, delta);
@@ -230,19 +223,28 @@ class Player {
 }
 
 
-  handleChat(parsed) {
-    var chatColor = parsed.color;
-    var chatName = parsed.name;
-    var chatMsg = parsed.msg;
+  handleChat(msg, offset) {
 
-    var chatListElement = document.getElementById('cList');
-    var listElement = document.createElement("li");
-    listElement.className = 'chatInList';
-    listElement.innerHTML = chatName + ": " + chatMsg;
-    listElement.style.color = chatColor;
-    chatListElement.appendChild(listElement);
+    var id = msg.getUint8(offset++, true);
 
-    $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
+    var chatText = "";
+
+    for (var i = offset; i < msg.byteLength; i++) {
+      var letter = String.fromCharCode(msg.getUint8(i));
+      chatText += letter;
+    }
+
+    var result = $.grep(this.scene.children, function(e) { return e.name == id; });
+
+    if (result.length == 1) {
+      var chatListElement = document.getElementById('cList');
+      var listElement = document.createElement("li");
+      listElement.className = 'chatInList';
+      listElement.innerHTML = result[0].uName + ": " + chatText;
+      listElement.style.color = result[0].uColor;
+      chatListElement.appendChild(listElement);
+      $('#cList').animate({scrollTop: $('#cList').prop("scrollHeight")}, 500);
+    }
   }
 
 

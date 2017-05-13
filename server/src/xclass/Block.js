@@ -31,7 +31,7 @@ class Block {
     onCloseConn(code, reason) {
       Logger.info("Client " + this.id + " disconnect with code: " + code + " from IP: " + this.ip + "".green);
 
-      if (code == 1001 || code == 1006) {
+      if (code) {
         this.rmClient();
       }
     }
@@ -58,15 +58,9 @@ class Block {
 
       for (var i = 0; i < this.xQube.userList.length; i++) {
         var writer = new BinaryWriter();
-        var reader = new BinaryReader(this.nameBin);
-        var len = this.nameBin.byteLength;
 
         writer.writeUInt8('r'.charCodeAt(0));
         writer.writeUInt8(this.id);
-
-        for (var t = 1; t < len; t++) {
-          writer.writeUInt8(reader.readUInt8(t));
-        }
 
         if ((this.xQube.userList[i].socket.readyState === 1) && (this.xQube.userList[i].id != this.id)) {
           this.xQube.userList[i].socket.send(writer.toBuffer());
@@ -77,17 +71,44 @@ class Block {
 
     }
 
+    getChatString(msg, reader, offset) {
+      var chatText = "";
+      var len = msg.byteLength;
+
+      for (var i = offset; i < len; i++) {
+        var letter = String.fromCharCode(reader.readUInt8());
+        chatText += letter;
+      }
+
+      this.handleChat(chatText, msg, offset);
+    }
+
+    handleChat(chatText, msg, offset) {
+      var writer = new BinaryWriter();
+
+      writer.writeUInt8('t'.charCodeAt(0));
+      writer.writeUInt8(this.id);
+
+      for (var y = 0; y < chatText.length; y++) {
+        writer.writeUInt8(chatText.charCodeAt(y));
+      }
+
+      for (var t = 0; t < this.xQube.userList.length; t++) {
+        if (this.xQube.userList[t].socket.readyState === 1) {
+          this.xQube.userList[t].socket.send(writer.toBuffer());
+        }
+      }
+    }
+
     setName(msg, reader, offset) {
       var name = "";
       var len = msg.byteLength;
 
-      for (var i = this.offset; i < len; i++) {
+      for (var i = offset; i < len; i++) {
         var letter = String.fromCharCode(reader.readUInt8());
         name += letter;
       }
       this.name = name;
-      this.nameBin = msg;
-      this.offset = offset;
     }
 
     setColor(msg, reader, offset) {
@@ -113,8 +134,6 @@ class Block {
       for (var i = 0; i < this.xQube.userList.length; i++) {
         for (var t = 0; t < this.xQube.userList.length; t++) {
           var writer = new BinaryWriter();
-          var reader = new BinaryReader(this.xQube.userList[t].nameBin);
-          var len = this.xQube.userList[t].nameBin.byteLength;
           writer.writeUInt8('u'.charCodeAt(0));
           writer.writeUInt8(this.xQube.userList[t].id);
           writer.writeInt32(this.xQube.userList[t].cubeID.x);
@@ -125,8 +144,8 @@ class Block {
           writer.writeUInt8(this.xQube.userList[t].cubeID.r);
           writer.writeUInt8(this.xQube.userList[t].cubeID.g);
           writer.writeUInt8(this.xQube.userList[t].cubeID.b);
-          for (var y = this.offset; y < len; y++) {
-            writer.writeUInt8(reader.readUInt8(y));
+          for (var y = 0; y < this.xQube.userList[t].name.length; y++) {
+              writer.writeUInt8(this.xQube.userList[t].name.charCodeAt(y));
           }
           if (this.xQube.userList[i].socket.readyState === 1) {
             this.xQube.userList[i].socket.send(writer.toBuffer());
@@ -177,6 +196,9 @@ class Block {
           case 'g':
             this.returnUList();
             break;
+          case 't':
+            this.getChatString(msg, reader, offset);
+            break
         }
 
         /*

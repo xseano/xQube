@@ -14,15 +14,24 @@ class Utils {
   }
 
   sendChat() {
-  	var chatText = document.getElementById('chat-text').value;
-    var kek = this.hashCode(chatText);
-    var kek1 = this.deHashCode(kek);
-    console.log(kek);
-    console.log(kek1);
-  	var chatObj = {'id': 'chatMessage', 'data': chatText};
-  	var cO = this.uintIfy(chatObj);
-  	this.socket.send(cO);
+
+      var chatText = document.getElementById('chat-text').value;
+      var len =  1 + chatText.length;
+      var offset = 0;
+
+      var msg = this.preparePacket(len);
+      msg.setUint8(offset, 't'.charCodeAt(0));
+      offset++;
+
+      for (var i = 0; i < chatText.length; i++) {
+          msg.setUint8(offset, chatText.charCodeAt(i));
+          offset++;
+      }
+
+      this.sendPacket(msg);
   }
+
+
 
   lerp(a, b, f, dt) {
       return a + (1 - (Math.pow(f, dt))) * (b - a);

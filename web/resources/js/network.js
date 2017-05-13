@@ -92,6 +92,9 @@ class Network {
         case 'u':
           this.player.returnUserList(msg, offset);
           break;
+        case 't':
+          this.player.handleChat(msg, offset);
+          break;
     }
 }
 
