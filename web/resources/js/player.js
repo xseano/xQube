@@ -25,63 +25,68 @@ class Player {
 
     console.log(this.id);
 
-    this.utils.sendName(this.cName);
-    this.utils.sendColor(this.cColor);
+    var sendName = this.utils.sendName(this.cName);
+    var sendColor = this.utils.sendColor(this.cColor);
 
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.domElement.id = "render";
-    document.body.appendChild(this.renderer.domElement);
+    if ((sendName === 1) && (sendColor === 1)) {
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.domElement.id = "render";
+      document.body.appendChild(this.renderer.domElement);
 
-    var scale = conf.scale;
-    var sections = conf.selections;
-    var baseGrid = new THREE.GridHelper(scale, sections);
-    this.scene.add(baseGrid);
+      var scale = conf.scale;
+      var sections = conf.selections;
+      var baseGrid = new THREE.GridHelper(scale, sections);
+      this.scene.add(baseGrid);
 
-    this.camObj = new THREE.PerspectiveCamera(conf.camOption1, window.innerWidth/window.innerHeight, conf.camOption2, conf.camOption3);
+      this.camObj = new THREE.PerspectiveCamera(conf.camOption1, window.innerWidth/window.innerHeight, conf.camOption2, conf.camOption3);
 
-    var cWidth = w;
-    var cHeight = h;
-    var cDepth = d;
-    var cColor = c;
-    var camZ = cz;
+      var cWidth = w;
+      var cHeight = h;
+      var cDepth = d;
+      var cColor = c;
+      var camZ = cz;
 
-    var cubeColorRGB = new THREE.Color(this.cColor);
-    var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
-    var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: conf.opacityVal, transparent: conf.wantTransparent });
+      var cubeColorRGB = new THREE.Color(this.cColor);
+      var cubeGeom = new THREE.BoxGeometry(cWidth, cHeight, cDepth);
+      var cubeColor = new THREE.MeshBasicMaterial({ color: cubeColorRGB, opacity: conf.opacityVal, transparent: conf.wantTransparent });
 
-    this.scene.add(this.group);
-    this.cubeObj = new THREE.Mesh(cubeGeom, cubeColor);
-    this.cubeObj.uName = this.cName;
-    this.cubeObj.name = this.id;
-    this.cubeObj.uId = this.id;
-    this.cubeObj.uColor = this.cColor;
-    this.group.add(this.cubeObj);
-    this.scene.add(this.cubeObj);
+      this.scene.add(this.group);
+      this.cubeObj = new THREE.Mesh(cubeGeom, cubeColor);
+      this.cubeObj.uName = this.cName;
+      this.cubeObj.name = this.id;
+      this.cubeObj.uId = this.id;
+      this.cubeObj.uColor = this.cColor;
+      this.group.add(this.cubeObj);
+      this.scene.add(this.cubeObj);
 
-    this.nameText = this.makeTextSprite(this.cName, {'textColor': this.cColor});
-    this.cubeObj.add(this.nameText);
-    this.nameText.position.set(3.5, 2.5, 2.5);
+      this.nameText = this.makeTextSprite(this.cName, {'textColor': this.cColor});
+      this.cubeObj.add(this.nameText);
+      this.nameText.position.set(3.5, 2.5, 2.5);
 
-    this.cubeObj.position.set(x, conf.cubeY, z);
-    this.camObj.position.set(cx, conf.cameraHeight, cz);
-    this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
+      this.cubeObj.position.set(x, conf.cubeY, z);
+      this.camObj.position.set(cx, conf.cameraHeight, cz);
+      this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
 
-    var rndr = this.renderer;
-    var scn = this.scene;
-    var cm = this.camObj;
-    var thObj = this;
-    var utls = this.utils;
+      var rndr = this.renderer;
+      var scn = this.scene;
+      var cm = this.camObj;
+      var thObj = this;
+      var utls = this.utils;
 
-    var render = function() {
-      thObj.network.update();
-      requestAnimationFrame(render);
-      rndr.render(scn, cm);
-      thObj.date = new Date();
-    };
+      var render = function() {
+        thObj.network.update();
+        requestAnimationFrame(render);
+        rndr.render(scn, cm);
+        thObj.date = new Date();
+      };
 
-    render();
-    this.utils.getUserList();
+      render();
+      this.utils.getUserList();
+
+  } else {
+    console.log("Name: " + this.cName + " and color: " + this.cColor + " did not successfully send to the server!");
   }
+}
 
   move(msg, offset) {
 
@@ -116,7 +121,6 @@ class Player {
       this.camObj.position.z = cz;
       this.camObj.rotation.x = -(conf.cameraAngle * Math.PI / conf.camAngleFactor);
     }
-
   }
 
   removeClient(msg, offset) {

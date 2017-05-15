@@ -67,6 +67,7 @@ class Utils {
       }
 
       this.sendPacket(msg);
+      return 1;
   }
 
   sendColor() {
@@ -86,6 +87,7 @@ class Utils {
       offset++;
 
       this.sendPacket(msg);
+      return 1;
   }
 
 
