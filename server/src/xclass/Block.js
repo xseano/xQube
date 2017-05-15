@@ -65,9 +65,11 @@ class Block {
         if ((this.xQube.userList[i].socket.readyState === 1) && (this.xQube.userList[i].id != this.id)) {
           this.xQube.userList[i].socket.send(writer.toBuffer());
         } else if(this.xQube.userList[i].id === this.id) {
-          this.xQube.userList.splice(i, 1);
+          var position = i;
         }
       }
+
+      this.xQube.userList.splice(position, 1);
 
     }
 

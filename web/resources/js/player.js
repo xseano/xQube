@@ -121,7 +121,7 @@ class Player {
 
   removeClient(msg, offset) {
 
-    var uid = msg.getUint8();
+    var uid = msg.getUint8(offset, true);
     var result = this.querySceneItem(uid);
 
     if (result.length == 1) {
